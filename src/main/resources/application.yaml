@@ -1,19 +1,38 @@
 server:
-  port: 8080
+  port: 8080 # Ứng dụng chạy trên cổng 8080
   servlet:
-    context-path: /identity
+    context-path: /identity # Đường dẫn gốc của API (VD: http://localhost:8080/identity/users)
+
 spring:
   datasource:
-    url: "jdbc:mysql://localhost:3636/identity-servive"
-    username: root
-    password: lamdzbodoi
+    # URL kết nối đến MySQL. Port 3636 là cổng đã được map từ Docker ra máy thật.
+    # ${DBMS_CONNECTION:...} giúp linh hoạt thay đổi URL khi chạy trên server thật.
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3636/identity-servive}
+
+    # Tài khoản và mật khẩu kết nối Database
+    username: ${DBMS_USER:root}
+    password: ${DBMS_PASSWORD:lamdzbodoi}
+
     driver-class-name: "com.mysql.cj.jdbc.Driver"
+
   jpa:
     hibernate:
+      # 'update': Hibernate sẽ tự động so sánh Entity và DB để thêm/sửa cột mà không xóa dữ liệu cũ
       ddl-auto: update
+
+    # 'show-sql: true': In các câu lệnh SQL mà Hibernate thực thi ra màn hình console để tiện debug
     show-sql: true
+    properties:
+      hibernate:
+        # Khai báo phương ngôn SQL sử dụng cho MySQL
+        dialect: org.hibernate.dialect.MySQLDialect
 
 jwt:
+  # Khóa bí mật (HS512) dùng để ký tên lên Token. Phải giữ kín khóa này!
   signerKey: "a065bd796281e2a4388ebc7f7a3c41bba935512d5e51526e898235a6ad5b4142"
-  valid-duration: 3600 # is second
-  refreshable-duration: 360000 #in second
+
+  # Thời gian sống của Access Token (3600 giây = 1 giờ)
+  valid-duration: 3600
+
+  # Thời gian tối đa để có thể dùng Refresh Token (360.000 giây = 100 giờ)
+  refreshable-duration: 360000

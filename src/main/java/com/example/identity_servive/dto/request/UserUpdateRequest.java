@@ -1,15 +1,15 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request;
 
 import com.example.identity_servive.validator.DobConstraint;
+import java.time.LocalDate;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.List;
-
 /**
- * Class đại diện cho yêu cầu cập nhật thông tin người dùng.
- * Chứa các trường dữ liệu mà người dùng được phép thay đổi.
+ * Class đại diện cho yêu cầu cập nhật thông tin người dùng. Chứa các trường dữ liệu mà người dùng
+ * được phép thay đổi.
  */
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @NoArgsConstructor // Tạo constructor không tham số (Bắt buộc cho Jackson/Spring)
@@ -18,18 +18,20 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE) // Tự động đặt tất cả các field là 'private'
 public class UserUpdateRequest {
 
-    // Mật khẩu mới nếu người dùng muốn thay đổi
-    String password;
+  // Mật khẩu mới nếu người dùng muốn thay đổi
+  String password;
 
-    // Tên mới
-    String firstName;
+  // Tên mới
+  String firstName;
+
+  String email;
 
     // Họ mới
-    String lastName;
+  String lastName;
 
-    // Ngày sinh cần cập nhật
-    @DobConstraint(min = 10, message = "INVALID_DOB")
-    LocalDate birthDate;
+  // Ngày sinh cần cập nhật
+  @DobConstraint(min = 10, message = "INVALID_DOB")
+  LocalDate birthDate;
 
-    List<String> roles;
+  List<String> roles;
 }

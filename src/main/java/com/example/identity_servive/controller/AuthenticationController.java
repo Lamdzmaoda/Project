@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.controller;
 
 import com.example.identity_servive.dto.request.*;
@@ -5,75 +6,74 @@ import com.example.identity_servive.dto.response.AuthenticationResponse;
 import com.example.identity_servive.dto.response.IntrospectResponse;
 import com.example.identity_servive.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
+import java.text.ParseException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
-/**
- * Controller xử lý các yêu cầu liên quan đến xác thực (đăng nhập, logout, verify token).
- */
-@RestController // Đánh dấu đây là một REST Controller, trả về dữ liệu dạng JSON
-@RequestMapping("/auth") // Định nghĩa đường dẫn gốc cho các API trong class này là /auth
-@RequiredArgsConstructor // Tự động tạo Constructor cho các field được đánh dấu là 'final' (Dependency Injection)
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true) // Tự động thêm 'private final' cho các field
+/** Controller xử lý các yêu cầu liên quan đến xác thực (đăng nhập, logout, verify token). */
+@RestController // Đánh dấu class này là một REST Controller, chuyên trả về dữ liệu JSON
+@RequestMapping("/auth") // Tất cả các API trong class này sẽ bắt đầu bằng đường dẫn /auth
+@RequiredArgsConstructor // Tự động tạo Constructor để Spring tiêm (Inject) các Service vào
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true) // Tự động biến các biến khai báo thành 'private final'
 public class AuthenticationController {
 
-    // Inject AuthenticationService để xử lý logic nghiệp vụ xác thực
+    // Tiêm AuthenticationService để xử lý các logic nghiệp vụ xác thực phức tạp bên dưới
     AuthenticationService authenticationService;
 
     /**
-     * API Đăng nhập
-     * @param request Chứa thông tin username và password từ Client gửi lên
-     * @return ApiResponse bao bọc kết quả xác thực (true/false)
+     * API Đăng nhập và lấy Token
+     * URL: POST /auth/token
      */
-    @PostMapping("/token") // Tiếp nhận yêu cầu HTTP POST đến đường dẫn /auth/log-in
+    @PostMapping("/token")
     ApiResponse<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-
-        // Gọi xuống tầng Service để kiểm tra thông tin đăng nhập
+        // 1. Gọi Service để kiểm tra user/pass. Nếu đúng, Service trả về Token JWT.
         var result = authenticationService.authenticate(request);
 
-        // Trả về kết quả theo cấu trúc ApiResponse chuẩn của dự án
-        return ApiResponse.<AuthenticationResponse>builder()
-                .code(2000)
-                .result(result)
-                .build();
+        // 2. Trả về kết quả kèm mã code thành công (2000) và dữ liệu Token
+        return ApiResponse.<AuthenticationResponse>builder().code(2000).result(result).build();
     }
 
-    @PostMapping("/introspect") // Tiếp nhận yêu cầu HTTP POST đến đường dẫn /auth/log-in
-    ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request) throws ParseException, JOSEException {
-
-        // Gọi xuống tầng Service để kiểm tra thông tin đăng nhập
+    /**
+     * API Kiểm tra Token còn hiệu lực hay không
+     * URL: POST /auth/introspect
+     */
+    @PostMapping("/introspect")
+    ApiResponse<IntrospectResponse> authenticate(@RequestBody IntrospectRequest request)
+            throws ParseException, JOSEException {
+        // 1. Gọi Service để kiểm tra Token gửi lên có hợp lệ và còn hạn không
         var result = authenticationService.introspect(request);
 
-        // Trả về kết quả theo cấu trúc ApiResponse chuẩn của dự án
-        return ApiResponse.<IntrospectResponse>builder()
-                .code(2001)
-                .result(result)
-                .build();
+        // 2. Trả về kết quả kiểm tra (true/false) kèm mã code (2001)
+        return ApiResponse.<IntrospectResponse>builder().code(2001).result(result).build();
     }
-    @PostMapping("/refresh") // Tiếp nhận yêu cầu HTTP POST đến đường dẫn /auth/log-in
-    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request) throws ParseException, JOSEException {
 
-        // Gọi xuống tầng Service để kiểm tra thông tin đăng nhập
+    /**
+     * API Làm mới Token (Dùng Refresh Token để lấy Access Token mới)
+     * URL: POST /auth/refresh
+     */
+    @PostMapping("/refresh")
+    ApiResponse<AuthenticationResponse> authenticate(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        // 1. Gọi Service để cấp lại Token mới cho người dùng mà không cần bắt họ đăng nhập lại
         var result = authenticationService.refreshToken(request);
 
-        // Trả về kết quả theo cấu trúc ApiResponse chuẩn của dự án
-        return ApiResponse.<AuthenticationResponse>builder()
-                .code(2000)
-                .result(result)
-                .build();
+        // 2. Trả về Token mới cho Client
+        return ApiResponse.<AuthenticationResponse>builder().code(2000).result(result).build();
     }
-    @PostMapping("/logout") // Tiếp nhận yêu cầu HTTP POST đến đường dẫn /auth/log-in
-    ApiResponse<Void> logout(@RequestBody LogoutRequest request) throws ParseException, JOSEException {
 
-        // Gọi xuống tầng Service để kiểm tra thông tin đăng nhập
+    /**
+     * API Đăng xuất (Vô hiệu hóa Token hiện tại)
+     * URL: POST /auth/logout
+     */
+    @PostMapping("/logout")
+    ApiResponse<Void> logout(@RequestBody LogoutRequest request)
+            throws ParseException, JOSEException {
+        // 1. Gọi Service để đưa Token hiện tại vào danh sách bị vô hiệu hóa (Blacklist)
         authenticationService.logout(request);
 
-        // Trả về kết quả theo cấu trúc ApiResponse chuẩn của dự án
-        return ApiResponse.<Void>builder()
-                .build();
+        // 2. Trả về thông báo thành công (trống phần result vì không cần trả dữ liệu)
+        return ApiResponse.<Void>builder().build();
     }
 }
