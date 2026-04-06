@@ -2,6 +2,7 @@
 package com.example.identity_servive.exception;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
@@ -32,12 +33,17 @@ public enum ErrorCode {
   UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
   UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
   INVALID_DOB(1008, "your age must be at least {min}", HttpStatus.BAD_REQUEST),
+  ID_NOT_EXISTED(1009, "id not exists", HttpStatus.BAD_REQUEST),
+    NAME_EXISTED(1010, "name exists", HttpStatus.BAD_REQUEST),
+    PARSE_DATA_INVALID(1011, "parse data invalid : ", HttpStatus.BAD_REQUEST),
+    DATA_INTEGRITY_VIOLATION(1012, "data integrity violation : ", HttpStatus.BAD_REQUEST),
   ;
 
   // Mã số lỗi định danh (giúp Frontend dễ dàng bắt lỗi bằng code thay vì so sánh chuỗi)
-  private int code;
+  private int code = 2000;
 
   // Thông điệp giải thích lỗi bằng ngôn ngữ con người
+  @Setter
   private String message;
 
   private HttpStatusCode statusCode;
@@ -48,4 +54,5 @@ public enum ErrorCode {
     this.message = message;
     this.statusCode = statusCode;
   }
+
 }

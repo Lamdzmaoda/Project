@@ -8,7 +8,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import com.example.identity_servive.dto.request.UserCreationRequest;
 import com.example.identity_servive.dto.response.UserResponse;
 import com.example.identity_servive.entity.User;
 import com.example.identity_servive.exception.AppException;

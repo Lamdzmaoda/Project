@@ -75,7 +75,7 @@ public class AuthenticationService {
      */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         // Tìm user, nếu không có ném lỗi 404 nghiệp vụ
-        var user = userRepository.findByUserName(request.getUsername())
+        var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         // Dùng BCrypt để so khớp mật khẩu thuần và mật khẩu đã băm trong DB
@@ -141,7 +141,7 @@ public class AuthenticationService {
 
         // Thiết lập các thông tin chứa trong Token (Payload)
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
-                .subject(user.getUserName()) // Chủ thể của token là username
+                .subject(user.getUsername()) // Chủ thể của token là username
                 .issuer("lamdzbodoi.com") // Người phát hành
                 .issueTime(new Date()) // Thời điểm tạo
                 .expirationTime(new Date(Instant.now().plus(VALIDATION_DURATION, ChronoUnit.SECONDS).toEpochMilli())) // Thời điểm hết hạn
@@ -173,7 +173,7 @@ public class AuthenticationService {
 
         // 3. Tạo một Token hoàn toàn mới cho người dùng
         var username = signJWT.getJWTClaimsSet().getSubject();
-        var user = userRepository.findByUserName(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+        var user = userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
 
         return AuthenticationResponse.builder().token(generateToken(user)).authenticated(true).build();
     }

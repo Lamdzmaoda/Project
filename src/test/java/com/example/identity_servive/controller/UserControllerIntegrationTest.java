@@ -1,7 +1,6 @@
 /* (C)2026 */
 package com.example.identity_servive.controller;
 
-import com.example.identity_servive.dto.request.UserCreationRequest;
 import com.example.identity_servive.dto.response.UserResponse;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import tools.jackson.databind.ObjectMapper;
 
 @Slf4j

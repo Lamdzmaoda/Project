@@ -40,7 +40,7 @@ public class ApplicationInitConfig {
 
         return args -> {
             // Kiểm tra trong DB xem đã có user 'admin' chưa để tránh tạo trùng lặp
-            if (userRepository.findByUserName(ADMIN_USER_NAME).isEmpty()) {
+            if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
 
                 // 1. Tạo và lưu quyền USER vào bảng Role
                 roleRepository.save(
@@ -58,11 +58,10 @@ public class ApplicationInitConfig {
                 // 3. Khởi tạo đối tượng User Admin
                 User user =
                         User.builder()
-                                .userName(ADMIN_USER_NAME) // Gán username = admin
+                                .username(ADMIN_USER_NAME) // Gán username = admin
                                 .password(passwordEncoder.encode(ADMIN_PASSWORD)) // Mã hóa mật khẩu 'admin' trước khi gán
                                 .roles(roles) // Gán danh sách quyền đã tạo ở trên
                                 .build();
-
                 // 4. Lưu User Admin xuống Database
                 userRepository.save(user);
 

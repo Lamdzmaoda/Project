@@ -4,7 +4,6 @@ package com.example.identity_servive.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.identity_servive.dto.request.UserCreationRequest;
 import com.example.identity_servive.dto.response.UserResponse;
 import com.example.identity_servive.service.UserService;
 import java.time.LocalDate;

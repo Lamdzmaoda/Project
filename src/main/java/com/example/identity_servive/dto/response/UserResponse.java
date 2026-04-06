@@ -22,7 +22,7 @@ public class UserResponse {
   String id;
 
   // Tên đăng nhập
-  String userName;
+  String username;
 
   /**
    * CẢNH BÁO BẢO MẬT: Thông thường, chúng ta KHÔNG BAO GIỜ trả về trường 'password' trong

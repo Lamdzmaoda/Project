@@ -6,11 +6,14 @@ import jakarta.validation.ConstraintViolation;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import tools.jackson.databind.exc.InvalidFormatException;
 
 /**
  * Bộ xử lý ngoại lệ toàn cục (Global Exception Handler).
@@ -54,6 +57,29 @@ public class GlobalExceptionHandler {
 
         // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
         return ResponseEntity.status(errorCode.getStatusCode()).body(response);
+    }
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    ResponseEntity<ApiResponse<Void>> handlingHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+        ApiResponse<Void> response = new ApiResponse();
+        // Lấy đối tượng ErrorCode từ trong exception được ném ra
+        ErrorCode errorCode = ErrorCode.PARSE_DATA_INVALID;
+
+        String message = errorCode.getMessage();
+        if (ex.getCause() instanceof InvalidFormatException invalidEx) {
+            // Ví dụ: Lâm gửi "SAI_ENUM" vào trường IsLocked
+            String targetType = invalidEx.getTargetType().getSimpleName();
+            String value = invalidEx.getValue().toString();
+            message += String.format("The value '%s' does not match the data type '%s'.", value, targetType);
+        }
+
+        // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(
+                        ApiResponse.<Void>builder()
+                                .code(errorCode.getCode())
+                                .message(message)
+                                .build()
+                );
     }
 
     /**
@@ -106,6 +132,25 @@ public class GlobalExceptionHandler {
                         : errorCode.getMessage());
 
         return ResponseEntity.badRequest().body(response);
+    }
+    @ExceptionHandler(value = DataIntegrityViolationException.class)
+    ResponseEntity<ApiResponse<Void>> handlingDataIntegrity(DataIntegrityViolationException ex) {
+        ApiResponse<Void> apiResponse = new ApiResponse<>();
+        ErrorCode errorCode = ErrorCode.DATA_INTEGRITY_VIOLATION; // Lỗi 403 Forbidden
+        String message = errorCode.getMessage();
+        String rootMSG = ex.getRootCause() != null ? ex.getRootCause().getMessage() : "";
+        if(rootMSG.contains("Duplicate entry")) {
+            message = message + "Data existed";
+        } else if (rootMSG.contains("Column") && rootMSG.contains("cannot be null")) {
+            message = message + "The data is missing required fields.";
+        }
+        apiResponse.setMessage(message);
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(
+                        ApiResponse.<Void>builder()
+                                .code(errorCode.getCode())
+                                .message(message)
+                                .build());
     }
 
     /**

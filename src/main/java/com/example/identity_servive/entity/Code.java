@@ -1,9 +1,11 @@
 /* (C)2026 */
 package com.example.identity_servive.entity;
 
-import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.util.Set;
+import com.example.identity_servive.enums.Status;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -18,7 +20,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE) // Lombok: Mặc định mọi trường là 'private'
 @Entity
-public class User {
+public class Code {
 
   /**
    * Khóa chính (Primary Key) của bảng. @GeneratedValue: Tự động tạo giá trị cho ID. strategy =
@@ -28,27 +30,13 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
+  Status status = Status.SUCCESS;
+  String errorType;
+  int line;
+  String errorLineCode;
+  String pointer;
+  String messageVn;
+  String input;
+  String output;
 
-  // Tên đăng nhập (Username)
-  @Column(
-      name = "userName",
-      unique = true,
-      columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
-  String username;
-
-  // Mật khẩu (Lưu ý: Trong thực tế, trường này PHẢI lưu mật khẩu đã băm/hash)
-  String password;
-
-  String email;
-
-  // Tên của người dùng
-  String firstName;
-
-    // Họ của người dùng
-  String lastName;
-
-  // Ngày sinh (Ánh xạ kiểu DATE trong Database)
-  LocalDate birthDate;
-
-  @ManyToMany Set<Role> roles;
 }

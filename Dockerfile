@@ -9,7 +9,7 @@ COPY src ./src
 
 # Build source code with maven
 # Sửa dòng 11 thành:
-RUN mvn package -DskipTests -Dspotless.check.skip=true
+RUN mvn package -Dmaven.test.skip=true -Dspotless.check.skip=true
 
 #Stage 2: create image
 # Start with Amazon Correto JDK 21

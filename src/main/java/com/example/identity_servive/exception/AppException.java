@@ -9,7 +9,7 @@ package com.example.identity_servive.exception;
 public class AppException extends RuntimeException {
 
   // Chứa thông tin chi tiết về lỗi (Mã lỗi, Thông điệp, HTTP Status)
-  private ErrorCode errorCode;
+  private  ErrorCode errorCode ;
 
   /**
    * Khởi tạo ngoại lệ dựa trên một mã lỗi cụ thể.
@@ -31,4 +31,6 @@ public class AppException extends RuntimeException {
   public void setErrorCode(ErrorCode errorCode) {
     this.errorCode = errorCode;
   }
+
 }
+

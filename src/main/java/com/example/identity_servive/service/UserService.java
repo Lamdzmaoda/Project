@@ -5,7 +5,6 @@ import com.example.identity_servive.dto.request.UserCreationRequest;
 import com.example.identity_servive.dto.request.UserUpdateRequest;
 import com.example.identity_servive.dto.response.UserResponse;
 import com.example.identity_servive.entity.User;
-import com.example.identity_servive.enums.Role;
 import com.example.identity_servive.exception.AppException;
 import com.example.identity_servive.exception.ErrorCode;
 import com.example.identity_servive.mapper.UserMapper;
@@ -40,7 +39,7 @@ public class UserService {
      */
     public UserResponse createUser(UserCreationRequest request) {
         // 1. Kiểm tra username đã tồn tại trong DB chưa
-        if (userRepository.existsByUserName(request.getUserName()))
+        if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
 
         // 2. Chuyển đổi dữ liệu từ Request DTO sang Entity User
@@ -70,7 +69,7 @@ public class UserService {
         String name = context.getAuthentication().getName();
 
         // 2. Truy vấn User từ DB dựa trên username trong Token
-        User user = userRepository.findByUserName(name)
+        User user = userRepository.findByUsername(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         return userMapper.toUserResponse(user);
@@ -115,7 +114,7 @@ public class UserService {
      * @PostAuthorize: Kiểm tra SAU KHI hàm chạy xong.
      * Đảm bảo: Chỉ ADMIN hoặc CHÍNH CHỦ tài khoản đó mới được xem thông tin này.
      */
-    @PostAuthorize("returnObject.userName == authentication.name")
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUserById(String id) {
         log.info("Fetching user detail for id: {}", id);
         return userMapper.toUserResponse(

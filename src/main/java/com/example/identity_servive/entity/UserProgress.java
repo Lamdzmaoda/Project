@@ -1,11 +1,13 @@
 /* (C)2026 */
 package com.example.identity_servive.entity;
 
+import com.example.identity_servive.enums.IsCompleted;
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 /**
  * Class Entity đại diện cho bảng 'user' trong Database. Sử dụng JPA (Java Persistence API) để ánh
@@ -18,7 +20,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE) // Lombok: Mặc định mọi trường là 'private'
 @Entity
-public class User {
+public class UserProgress {
 
   /**
    * Khóa chính (Primary Key) của bảng. @GeneratedValue: Tự động tạo giá trị cho ID. strategy =
@@ -28,27 +30,19 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
+  @Column(nullable = false)
+  String userID;
 
-  // Tên đăng nhập (Username)
-  @Column(
-      name = "userName",
-      unique = true,
-      columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
-  String username;
+  @ManyToOne
+  @JoinColumn(name = "step_id")
+  Step step;
 
-  // Mật khẩu (Lưu ý: Trong thực tế, trường này PHẢI lưu mật khẩu đã băm/hash)
-  String password;
+  @Column(nullable = false)
+  IsCompleted completedStatus = IsCompleted.FALSE;
 
-  String email;
+  @Column(nullable = false)
+  double earnedXp;
 
-  // Tên của người dùng
-  String firstName;
-
-    // Họ của người dùng
-  String lastName;
-
-  // Ngày sinh (Ánh xạ kiểu DATE trong Database)
-  LocalDate birthDate;
-
-  @ManyToMany Set<Role> roles;
+  @CreationTimestamp
+  LocalDateTime completedAt;
 }

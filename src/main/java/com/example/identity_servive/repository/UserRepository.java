@@ -17,18 +17,18 @@ public interface UserRepository extends JpaRepository<User, String> {
   /**
    * Kiểm tra xem tên đăng nhập đã tồn tại trong hệ thống chưa.
    *
-   * @param userName Tên đăng nhập cần kiểm tra
+   * @param username Tên đăng nhập cần kiểm tra
    * @return true nếu đã tồn tại, false nếu chưa (Cực kỳ hữu ích trong logic Đăng ký người dùng)
    */
-  boolean existsByUserName(String userName);
+  boolean existsByUsername(String username);
 
   /**
    * Tìm kiếm người dùng dựa trên tên đăng nhập.
    *
-   * @param userName Tên đăng nhập
+   * @param username Tên đăng nhập
    * @return Một Optional chứa User (nếu tìm thấy) hoặc rỗng (nếu không thấy). (Sử dụng Optional
    *     giúp tránh lỗi NullPointerException khi xử lý logic)
    */
-  Optional<User> findByUserName(String userName);
+  Optional<User> findByUsername(String username);
 
 }

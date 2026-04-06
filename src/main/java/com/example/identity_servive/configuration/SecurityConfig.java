@@ -26,7 +26,8 @@ public class SecurityConfig {
 
     // Danh sách các API công khai, không cần đăng nhập cũng vào được (VD: Đăng ký, Đăng nhập)
     private final String[] PUBLIC_ENDPOINTS = {
-            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh","/piston",     // Cho phép chính xác /piston
+            "/piston/**","/course/**","/course"
     };
 
     @Autowired private CustomJwtDecoder customJwtDecoder; // Tiêm bộ giải mã Token tự định nghĩa
