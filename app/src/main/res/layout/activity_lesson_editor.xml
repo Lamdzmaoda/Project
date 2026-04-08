@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="#0F172A"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LESSON MANAGER"
+        android:textColor="#FFFFFF"
+        android:padding="16dp"
+        android:gravity="center"
+        android:background="#7C3AED"/>
+
+    <ListView
+        android:id="@+id/listSteps"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnAddStep"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="+ Thêm Step"/>
+
+</LinearLayout>

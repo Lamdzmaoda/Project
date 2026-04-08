@@ -29,18 +29,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 🔥 TẠM TẮT AUTO LOGIN (TRÁNH MÀN HÌNH ĐEN)
+        // 🔥 AUTO LOGIN (SỬA CHỖ NÀY)
         SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
         String savedToken = prefs.getString("TOKEN", null);
 
-        // 👉 COMMENT LẠI ĐOẠN NÀY (khi fix xong Main thì bật lại)
-        /*
-        if (savedToken != null) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+        if (savedToken != null && !savedToken.isEmpty()) {
+            startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
             finish();
             return;
         }
-        */
 
         // 🔹 GÁN VIEW
         edtUsername = findViewById(R.id.edtUsername);
@@ -85,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
                         prefs.edit().putString("TOKEN", token).apply();
 
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
                         finish();
 
                     } else {
@@ -102,22 +99,18 @@ public class LoginActivity extends AppCompatActivity {
 
         });
 
-        // 🔹 FORGOT PASSWORD
         txtForgot.setOnClickListener(v ->
                 Toast.makeText(this, "Chức năng quên mật khẩu", Toast.LENGTH_SHORT).show()
         );
 
-        // 🔥 REGISTER
         txtRegister.setOnClickListener(v -> {
             startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
         });
 
-        // 🔹 FACEBOOK
         btnFacebook.setOnClickListener(v ->
                 Toast.makeText(this, "Login Facebook", Toast.LENGTH_SHORT).show()
         );
 
-        // 🔹 GOOGLE
         btnGoogle.setOnClickListener(v ->
                 Toast.makeText(this, "Login Google", Toast.LENGTH_SHORT).show()
         );

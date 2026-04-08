@@ -1,8 +1,10 @@
 package com.example.appcodetest.api;
 
+import com.example.appcodetest.model.ApiResponse;
 import com.example.appcodetest.model.AuthResponse;
 import com.example.appcodetest.model.LoginRequest;
 import com.example.appcodetest.model.RegisterRequest;
+import com.example.appcodetest.model.UserResponse;
 
 import okhttp3.MultipartBody;
 
@@ -28,4 +30,8 @@ public interface ApiService {
     @Multipart
     @POST("users/upload-avatar")
     Call<Void> uploadAvatar(@Part MultipartBody.Part file);
+    @GET("users/myInfo")
+    Call<ApiResponse<UserResponse>> getMyInfo(
+            @Header("Authorization") String token
+    );
 }

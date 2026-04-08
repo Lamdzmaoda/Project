@@ -7,7 +7,8 @@
     <uses-sdk
         android:minSdkVersion="36"
         android:targetSdkVersion="36" />
-    <!-- 🔥 QUAN TRỌNG -->
+
+    <!-- INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <permission
@@ -30,12 +31,8 @@
         android:testOnly="true"
         android:theme="@style/Theme.AppCodeTest"
         android:usesCleartextTraffic="true" >
-        <activity
-            android:name="com.example.appcodetest.ui.ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name="com.example.appcodetest.ui.RegisterActivity"
-            android:exported="false" /> <!-- LOGIN là màn hình đầu -->
+
+        <!-- LOGIN -->
         <activity
             android:name="com.example.appcodetest.ui.LoginActivity"
             android:exported="true" >
@@ -44,9 +41,53 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- MAIN -->
+        </activity>
+
+        <!-- DASHBOARD -->
+        <activity
+            android:name="com.example.appcodetest.ui.DashboardActivity"
+            android:exported="false" />
+
+        <!-- USER -->
         <activity
             android:name="com.example.appcodetest.ui.MainActivity"
+            android:exported="false" />
+
+        <!-- ADMIN -->
+        <activity
+            android:name="com.example.appcodetest.ui.AdminActivity"
+            android:exported="false" />
+
+        <!-- 🔥 ADMIN SYSTEM -->
+        <activity
+            android:name="com.example.appcodetest.ui.CourseEditorActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.appcodetest.ui.ChapterEditorActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.appcodetest.ui.LessonEditorActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.appcodetest.ui.StepEditorActivity"
+            android:exported="false" />
+
+        <!-- 🔥 LESSON -->
+        <activity
+            android:name="com.example.appcodetest.ui.LessonLearnActivity"
+            android:exported="false" />
+        <activity
+            android:name="com.example.appcodetest.ui.LessonPracticeActivity"
+            android:exported="false" />
+
+        <!-- PROFILE -->
+        <activity
+            android:name="com.example.appcodetest.ui.ProfileActivity"
+            android:exported="false" />
+
+        <!-- REGISTER -->
+        <activity
+            android:name="com.example.appcodetest.ui.RegisterActivity"
             android:exported="false" />
 
         <provider

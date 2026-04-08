@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- 🔥 QUAN TRỌNG -->
+
+    <!-- INTERNET -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,24 +15,68 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCodeTest"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".ui.ProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.RegisterActivity"
-            android:exported="false" /> <!-- LOGIN là màn hình đầu -->
+
+        <!-- LOGIN -->
         <activity
             android:name=".ui.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity> <!-- MAIN -->
+        </activity>
+
+        <!-- DASHBOARD -->
+        <activity
+            android:name=".ui.DashboardActivity"
+            android:exported="false"/>
+
+        <!-- USER -->
         <activity
             android:name=".ui.MainActivity"
-            android:exported="false" />
+            android:exported="false"/>
+
+        <!-- ADMIN -->
+        <activity
+            android:name=".ui.AdminActivity"
+            android:exported="false"/>
+
+        <!-- 🔥 ADMIN SYSTEM -->
+        <activity
+            android:name=".ui.CourseEditorActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.ChapterEditorActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.LessonEditorActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.StepEditorActivity"
+            android:exported="false"/>
+
+        <!-- 🔥 LESSON -->
+        <activity
+            android:name=".ui.LessonLearnActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".ui.LessonPracticeActivity"
+            android:exported="false"/>
+
+        <!-- PROFILE -->
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:exported="false"/>
+
+        <!-- REGISTER -->
+        <activity
+            android:name=".ui.RegisterActivity"
+            android:exported="false"/>
+
     </application>
 
 </manifest>

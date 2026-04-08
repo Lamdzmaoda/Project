@@ -39,14 +39,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> {
 
             // 🔥 userName (KHÔNG phải fullName nữa)
-            String userName = edtFullName.getText().toString().trim();
+            String username = edtFullName.getText().toString().trim();
 
             String email = edtEmail.getText().toString().trim();
             String password = edtPassword.getText().toString().trim();
             String confirmPassword = edtConfirmPassword.getText().toString().trim();
 
             // kiểm tra rỗng
-            if (userName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(this, "Nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -58,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             // 🔥 gọi API đúng
-            Call<Object> call = AuthServiceHelper.register(apiService, email, password, userName);
+            Call<Object> call = AuthServiceHelper.register(apiService, email, password, username);
 
             call.enqueue(new Callback<Object>() {
 
