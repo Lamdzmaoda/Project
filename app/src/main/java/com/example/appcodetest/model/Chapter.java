@@ -2,24 +2,18 @@ package com.example.appcodetest.model;
 
 import java.util.List;
 
-public class Lesson {
+public class Chapter {
 
     public String id;
+    public String languageName;
 
     public String title;
     public int orderIndex;
 
-    public double xp;
-    public double progress;
-
     public String lockedStatus;
-    public String completedStatus;
-
     public String createAt;
 
-    public String contentMarkdown;
-
-    public List<LessonStep> steps;
+    public List<Lesson> lessons;
 
     @Override
     public String toString() {

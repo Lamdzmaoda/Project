@@ -5,24 +5,28 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:text="LESSON MANAGER"
         android:textColor="#FFFFFF"
+        android:textSize="20sp"
         android:padding="16dp"
         android:gravity="center"
-        android:background="#7C3AED"/>
+        android:background="#7C3AED"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-    <ListView
-        android:id="@+id/listSteps"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:padding="8dp"/>
 
     <Button
-        android:id="@+id/btnAddStep"
+        android:id="@+id/btnAdd"
+        android:text="+ Thêm Lesson"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="+ Thêm Step"/>
+        android:layout_height="60dp"
+        android:background="#6366F1"
+        android:textColor="#FFFFFF"/>
 
 </LinearLayout>

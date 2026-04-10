@@ -4,25 +4,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- HEADER -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="COURSE MANAGER"
         android:textColor="#FFFFFF"
+        android:textSize="20sp"
         android:padding="16dp"
         android:gravity="center"
         android:background="#7C3AED"/>
 
-    <ListView
-        android:id="@+id/listCourse"
+    <!-- LIST -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCourse"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:padding="8dp"/>
 
+    <!-- ADD BUTTON -->
     <Button
         android:id="@+id/btnAddCourse"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="+ Thêm Course"/>
+        android:layout_height="60dp"
+        android:text="+ Thêm Course"
+        android:textColor="#FFFFFF"
+        android:background="#6366F1"/>
 
 </LinearLayout>

@@ -1,35 +1,43 @@
 package com.example.appcodetest.ui;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.res.ColorStateList;
-
 import com.example.appcodetest.R;
+import com.example.appcodetest.api.ApiService;
+import com.example.appcodetest.api.RetrofitClient;
+import com.example.appcodetest.model.ApiResponse;
 import com.example.appcodetest.model.LessonStep;
-import com.example.appcodetest.utils.FakeDataProvider;
+import com.example.appcodetest.utils.UserProgress;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import retrofit2.*;
 
 public class LessonLearnActivity extends AppCompatActivity {
 
     LinearLayout layoutInfo, layoutQuestion, layoutFillCode, layoutWords;
 
     TextView txtInfo, txtQuestion, txtExplanation, txtCodeResult;
-    Button option1, option2, option3, btnCheck, btnNext, btnCheckFill, btnResetFill;
+    TextView txtXP, txtLevel;
+
+    Button option1, option2, option3;
+    Button btnCheck, btnNext, btnCheckFill;
 
     List<LessonStep> steps;
     int currentIndex = 0;
     String lessonId;
 
     int selectedIndex = -1;
-    String currentCode = "";
+
+    List<String> selectedWords = new ArrayList<>();
+    List<String> correctWords = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +48,8 @@ public class LessonLearnActivity extends AppCompatActivity {
 
         lessonId = getIntent().getStringExtra("LESSON_ID");
 
-        // 🔥 FIX NULL
-        if (lessonId == null) lessonId = "lesson_1";
-
         loadSteps();
+        updateXPUI();
     }
 
     private void bindViews() {
@@ -58,6 +64,9 @@ public class LessonLearnActivity extends AppCompatActivity {
         txtExplanation = findViewById(R.id.txtExplanation);
         txtCodeResult = findViewById(R.id.txtCodeResult);
 
+        txtXP = findViewById(R.id.txtXP);
+        txtLevel = findViewById(R.id.txtLevel);
+
         option1 = findViewById(R.id.option1);
         option2 = findViewById(R.id.option2);
         option3 = findViewById(R.id.option3);
@@ -65,205 +74,192 @@ public class LessonLearnActivity extends AppCompatActivity {
         btnCheck = findViewById(R.id.btnCheck);
         btnNext = findViewById(R.id.btnNext);
         btnCheckFill = findViewById(R.id.btnCheckFill);
-        btnResetFill = findViewById(R.id.btnResetFill);
 
         btnNext.setOnClickListener(v -> nextStep());
+    }
 
-        // 🔥 CLICK INFO để next
-        layoutInfo.setOnClickListener(v -> nextStep());
+    private void updateXPUI() {
+        txtXP.setText("XP: " + UserProgress.getXP(this));
+        txtLevel.setText("Level " + UserProgress.getLevel(this));
     }
 
     private void loadSteps() {
-        steps = FakeDataProvider.getSteps(lessonId);
 
-        currentIndex = 0;
-        showStep();
+        String token = getSharedPreferences("APP", MODE_PRIVATE)
+                .getString("TOKEN", "");
+
+        ApiService api = RetrofitClient.getClient().create(ApiService.class);
+
+        api.getSteps(lessonId, "Bearer " + token)
+                .enqueue(new Callback<ApiResponse<List<LessonStep>>>() {
+
+                    @Override
+                    public void onResponse(Call<ApiResponse<List<LessonStep>>> call,
+                                           Response<ApiResponse<List<LessonStep>>> response) {
+
+                        steps = response.body().result;
+                        showStep();
+                    }
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<List<LessonStep>>> call, Throwable t) {}
+                });
     }
 
     private void showStep() {
 
-        if (steps == null || steps.isEmpty()) return;
-
-        LessonStep step = steps.get(currentIndex);
-
         hideAll();
 
-        JSONObject data = step.data;
-        if (data == null) data = new JSONObject();
+        LessonStep step = steps.get(currentIndex);
+        LessonStep.StepData data = step.data;
 
-        switch (step.type) {
+        if (step.type.equals("INFO")) {
 
-            case "INFO":
-                layoutInfo.setVisibility(View.VISIBLE);
-                txtInfo.setText(data.optString("content"));
-                btnNext.setVisibility(View.VISIBLE);
-                break;
+            layoutInfo.setVisibility(View.VISIBLE);
+            txtInfo.setText(data.question);
+            btnNext.setVisibility(View.VISIBLE);
 
-            case "QUESTION":
-                layoutQuestion.setVisibility(View.VISIBLE);
-                renderQuestion(data);
-                break;
+        } else if (step.type.equals("QUIZ")) {
 
-            case "FILL_CODE":
-                layoutFillCode.setVisibility(View.VISIBLE);
-                renderFillCode(data);
-                break;
+            layoutQuestion.setVisibility(View.VISIBLE);
+            renderQuiz(data, step.xp);
+
+        } else if (step.type.equals("FILL_CODE")) {
+
+            layoutFillCode.setVisibility(View.VISIBLE);
+            renderFillCode(data, step.xp);
         }
+    }
+
+    // 🔥 FIX: xp = double
+    private void renderQuiz(LessonStep.StepData data, double xp) {
+
+        txtQuestion.setText(data.question);
+
+        option1.setText(data.options.get(0));
+        option2.setText(data.options.get(1));
+        option3.setText(data.options.get(2));
+
+        selectedIndex = -1;
+        resetOptions();
+
+        option1.setOnClickListener(v -> select(0));
+        option2.setOnClickListener(v -> select(1));
+        option3.setOnClickListener(v -> select(2));
+
+        btnCheck.setOnClickListener(v -> {
+
+            if (selectedIndex == data.correctValue) {
+
+                highlightCorrect(selectedIndex);
+                txtExplanation.setText("✅ " + data.explanation);
+                txtExplanation.setTextColor(0xFF22C55E);
+
+                // 🎯 FIX: ép int
+                UserProgress.addXP(this, (int) xp);
+                updateXPUI();
+
+                txtExplanation.postDelayed(this::nextStep, 1000);
+
+            } else {
+
+                highlightWrong(selectedIndex);
+                txtExplanation.setText("❌ " + data.explanation);
+                txtExplanation.setTextColor(0xFFEF4444);
+            }
+
+            txtExplanation.setVisibility(View.VISIBLE);
+        });
+    }
+
+    // 🔥 FIX: xp = double
+    private void renderFillCode(LessonStep.StepData data, double xp) {
+
+        txtCodeResult.setText("");
+        layoutWords.removeAllViews();
+
+        selectedWords.clear();
+        correctWords = new ArrayList<>(data.options);
+
+        List<String> shuffled = new ArrayList<>(data.options);
+        Collections.shuffle(shuffled);
+
+        for (String word : shuffled) {
+
+            Button b = new Button(this);
+            b.setText(word);
+            b.setOnClickListener(v -> {
+                selectedWords.add(word);
+                txtCodeResult.setText(String.join(" ", selectedWords));
+            });
+
+            layoutWords.addView(b);
+        }
+
+        btnCheckFill.setOnClickListener(v -> {
+
+            if (selectedWords.equals(correctWords)) {
+
+                txtExplanation.setText("✅ Chính xác!");
+                txtExplanation.setTextColor(0xFF22C55E);
+
+                // 🎯 FIX
+                UserProgress.addXP(this, (int) xp);
+                updateXPUI();
+
+                txtExplanation.postDelayed(this::nextStep, 1000);
+
+            } else {
+
+                txtExplanation.setText("❌ Sai rồi!");
+                txtExplanation.setTextColor(0xFFEF4444);
+            }
+
+            txtExplanation.setVisibility(View.VISIBLE);
+        });
+    }
+
+    private void select(int i) {
+        selectedIndex = i;
+        resetOptions();
+
+        if (i == 0) option1.setBackgroundTintList(ColorStateList.valueOf(0xFF6366F1));
+        if (i == 1) option2.setBackgroundTintList(ColorStateList.valueOf(0xFF6366F1));
+        if (i == 2) option3.setBackgroundTintList(ColorStateList.valueOf(0xFF6366F1));
+    }
+
+    private void resetOptions() {
+        option1.setBackgroundTintList(ColorStateList.valueOf(0xFF1E293B));
+        option2.setBackgroundTintList(ColorStateList.valueOf(0xFF1E293B));
+        option3.setBackgroundTintList(ColorStateList.valueOf(0xFF1E293B));
+    }
+
+    private void highlightCorrect(int i) {
+        if (i == 0) option1.setBackgroundTintList(ColorStateList.valueOf(0xFF22C55E));
+        if (i == 1) option2.setBackgroundTintList(ColorStateList.valueOf(0xFF22C55E));
+        if (i == 2) option3.setBackgroundTintList(ColorStateList.valueOf(0xFF22C55E));
+    }
+
+    private void highlightWrong(int i) {
+        if (i == 0) option1.setBackgroundTintList(ColorStateList.valueOf(0xFFEF4444));
+        if (i == 1) option2.setBackgroundTintList(ColorStateList.valueOf(0xFFEF4444));
+        if (i == 2) option3.setBackgroundTintList(ColorStateList.valueOf(0xFFEF4444));
     }
 
     private void hideAll() {
         layoutInfo.setVisibility(View.GONE);
         layoutQuestion.setVisibility(View.GONE);
         layoutFillCode.setVisibility(View.GONE);
-
         txtExplanation.setVisibility(View.GONE);
-
-        btnNext.setVisibility(View.GONE);
-        btnCheck.setVisibility(View.GONE);
-    }
-
-    private void renderQuestion(JSONObject data) {
-
-        txtQuestion.setText(data.optString("question"));
-
-        JSONArray options = data.optJSONArray("options");
-
-        try {
-            option1.setText(options.getString(0));
-            option2.setText(options.getString(1));
-            option3.setText(options.getString(2));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        selectedIndex = -1;
-        resetOptions();
-
-        btnCheck.setVisibility(View.VISIBLE);
-        btnCheck.setEnabled(false);
-        btnCheck.setAlpha(0.5f);
-
-        btnNext.setVisibility(View.GONE);
-
-        option1.setOnClickListener(v -> selectOption(0));
-        option2.setOnClickListener(v -> selectOption(1));
-        option3.setOnClickListener(v -> selectOption(2));
-
-        btnCheck.setOnClickListener(v -> {
-
-            int correctIndex = data.optInt("correctIndex", -1);
-
-            if (selectedIndex == correctIndex) {
-
-                highlightCorrect(selectedIndex);
-
-                txtExplanation.setText("✅ " + data.optString("explanation"));
-                txtExplanation.setTextColor(0xFF22C55E);
-                txtExplanation.setVisibility(View.VISIBLE);
-
-                btnCheck.setVisibility(View.GONE);
-                btnNext.setVisibility(View.VISIBLE);
-
-            } else {
-
-                highlightWrong(selectedIndex);
-
-                txtExplanation.setText("❌ " + data.optString("explanation"));
-                txtExplanation.setTextColor(0xFFEF4444);
-                txtExplanation.setVisibility(View.VISIBLE);
-            }
-        });
-    }
-
-    private void selectOption(int index) {
-
-        selectedIndex = index;
-        resetOptions();
-
-        if (index == 0) option1.setBackgroundTintList(ColorStateList.valueOf(0xFF6366F1));
-        if (index == 1) option2.setBackgroundTintList(ColorStateList.valueOf(0xFF6366F1));
-        if (index == 2) option3.setBackgroundTintList(ColorStateList.valueOf(0xFF6366F1));
-
-        btnCheck.setEnabled(true);
-        btnCheck.setAlpha(1f);
-    }
-
-    private void resetOptions() {
-        option1.setBackgroundTintList(ColorStateList.valueOf(0xFF312E81));
-        option2.setBackgroundTintList(ColorStateList.valueOf(0xFF312E81));
-        option3.setBackgroundTintList(ColorStateList.valueOf(0xFF312E81));
-    }
-
-    private void highlightCorrect(int index) {
-        if (index == 0) option1.setBackgroundTintList(ColorStateList.valueOf(0xFF22C55E));
-        if (index == 1) option2.setBackgroundTintList(ColorStateList.valueOf(0xFF22C55E));
-        if (index == 2) option3.setBackgroundTintList(ColorStateList.valueOf(0xFF22C55E));
-    }
-
-    private void highlightWrong(int index) {
-        if (index == 0) option1.setBackgroundTintList(ColorStateList.valueOf(0xFFEF4444));
-        if (index == 1) option2.setBackgroundTintList(ColorStateList.valueOf(0xFFEF4444));
-        if (index == 2) option3.setBackgroundTintList(ColorStateList.valueOf(0xFFEF4444));
-    }
-
-    private void renderFillCode(JSONObject data) {
-
-        currentCode = "";
-        txtCodeResult.setText("");
-        layoutWords.removeAllViews();
-
-        JSONArray words = data.optJSONArray("words");
-
-        for (int i = 0; i < words.length(); i++) {
-
-            String word = words.optString(i);
-
-            Button btn = new Button(this);
-            btn.setText(word);
-            btn.setAllCaps(false);
-            btn.setTextColor(0xFFFFFFFF);
-            btn.setBackgroundTintList(ColorStateList.valueOf(0xFF4338CA));
-
-            LinearLayout.LayoutParams params =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            params.setMargins(10, 10, 10, 10);
-            btn.setLayoutParams(params);
-
-            btn.setOnClickListener(v -> {
-                currentCode += word + " ";
-                txtCodeResult.setText(currentCode);
-
-                btn.setEnabled(false);
-                btn.setAlpha(0.4f);
-            });
-
-            layoutWords.addView(btn);
-        }
-
-        btnCheckFill.setOnClickListener(v -> {
-
-            if (currentCode.trim().equals(data.optString("correctAnswer"))) {
-                Toast.makeText(this, "Đúng!", Toast.LENGTH_SHORT).show();
-                btnNext.setVisibility(View.VISIBLE);
-            } else {
-                Toast.makeText(this, "Sai rồi!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnResetFill.setOnClickListener(v -> renderFillCode(data));
     }
 
     private void nextStep() {
-
         currentIndex++;
 
         if (currentIndex < steps.size()) {
             showStep();
         } else {
-            Toast.makeText(this, "Hoàn thành!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "🎉 Hoàn thành bài!", Toast.LENGTH_LONG).show();
             finish();
         }
     }

@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <string name="app_name">AppCodeTest</string>
-    <style name="Base.Theme.AppCodeTest" parent="Theme.Material3.DayNight.NoActionBar">
-        
-        
-    </style>
+
     <style name="InputStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -15,5 +9,5 @@
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:padding">12dp</item>
     </style>
-    <style name="Theme.AppCodeTest" parent="Base.Theme.AppCodeTest"/>
+
 </resources>

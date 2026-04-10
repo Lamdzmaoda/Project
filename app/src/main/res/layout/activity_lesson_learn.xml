@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="#0F172A"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -15,22 +13,34 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="✕"
             android:textSize="22sp"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_weight="1"/>
 
+        <!-- 🔥 XP -->
         <TextView
+            android:id="@+id/txtXP"
+            android:text="XP: 0"
+            android:textColor="#FACC15"
+            android:layout_marginEnd="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="💬 0"
-            android:textColor="#FFFFFF"/>
+            android:layout_height="wrap_content"/>
+
+        <!-- 🔥 LEVEL -->
+        <TextView
+            android:id="@+id/txtLevel"
+            android:text="Lv 1"
+            android:textColor="#22C55E"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
     <!-- PROGRESS -->
@@ -40,7 +50,6 @@
         android:layout_below="@id/header"
         android:layout_width="match_parent"
         android:layout_height="6dp"
-        android:progress="20"
         android:progressTint="#A78BFA"/>
 
     <!-- CONTENT -->
@@ -68,10 +77,10 @@
 
                 <TextView
                     android:id="@+id/txtInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- QUESTION -->
@@ -84,35 +93,35 @@
 
                 <TextView
                     android:id="@+id/txtQuestion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:textColor="#FFFFFF"
                     android:textSize="22sp"
-                    android:layout_marginBottom="20dp"/>
+                    android:layout_marginBottom="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <Button
                     android:id="@+id/option1"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
                     android:backgroundTint="#312E81"
                     android:textColor="#FFFFFF"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
 
                 <Button
                     android:id="@+id/option2"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
                     android:backgroundTint="#312E81"
                     android:textColor="#FFFFFF"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
 
                 <Button
                     android:id="@+id/option3"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
                     android:backgroundTint="#312E81"
                     android:textColor="#FFFFFF"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"/>
             </LinearLayout>
 
             <!-- FILL CODE -->
@@ -125,43 +134,45 @@
 
                 <TextView
                     android:id="@+id/txtCodeResult"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:textColor="#22C55E"
                     android:background="#000000"
                     android:padding="16dp"
                     android:textSize="18sp"
-                    android:layout_marginBottom="12dp"/>
+                    android:layout_marginBottom="12dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
+                <!-- 🔥 FIX: WRAP -->
                 <LinearLayout
                     android:id="@+id/layoutWords"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+                    />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <Button
                         android:id="@+id/btnCheckFill"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Kiểm tra"
                         android:backgroundTint="#22C55E"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
 
                     <Button
                         android:id="@+id/btnResetFill"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Reset"
                         android:backgroundTint="#EF4444"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="#FFFFFF"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -180,29 +191,29 @@
 
         <TextView
             android:id="@+id/txtExplanation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
             android:textColor="#22C55E"
-            android:layout_marginBottom="10dp"/>
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btnCheck"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="KIỂM TRA"
             android:backgroundTint="#6366F1"
-            android:textColor="#FFFFFF"/>
+            android:textColor="#FFFFFF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btnNext"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:text="TIẾP TỤC"
             android:backgroundTint="#22C55E"
             android:textColor="#FFFFFF"
             android:visibility="gone"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </RelativeLayout>

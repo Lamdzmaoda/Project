@@ -9,48 +9,80 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!-- TYPE -->
         <Spinner
             android:id="@+id/spinnerType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="50dp"
+            android:background="#1E293B"
+            android:padding="10dp"/>
 
+        <!-- CONTENT -->
         <EditText
             android:id="@+id/edtContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Content / Question"
-            android:textColor="#FFFFFF"/>
+            android:hint="Nhập câu hỏi / nội dung"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#888"
+            android:background="#1E293B"
+            android:padding="12dp"
+            android:layout_marginTop="12dp"/>
 
+        <!-- OPTIONS -->
         <EditText
             android:id="@+id/edtOption1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Option 1"/>
+            android:hint="Đáp án 1"
+            style="@style/InputStyle"/>
 
         <EditText
             android:id="@+id/edtOption2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Option 2"/>
+            android:hint="Đáp án 2"
+            style="@style/InputStyle"/>
 
         <EditText
             android:id="@+id/edtOption3"
+            android:hint="Đáp án 3"
+            style="@style/InputStyle"/>
+
+        <!-- RADIO -->
+        <RadioGroup
+            android:id="@+id/radioCorrect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Option 3"/>
+            android:layout_marginTop="12dp">
 
-        <EditText
-            android:id="@+id/edtCorrect"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Correct Index"/>
+            <RadioButton
+                android:id="@+id/radio1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đáp án đúng: 1"
+                android:textColor="#FFFFFF"/>
 
+            <RadioButton
+                android:id="@+id/radio2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đáp án đúng: 2"
+                android:textColor="#FFFFFF"/>
+
+            <RadioButton
+                android:id="@+id/radio3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đáp án đúng: 3"
+                android:textColor="#FFFFFF"/>
+        </RadioGroup>
+
+        <!-- SAVE -->
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Lưu"/>
+            android:layout_height="55dp"
+            android:text="Lưu Step 🚀"
+            android:background="#7C3AED"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp"/>
 
     </LinearLayout>
-
 </ScrollView>
