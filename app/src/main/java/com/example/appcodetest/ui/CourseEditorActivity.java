@@ -2,7 +2,9 @@ package com.example.appcodetest.ui;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,8 +47,22 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         recyclerCourse.setLayoutManager(new LinearLayoutManager(this));
 
-        token = "Bearer " + getSharedPreferences("APP", MODE_PRIVATE)
-                .getString("TOKEN", "");
+        // =========================
+        // 🔥 FIX TOKEN (KEY + FORMAT)
+        // =========================
+        SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
+        String rawToken = prefs.getString("token", "");
+
+        if (rawToken.isEmpty()) {
+            Toast.makeText(this, "Token hết hạn, login lại!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        token = "Bearer " + rawToken;
+
+        Log.d("TOKEN", token);
 
         api = RetrofitClient.getClient().create(ApiService.class);
 
@@ -66,7 +82,7 @@ public class CourseEditorActivity extends AppCompatActivity {
 
             @Override
             public void onDelete(Language l) {
-                deleteCourse(l.name); // 🔥 FIX
+                deleteCourse(l.name);
             }
 
             @Override
@@ -101,6 +117,9 @@ public class CourseEditorActivity extends AppCompatActivity {
                             courses.clear();
                             courses.addAll(response.body().result);
                             adapter.notifyDataSetChanged();
+                        } else {
+                            Toast.makeText(CourseEditorActivity.this,
+                                    "Token lỗi hoặc hết hạn!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -195,8 +214,7 @@ public class CourseEditorActivity extends AppCompatActivity {
                                 json.toString()
                         );
 
-                        api.updateLanguage(token, l.name, body); // 🔥 FIX
-
+                        // ✅ FIX: chỉ gọi 1 lần
                         api.updateLanguage(token, l.name, body)
                                 .enqueue(new Callback<Object>() {
 
@@ -228,7 +246,7 @@ public class CourseEditorActivity extends AppCompatActivity {
     // =========================
     private void deleteCourse(String name) {
 
-        api.deleteLanguage(token, name) // 🔥 FIX
+        api.deleteLanguage(token, name)
                 .enqueue(new Callback<Object>() {
 
                     @Override

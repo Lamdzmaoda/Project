@@ -1,7 +1,9 @@
 package com.example.appcodetest.ui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +39,21 @@ public class DashboardActivity extends AppCompatActivity {
         txtBirth = findViewById(R.id.txtBirth);
         btnContinue = findViewById(R.id.btnContinue);
 
-        // 🔥 KHÓA NÚT
+        // 🔒 khóa nút trước
         btnContinue.setEnabled(false);
 
-        String token = getSharedPreferences("APP", MODE_PRIVATE)
-                .getString("TOKEN", "");
+        // =========================
+        // 🔥 FIX TOKEN (KEY + CHECK)
+        // =========================
+        SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
+        String token = prefs.getString("token", ""); // ✅ FIX: token (không phải TOKEN)
+
+        if (token.isEmpty()) {
+            Toast.makeText(this, "Chưa đăng nhập!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
 
         callApi(token);
 
@@ -61,24 +73,32 @@ public class DashboardActivity extends AppCompatActivity {
 
         ApiService api = RetrofitClient.getClient().create(ApiService.class);
 
+        // 🔥 FIX QUAN TRỌNG NHẤT
         String auth = "Bearer " + token;
+
+        Log.d("TOKEN_DEBUG", auth);
 
         api.getMyInfo(auth).enqueue(new Callback<ApiResponse<UserResponse>>() {
 
             @Override
-            public void onResponse(Call<ApiResponse<UserResponse>> call, Response<ApiResponse<UserResponse>> response) {
+            public void onResponse(Call<ApiResponse<UserResponse>> call,
+                                   Response<ApiResponse<UserResponse>> response) {
 
-                if (response.isSuccessful() && response.body() != null && response.body().result != null) {
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().result != null) {
 
                     UserResponse user = response.body().result;
 
-                    txtWelcome.setText("Welcome back, " + user.username + " !");
-                    txtId.setText(user.id);
-                    txtUsername.setText(user.username);
+                    txtWelcome.setText("Welcome back, " + user.username + "!");
+                    txtId.setText(user.id != null ? user.id : "N/A");
+                    txtUsername.setText(user.username != null ? user.username : "N/A");
                     txtEmail.setText(user.email != null ? user.email : "N/A");
                     txtBirth.setText(user.birthDate != null ? user.birthDate : "N/A");
 
+                    // =========================
                     // 🔥 CHECK ROLE
+                    // =========================
                     isAdmin = false;
 
                     if (user.roles != null) {
@@ -90,21 +110,29 @@ public class DashboardActivity extends AppCompatActivity {
                         }
                     }
 
-                    // 🔥 MỞ NÚT
                     btnContinue.setEnabled(true);
 
                 } else {
-                    Toast.makeText(DashboardActivity.this, "Không lấy được user!", Toast.LENGTH_LONG).show();
+
+                    Log.e("API_ERROR", "Response lỗi: " + response.code());
+
+                    Toast.makeText(DashboardActivity.this,
+                            "Không lấy được user! (Token có thể sai)",
+                            Toast.LENGTH_LONG).show();
+
                     btnContinue.setEnabled(true);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<UserResponse>> call, Throwable t) {
-                t.printStackTrace();
-                Toast.makeText(DashboardActivity.this, "Lỗi API: " + t.getMessage(), Toast.LENGTH_LONG).show();
 
-                // 🔥 MỞ NÚT
+                t.printStackTrace();
+
+                Toast.makeText(DashboardActivity.this,
+                        "Lỗi API: " + t.getMessage(),
+                        Toast.LENGTH_LONG).show();
+
                 btnContinue.setEnabled(true);
             }
         });

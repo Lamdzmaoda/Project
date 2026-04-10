@@ -3,6 +3,7 @@ package com.example.appcodetest.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,9 +30,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // 🔥 AUTO LOGIN (SỬA CHỖ NÀY)
+        // =========================
+        // 🔥 AUTO LOGIN (FIX KEY)
+        // =========================
         SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
-        String savedToken = prefs.getString("TOKEN", null);
+        String savedToken = prefs.getString("token", null); // ✅ FIX: token (không phải TOKEN)
 
         if (savedToken != null && !savedToken.isEmpty()) {
             startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
@@ -39,7 +42,9 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        // 🔹 GÁN VIEW
+        // =========================
+        // 🔹 VIEW
+        // =========================
         edtUsername = findViewById(R.id.edtUsername);
         edtPassword = findViewById(R.id.edtPassword);
         btnLogin = findViewById(R.id.btnLogin);
@@ -48,10 +53,11 @@ public class LoginActivity extends AppCompatActivity {
         btnFacebook = findViewById(R.id.btnFacebook);
         btnGoogle = findViewById(R.id.btnGoogle);
 
-        // 🔥 TẠO API
         ApiService apiService = RetrofitClient.getClient().create(ApiService.class);
 
+        // =========================
         // 🔥 LOGIN
+        // =========================
         btnLogin.setOnClickListener(v -> {
 
             String username = edtUsername.getText().toString().trim();
@@ -64,38 +70,49 @@ public class LoginActivity extends AppCompatActivity {
 
             LoginRequest request = new LoginRequest(username, password);
 
-            Call<AuthResponse> call = AuthServiceHelper.login(apiService, request);
+            AuthServiceHelper.login(apiService, request)
+                    .enqueue(new Callback<AuthResponse>() {
 
-            call.enqueue(new Callback<AuthResponse>() {
+                        @Override
+                        public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
 
-                @Override
-                public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                            if (response.isSuccessful()
+                                    && response.body() != null
+                                    && response.body().result != null
+                                    && response.body().result.authenticated) {
 
-                    if (response.isSuccessful() && response.body() != null
-                            && response.body().result != null
-                            && response.body().result.authenticated) {
+                                String token = response.body().result.token;
 
-                        String token = response.body().result.token;
+                                // 🔥 LOG DEBUG
+                                Log.d("TOKEN_RAW", token);
 
-                        Toast.makeText(LoginActivity.this, "Login thành công!", Toast.LENGTH_SHORT).show();
+                                // =========================
+                                // 🔥 LƯU TOKEN CHUẨN
+                                // =========================
+                                SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
+                                prefs.edit()
+                                        .putString("token", token) // ✅ FIX KEY
+                                        .apply();
 
-                        SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
-                        prefs.edit().putString("TOKEN", token).apply();
+                                Toast.makeText(LoginActivity.this,
+                                        "Login thành công 🚀", Toast.LENGTH_SHORT).show();
 
-                        startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
-                        finish();
+                                startActivity(new Intent(LoginActivity.this, DashboardActivity.class));
+                                finish();
 
-                    } else {
-                        Toast.makeText(LoginActivity.this, "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                            } else {
+                                Toast.makeText(LoginActivity.this,
+                                        "Sai tài khoản hoặc mật khẩu!", Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-                @Override
-                public void onFailure(Call<AuthResponse> call, Throwable t) {
-                    t.printStackTrace();
-                    Toast.makeText(LoginActivity.this, "Không kết nối server!", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onFailure(Call<AuthResponse> call, Throwable t) {
+                            t.printStackTrace();
+                            Toast.makeText(LoginActivity.this,
+                                    "Không kết nối server!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
         });
 
@@ -103,9 +120,9 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(this, "Chức năng quên mật khẩu", Toast.LENGTH_SHORT).show()
         );
 
-        txtRegister.setOnClickListener(v -> {
-            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-        });
+        txtRegister.setOnClickListener(v ->
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class))
+        );
 
         btnFacebook.setOnClickListener(v ->
                 Toast.makeText(this, "Login Facebook", Toast.LENGTH_SHORT).show()

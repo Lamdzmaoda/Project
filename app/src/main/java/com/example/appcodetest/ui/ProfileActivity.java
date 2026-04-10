@@ -30,6 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
     Uri imageUri;
     ApiService api;
 
+    String token;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,9 +44,25 @@ public class ProfileActivity extends AppCompatActivity {
 
         api = RetrofitClient.getClient().create(ApiService.class);
 
-        // 🔥 LOAD DATA LOCAL
         SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
 
+        // =========================
+        // 🔥 FIX TOKEN
+        // =========================
+        String rawToken = prefs.getString("token", "");
+
+        if (rawToken.isEmpty()) {
+            Toast.makeText(this, "Chưa đăng nhập!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
+
+        token = "Bearer " + rawToken;
+
+        // =========================
+        // LOAD LOCAL
+        // =========================
         String name = prefs.getString("NAME", "");
         String avatar = prefs.getString("AVATAR", null);
 
@@ -54,14 +72,18 @@ public class ProfileActivity extends AppCompatActivity {
             imgAvatar.setImageURI(Uri.parse(avatar));
         }
 
-        // 🔥 CHỌN ẢNH (CHỈ LƯU LOCAL)
+        // =========================
+        // CHỌN ẢNH
+        // =========================
         imgAvatar.setOnClickListener(v -> {
             Intent intent = new Intent(Intent.ACTION_PICK);
             intent.setType("image/*");
             startActivityForResult(intent, PICK_IMAGE);
         });
 
-        // 🔥 SAVE PROFILE (CHỈ UPDATE NAME)
+        // =========================
+        // SAVE PROFILE
+        // =========================
         btnSave.setOnClickListener(v -> {
 
             String newName = edtName.getText().toString().trim();
@@ -74,21 +96,33 @@ public class ProfileActivity extends AppCompatActivity {
             // 👉 lưu local
             prefs.edit().putString("NAME", newName).apply();
 
-            // 👉 gọi API update name
-            api.updateProfile(newName).enqueue(new Callback<Void>() {
-                @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
-                    Toast.makeText(ProfileActivity.this, "Cập nhật tên OK", Toast.LENGTH_SHORT).show();
-                }
+            // 🔥 FIX API CALL (có token)
+            api.updateProfile(token, newName)
+                    .enqueue(new Callback<Void>() {
 
-                @Override
-                public void onFailure(Call<Void> call, Throwable t) {
-                    Toast.makeText(ProfileActivity.this, "Lỗi update name", Toast.LENGTH_SHORT).show();
-                }
-            });
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+
+                            if (response.isSuccessful()) {
+                                Toast.makeText(ProfileActivity.this,
+                                        "Cập nhật tên OK", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(ProfileActivity.this,
+                                        "Update fail: " + response.code(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            Toast.makeText(ProfileActivity.this,
+                                    "Lỗi update name", Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
-        // 🔥 LOGOUT
+        // =========================
+        // LOGOUT
+        // =========================
         btnLogout.setOnClickListener(v -> {
             prefs.edit().clear().apply();
             startActivity(new Intent(ProfileActivity.this, LoginActivity.class));
@@ -96,7 +130,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    // 🔥 NHẬN ẢNH (CHỈ LƯU LOCAL - KHÔNG UPLOAD)
+    // =========================
+    // NHẬN ẢNH
+    // =========================
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -108,7 +144,6 @@ public class ProfileActivity extends AppCompatActivity {
             if (imageUri != null) {
                 imgAvatar.setImageURI(imageUri);
 
-                // 👉 lưu local
                 getSharedPreferences("APP", MODE_PRIVATE)
                         .edit()
                         .putString("AVATAR", imageUri.toString())
