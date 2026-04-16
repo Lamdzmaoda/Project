@@ -14,6 +14,22 @@ spring:
     password: ${DBMS_PASSWORD:lamdzbodoi}
 
     driver-class-name: "com.mysql.cj.jdbc.Driver"
+  ai:
+    openai:
+      api-key: ${GEMINI_KEY}
+      chat:
+        base-url: "https://generativelanguage.googleapis.com"
+        completions-path : "/v1beta/openai/chat/completions"
+        options :
+          model : gemini-3-flash-preview
+    chat:
+        memory:
+          repository:
+            jdbc:
+              initialize-schema: always
+    sql:
+      init:
+        mode: always
 
   jpa:
     hibernate:

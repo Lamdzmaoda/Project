@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
@@ -14,12 +15,11 @@ import java.util.Set;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ChapterResponse {
-
     String id;
     String languageName;
     String title;
     int orderIndex;
     IsLocked lockedStatus;
     LocalDateTime createAt;
-    Set<LessonResponse> lessons;
+    List<LessonResponse> lessons;
 }

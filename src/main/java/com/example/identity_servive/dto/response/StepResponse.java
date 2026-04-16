@@ -26,7 +26,7 @@ public class StepResponse {
     IsLocked lockedStatus;
     IsCompleted completedStatus;
     double xp;
-    boolean requiredToUnlockNext = false;
+    boolean requiredToUnlockNext;
     LocalDateTime createAt;
     Object data;
 

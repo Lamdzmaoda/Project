@@ -1,11 +1,17 @@
 /* (C)2026 */
 package com.example.identity_servive.entity;
 
+import com.example.identity_servive.entity.Role;
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.util.Set;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.awt.image.RasterOp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Class Entity đại diện cho bảng 'user' trong Database. Sử dụng JPA (Java Persistence API) để ánh
@@ -18,7 +24,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE) // Lombok: Mặc định mọi trường là 'private'
 @Entity
-public class User {
+public class OpenAI {
 
   /**
    * Khóa chính (Primary Key) của bảng. @GeneratedValue: Tự động tạo giá trị cho ID. strategy =
@@ -27,31 +33,22 @@ public class User {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  String id;
-
-  // Tên đăng nhập (Username)
-  @Column(
-      name = "userName",
-      unique = true,
-      columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
-  String username;
-
-  // Mật khẩu (Lưu ý: Trong thực tế, trường này PHẢI lưu mật khẩu đã băm/hash)
-  String password;
-
-  String email;
-
-  // Tên của người dùng
-  String firstName;
-
-    // Họ của người dùng
-  String lastName;
-
-  // Ngày sinh (Ánh xạ kiểu DATE trong Database)
-  LocalDate birthDate;
-
-    @Column(name = "total_xp")
-    private Double totalXp = 0.0;
-
-  @ManyToMany Set<Role> roles;
+    String id;
+    @Column(columnDefinition = "TEXT")
+    String userMessage;
+    @Column(columnDefinition = "TEXT")
+    String aiExplanation;
+    @ElementCollection
+    List<String> hints;
+    @Column(columnDefinition = "TEXT")
+    String suggestedCode;
+    String motivationMessage;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
+    @ManyToOne
+    @JoinColumn(name = "step_id")
+    Step step;
+    @CreationTimestamp
+    LocalDateTime createAt;
 }

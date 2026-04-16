@@ -49,7 +49,7 @@ public class CourseController {
                 .build();
     }
     @PostMapping("/languages")
-    ApiResponse<LanguageResponse> createChapter(@RequestBody LanguageRequest request) {
+    ApiResponse<LanguageResponse> createLanguage(@RequestBody LanguageRequest request) {
         // 1. Nhận dữ liệu từ Client, đẩy xuống Service để lưu vào DB
         // 2. Bọc kết quả trả về vào đối tượng ApiResponse chuẩn
         return ApiResponse.<LanguageResponse>builder()
@@ -102,6 +102,40 @@ public class CourseController {
     LanguageResponse updateLanguage(@RequestBody LanguageUpdateRequest request, @PathVariable("languageName") String languageName) {
         return courseService.updateLanguage(languageName, request);
     }
+    @GetMapping("/steps/{stepId}")
+    StepResponse getStep(@PathVariable("stepId") String stepId){
+        return courseService.getStepById(stepId);
+    }
+    @GetMapping("/lessons/{lessonId}")
+    LessonResponse getLesson(@PathVariable("lessonId") String lessonId){
+        return courseService.getLessonById(lessonId);
+    }
+    @GetMapping("/chapters/{chapterId}")
+    ChapterResponse getChapter(@PathVariable("chapterId") String chapterId){
+        return courseService.getChapterById(chapterId);
+    }
+    @GetMapping("/languages/{languageName}")
+    LanguageResponse getLanguage(@PathVariable("languageName") String languageName){
+        return courseService.getLanguageById(languageName);
+    }
+    @GetMapping("/steps/BetterLesson/{lessonId}")
+    ApiResponse<List<StepResponse>> getStepByLessonId(@PathVariable("lessonId") String lessonId){
+        return ApiResponse.<List<StepResponse>>builder()
+                .result(courseService.getStepByLesson(lessonId))
+                .build();
+    }
+    @GetMapping("/lessons/BetterChapter/{chapterId}")
+    ApiResponse<List<LessonResponse>> getLessonByChapterId(@PathVariable("chapterId") String chapterId){
+        return ApiResponse.<List<LessonResponse>>builder()
+                .result(courseService.getLessonByChapter(chapterId))
+                .build();
+    }
+    @GetMapping("/chapters/BetterLanguage/{languageName}")
+    ApiResponse<List<ChapterResponse>> getChapterByLanguageName(@PathVariable("languageName") String languageName){
+        return ApiResponse.<List<ChapterResponse>>builder()
+                .result(courseService.getChapterByLanguage(languageName))
+                .build();
+    }
 
     @DeleteMapping("/steps/{stepId}")
     ApiResponse<Void> deleteStep(@PathVariable("stepId") String stepId) {
@@ -138,14 +172,5 @@ public class CourseController {
 
         // 3. Trả về phản hồi trống (chỉ báo thành công)
         return ApiResponse.<Void>builder().build();
-    }
-
-
-    @PostMapping("/verify")
-    ApiResponse<VerifyResponse> verifyQuetion(@RequestBody VerifyRequest request) {
-
-        return ApiResponse.<VerifyResponse>builder()
-                .result(learningService.verifyStep(request))
-                .build();
     }
 }

@@ -37,6 +37,9 @@ public enum ErrorCode {
     NAME_EXISTED(1010, "name exists", HttpStatus.BAD_REQUEST),
     PARSE_DATA_INVALID(1011, "parse data invalid : ", HttpStatus.BAD_REQUEST),
     DATA_INTEGRITY_VIOLATION(1012, "data integrity violation : ", HttpStatus.BAD_REQUEST),
+    STEP_LOCKED(1013, "step locked", HttpStatus.BAD_REQUEST),
+    LESSON_INCOMPLETE(1014, "LESSON NOT YET COMPLETED", HttpStatus.BAD_REQUEST),
+    INVALID_ANSWER(1015, "INVALID ANSWER", HttpStatus.BAD_REQUEST)
   ;
 
   // Mã số lỗi định danh (giúp Frontend dễ dàng bắt lỗi bằng code thay vì so sánh chuỗi)

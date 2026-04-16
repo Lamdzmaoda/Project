@@ -14,6 +14,5 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CodeRequest {
-
   String input;
 }

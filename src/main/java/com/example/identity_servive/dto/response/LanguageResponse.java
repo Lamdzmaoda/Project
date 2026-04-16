@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
@@ -20,7 +21,6 @@ public class LanguageResponse {
     String description;
     String icon;
     int level;
-    LocalDateTime durationDays;
     LocalDateTime createAt;
-    Set<ChapterResponse> chapters;
+    List<ChapterResponse> chapters;
 }

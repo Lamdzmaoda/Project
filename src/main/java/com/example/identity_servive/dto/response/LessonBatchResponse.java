@@ -1,9 +1,9 @@
 package com.example.identity_servive.dto.response;
 
-import com.example.identity_servive.enums.Status;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.List;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -11,15 +11,8 @@ import lombok.experimental.FieldDefaults;
 // Object này)
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class CodeResponse {
-    Status status;
-    String errorType;
-    Integer line;
-    Integer columnIndex;
-    String errorLineCode;
-    String pointer;
-    String messageVn;
-    String output;
-
+public class LessonBatchResponse {
+    double totalXpGained;
+    boolean isLessonCompleted;
+    List<VerifyResponse> verifyResponses;
 }

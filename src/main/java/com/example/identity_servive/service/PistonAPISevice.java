@@ -87,7 +87,7 @@ public class PistonAPISevice {
                 String stdout = (String) response.get("stdout");
                 String stderr = (String) response.get("stderr");
                 String compileOut = (String) response.get("compile_output");
-                if((stderr != null && stderr.isEmpty()) || (compileOut != null && compileOut.isEmpty())) {
+                if((stderr != null && !stderr.isEmpty()) || (compileOut != null && !compileOut.isEmpty())) {
                     String rawError = decode( stderr != null && stderr.isEmpty() ? compileOut : stderr );
 
                     parseAndFormatError(rawError ,codeEntity);
@@ -131,11 +131,14 @@ public class PistonAPISevice {
 
         String[] lines = rawError.split("\n");
         for (int i = 0; i < lines.length; i++) {
-            String line = lines[i].trim();
+            String line = lines[i];
 
             // Tìm vị trí lỗi (dấu ^)
             if (line.contains("^")) {
                 entity.setPointer(line);
+                int columnIndex = line.indexOf("^");
+                entity.setColumnIndex(columnIndex);
+                // Dòng ngay phía trên dấu ^ chính là dòng code bị lỗi
                 if (i > 0) {
                     entity.setErrorLineCode(lines[i - 1].trim());
                 }
@@ -163,7 +166,13 @@ public class PistonAPISevice {
         errorDictionary.put("ValueError", "Lỗi giá trị không hợp lệ");
         errorDictionary.put("ZeroDivisionError", "Lỗi chia cho số 0");
 
-        return errorDictionary.entrySet().iterator().next().getValue();
+        for(Map.Entry<String, String> entry : errorDictionary.entrySet()) {
+            if(line.contains(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        return "Lỗi không xác định: " + line;
     }
     private void logToConsole(String output) {
         System.out.println("\n========= [KIỂM TRA CODE PYTHON] =========");

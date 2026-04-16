@@ -30,9 +30,10 @@ public class Code {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
-  Status status = Status.SUCCESS;
+  Status status;
   String errorType;
-  int line;
+  Integer line;
+  Integer columnIndex;
   String errorLineCode;
   String pointer;
   String messageVn;

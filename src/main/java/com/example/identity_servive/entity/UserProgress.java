@@ -2,6 +2,7 @@
 package com.example.identity_servive.entity;
 
 import com.example.identity_servive.enums.IsCompleted;
+import com.example.identity_servive.enums.IsLocked;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -38,7 +39,10 @@ public class UserProgress {
   Step step;
 
   @Column(nullable = false)
-  IsCompleted completedStatus = IsCompleted.FALSE;
+  IsCompleted completedStatus;
+
+  @Column(nullable = false)
+  IsLocked isLocked;
 
   @Column(nullable = false)
   double earnedXp;

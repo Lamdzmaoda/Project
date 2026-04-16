@@ -4,6 +4,8 @@ package com.example.identity_servive.dto.request;
 import com.example.identity_servive.validator.DobConstraint;
 import java.time.LocalDate;
 import java.util.List;
+
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -17,17 +19,16 @@ import lombok.experimental.FieldDefaults;
 @Builder // Hỗ trợ khởi tạo đối tượng theo pattern Builder
 @FieldDefaults(level = AccessLevel.PRIVATE) // Tự động đặt tất cả các field là 'private'
 public class UserUpdateRequest {
-
-  // Mật khẩu mới nếu người dùng muốn thay đổi
+    @Size(min = 8, message = "PASSWORD_INVALID")
   String password;
 
   // Tên mới
-  String firstName;
+  String firstname;
 
   String email;
 
     // Họ mới
-  String lastName;
+  String lastname;
 
   // Ngày sinh cần cập nhật
   @DobConstraint(min = 10, message = "INVALID_DOB")

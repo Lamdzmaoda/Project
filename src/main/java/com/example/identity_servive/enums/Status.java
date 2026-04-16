@@ -4,5 +4,7 @@ public enum Status {
     ACTIVE,
     OFFLINE,
     ERROR,
-    SUCCESS
+    SUCCESS,
+    IN_PROGRESS,
+    IS_COMPLETE
 }

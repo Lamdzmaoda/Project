@@ -4,6 +4,7 @@ import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
 import com.example.identity_servive.enums.Mode;
 import com.example.identity_servive.enums.Type;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,11 +14,14 @@ import lombok.experimental.FieldDefaults;
 // Object này)
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class VerifyResponse {
     boolean isCorrect;
     double earnedXp;
     String message;
-    Object correctAnswer;
+    Object correctAnswer; // Đáp án đúng từ DB
+    Object userOutput;    // Output thực tế (nếu là Code thì là kết quả chạy code)
+    com.example.identity_servive.enums.Type type;
 
 
 }

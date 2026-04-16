@@ -27,5 +27,4 @@ public class StepRequest {
     double xp;
     boolean requiredToUnlockNext;
     Object data;
-
 }

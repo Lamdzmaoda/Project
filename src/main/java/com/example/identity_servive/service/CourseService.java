@@ -4,7 +4,7 @@ import com.example.identity_servive.dto.request.*;
 import com.example.identity_servive.dto.response.*;
 import com.example.identity_servive.entity.*;
 import com.example.identity_servive.enums.IsCompleted;
-import com.example.identity_servive.enums.Type;
+import com.example.identity_servive.enums.IsLocked;
 import com.example.identity_servive.exception.AppException;
 import com.example.identity_servive.exception.ErrorCode;
 import com.example.identity_servive.mapper.CourseMapper;
@@ -15,14 +15,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j // Hỗ trợ ghi lại lịch sử hoạt động (Logging)
 @Service // Đăng ký lớp này là một Service do Spring quản lý (Bean)
@@ -33,11 +32,13 @@ public class CourseService {
     ChapterRepository chapterRepository;
     StepRepository stepRepository;
     LanguageRepository languageRepository;
+    UserRepository userRepository;
     CourseMapper courseMapper;
-
+    UserStepProgressRepository userStepProgressRepository;
 
     ObjectMapper objectMapper = new ObjectMapper();
 
+    @Transactional
     public StepResponse createStep(StepRequest stepRequest) {
         Step step = courseMapper.toStep(stepRequest);
         var lesson = lessonRepository.findById(stepRequest.getLessonId())
@@ -47,13 +48,14 @@ public class CourseService {
                 String jsonBody = objectMapper.writeValueAsString(stepRequest.getData());
                 step.setData(jsonBody);
         }catch (JsonProcessingException e){
-            log.error("Lỗi parse dữ liệu"+e.getMessage());
+            log.error("Lỗi parse dữ liệu: {}", e.getMessage());
             throw new AppException(ErrorCode.UNAUTHORIZED_EXISTED);
         }
         step.setLesson(lesson);
         step = stepRepository.save(step);
         return convertToResponse(step);
     }
+
     @Transactional
     public LessonResponse createLesson(LessonRequest lessonRequest) {
         var chapter = chapterRepository.findById(lessonRequest.getChapterId())
@@ -89,6 +91,8 @@ public class CourseService {
 
         return courseMapper.toChapterResponse(chapter);
     }
+
+    @Transactional
     public LanguageResponse createLanguage(LanguageRequest languageRequest) {
 
         if(languageRepository.existsByName(languageRequest.getName()))
@@ -102,8 +106,37 @@ public class CourseService {
         languageRepository.save(language);
         return courseMapper.toLanguageResponse(language);
     }
+    public StepResponse getStepById(String stepId){
+        return courseMapper.toStepResponse(stepRepository.findById(stepId).orElseThrow(()
+                -> new AppException(ErrorCode.ID_NOT_EXISTED)));
+    }
+    public LessonResponse getLessonById(String lessonId){
+        return courseMapper.toLessonResponse(lessonRepository.findById(lessonId).orElseThrow(()
+                -> new AppException(ErrorCode.ID_NOT_EXISTED)));
+    }
+    public ChapterResponse getChapterById(String chapterId){
+        return courseMapper.toChapterResponse(chapterRepository.findById(chapterId).orElseThrow(()
+                -> new AppException(ErrorCode.ID_NOT_EXISTED)));
+    }
+    public LanguageResponse getLanguageById(String languageName){
+        return courseMapper.toLanguageResponse(languageRepository.findById(languageName).orElseThrow(()
+                -> new AppException(ErrorCode.ID_NOT_EXISTED)));
+    }
+    public List<StepResponse> getStepByLesson(String lessonId){
+        var steps = stepRepository.findByLessonId(lessonId);
+        return steps.stream().map(this::convertToResponse).toList();
+    }
+    public List<LessonResponse> getLessonByChapter(String chapterId){
+        var lessons = lessonRepository.findByChapterId(chapterId);
+        return lessons.stream().map(courseMapper::toLessonResponse).toList();
+    }
+    public List<ChapterResponse> getChapterByLanguage(String languageName){
+        var chapters = chapterRepository.findByLanguageName(languageName);
+        return chapters.stream().map(courseMapper::toChapterResponse).toList();
+    }
     public List<StepResponse> getStep() {
         var steps = stepRepository.findAll();
+
 
         return steps.stream().map(this::convertToResponse).toList();
     }
@@ -116,7 +149,7 @@ public class CourseService {
                 stepResponse.setData(dataObject);
             }
         }catch (JsonProcessingException e){
-            log.error("Lỗi parse JSON: " + e.getMessage());
+            log.error("Lỗi parse JSON: {}", e.getMessage());
         }
         return stepResponse;
     }
@@ -131,18 +164,56 @@ public class CourseService {
     public List<LanguageResponse> getLanguage() {
         return languageRepository.findAll().stream().map(courseMapper::toLanguageResponse).toList();
     }
+    public StepResponse getStepOfUserProgress(String stepId) {
+        Step step = stepRepository.findById(stepId).orElseThrow(()
+                -> new AppException(ErrorCode.ID_NOT_EXISTED));
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = context.getAuthentication();
+        if (authentication == null || authentication.getName() == null) {
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
+        }
+
+        String name = authentication.getName();
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        // 3. Lấy tiến trình của User cho Step này
+        UserStepProgress progress = userStepProgressRepository.findByUserAndStep(user, step)
+                .orElse(null); // Hoặc tạo mặc định là LOCKED
+
+        // 4. Kiểm tra quyền truy cập (Ví dụ: Nếu bị khóa thì không cho xem)
+        if (progress == null || progress.getLockedStatus() == IsLocked.TRUE_LOCKED) {
+            throw new AppException(ErrorCode.STEP_LOCKED); // Giả sử bạn có mã lỗi này
+        }
+
+        // 5. Chuyển đổi sang Response (Dùng Mapper của bạn)
+        StepResponse response = convertToResponse(step);
+
+        // Gán thêm thông tin tiến trình
+        response.setCompletedStatus(progress.getCompletedStatus());
+        response.setLockedStatus(progress.getLockedStatus());
+
+        return response;
+    }
+
+    @Transactional
     public void deleteStep(String stepId) {
         stepRepository.deleteById(stepId);
     }
+    @Transactional
     public void deleteLesson(String lessonId) {
         lessonRepository.deleteById(lessonId);
     }
-    public void deleteChapter(String chapterName) {
-        chapterRepository.deleteById(chapterName);
+    @Transactional
+    public void deleteChapter(String chapterId) {
+        chapterRepository.deleteById(chapterId);
     }
+    @Transactional
     public void deleteLanguage(String languageName) {
-        chapterRepository.deleteById(languageName);
+        languageRepository.deleteById(languageName);
     }
+
+    @Transactional
     public StepResponse updateStep(String stepId, StepRequest stepRequest) {
         Step step = stepRepository.findById(stepId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));
@@ -151,12 +222,15 @@ public class CourseService {
             try{
                 step.setData(objectMapper.writeValueAsString(stepRequest.getData()));
             }catch (JsonProcessingException e){
-                throw new RuntimeException(e.getMessage());
+                log.error("Error serializing step data: {}", e.getMessage());
+                throw new AppException(ErrorCode.UNAUTHORIZED_EXISTED);
             }
         }
         stepRepository.save(step);
         return convertToResponse(step);
     }
+
+    @Transactional
     public LessonResponse updateLesson(String lessonId, LessonRequest request) {
         Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));
@@ -171,6 +245,8 @@ public class CourseService {
         var savedlesson = lessonRepository.save(lesson);
         return courseMapper.toLessonResponse(savedlesson);
     }
+
+    @Transactional
     public ChapterResponse updateChapter(String chapterId, ChapterRequest chapterRequest) {
         Chapter chapter = chapterRepository.findById(chapterId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));
@@ -183,6 +259,8 @@ public class CourseService {
         var savedchapter = chapterRepository.save(chapter);
         return  courseMapper.toChapterResponse(savedchapter);
     }
+
+    @Transactional
     public LanguageResponse updateLanguage(String languageId, LanguageUpdateRequest request) {
         Language language = languageRepository.findById(languageId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));

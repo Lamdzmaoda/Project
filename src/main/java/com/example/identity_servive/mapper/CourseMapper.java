@@ -7,10 +7,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.mapstruct.*;
 
-
-/**
- * Đổi sang abstract class để có thể sử dụng ObjectMapper và xử lý logic phức tạp.
- */
 @Mapper(componentModel = "spring")
 public abstract class CourseMapper {
 
@@ -31,7 +27,7 @@ public abstract class CourseMapper {
     @Mapping(target = "lessons", ignore = true)
     public abstract Chapter toChapter(ChapterRequest chapterRequest);
 
-    // Lấy name từ language để map vào languageName trong DTO
+    // Map tên ngôn ngữ từ đối tượng Language vào trường languageName của DTO
     @Mapping(target = "languageName", source = "language.name")
     public abstract ChapterResponse toChapterResponse(Chapter chapter);
 
@@ -43,17 +39,18 @@ public abstract class CourseMapper {
     @Mapping(target = "steps", ignore = true)
     public abstract Lesson toLesson(LessonRequest lessonRequest);
 
+    // Không map ngược lại Chapter để tránh vòng lặp đệ quy
     public abstract LessonResponse toLessonResponse(Lesson lesson);
 
     @Mapping(target = "steps", ignore = true)
     public abstract void updateLesson(LessonRequest request, @MappingTarget Lesson lesson);
 
 
-    // --- STEP MAPPING (TRUNG TÂM CỦA VẤN ĐỀ) ---
-
+    // --- STEP MAPPING ---
     @Mapping(target = "data", ignore = true)
     public abstract Step toStep(StepRequest stepRequest);
 
+    // Không map ngược lại Lesson để tránh vòng lặp đệ quy
     @Mapping(target = "data", ignore = true)
     public abstract StepResponse toStepResponse(Step step);
 
@@ -61,20 +58,17 @@ public abstract class CourseMapper {
     public abstract void updateStep(StepRequest request, @MappingTarget Step step);
 
     /**
-     * Logic giải mã JSON: 
-     * Sau khi MapStruct map xong các trường cơ bản, hàm này sẽ chạy để xử lý trường 'data'.
-     * Nó giúp 'data' không còn bị null khi get Language hay Lesson nữa.
+     * Logic giải mã JSON:
+     * Xử lý trường 'data' từ String (DB) sang Object (Client).
      */
     @AfterMapping
     protected void handleStepDataMapping(Step step, @MappingTarget StepResponse response) {
         try {
             if (step.getData() != null && !step.getData().isEmpty()) {
-                // Chuyển chuỗi JSON (String) từ Database thành Object (Map/List) để trả về Client
                 Object dataObject = objectMapper.readValue(step.getData(), Object.class);
                 response.setData(dataObject);
             }
         } catch (Exception e) {
-            // Nếu lỗi parse JSON thì để data là null để không crash ứng dụng
             response.setData(null);
         }
     }
