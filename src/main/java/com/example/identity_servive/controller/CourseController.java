@@ -22,7 +22,6 @@ public class CourseController {
 
     // Tiêm Service xử lý nghiệp vụ liên quan đến Permission
     CourseService courseService;
-    LearningService learningService;
 
     @PostMapping("/steps")
     ApiResponse<StepResponse> createStep(@RequestBody StepRequest request) {
@@ -57,25 +56,25 @@ public class CourseController {
                 .build();
     }
 
-    @GetMapping("/steps")
-    ApiResponse<List<StepResponse>> getSteps() {
+    @GetMapping("/steps/admin/{lessonId}")
+    ApiResponse<List<StepResponse>> getSteps(@PathVariable("lessonId") String lessonId) {
         // Gọi Service lấy toàn bộ danh sách và trả về cho Client
         return ApiResponse.<List<StepResponse>>builder()
-                .result(courseService.getStep())
+                .result(courseService.getAllStepsByLessonForAdmin(lessonId))
                 .build();
     }
-    @GetMapping("/lessons")
-    ApiResponse<List<LessonResponse>> getLessons() {
+    @GetMapping("/lessons/admin/{chapterId}")
+    ApiResponse<List<LessonResponse>> getLessons(@PathVariable("chapterId") String chapterId) {
         // Gọi Service lấy toàn bộ danh sách và trả về cho Client
         return ApiResponse.<List<LessonResponse>>builder()
-                .result(courseService.getLesson())
+                .result(courseService.getAllLessonsByChapterForAdmin(chapterId))
                 .build();
     }
-    @GetMapping("/chapters")
-    ApiResponse<List<ChapterResponse>> getChapter() {
+    @GetMapping("/chapters/admin/{languageName}")
+    ApiResponse<List<ChapterResponse>> getChapters(@PathVariable("languageName") String languageName) {
         // Gọi Service lấy toàn bộ danh sách và trả về cho Client
         return ApiResponse.<List<ChapterResponse>>builder()
-                .result(courseService.getChapter())
+                .result(courseService.getAllChaptersByLanguageForAdmin(languageName))
                 .build();
     }
     @GetMapping("/languages")
@@ -87,15 +86,15 @@ public class CourseController {
     }
 
     @PutMapping("/steps/{stepsId}")
-    StepResponse updateStep(@RequestBody StepRequest request, @PathVariable("stepsId") String stepsId) {
+    StepResponse updateStep(@RequestBody StepUpdateRequest request, @PathVariable("stepsId") String stepsId) {
         return courseService.updateStep(stepsId, request);
     }
     @PutMapping("/lessons/{lessonId}")
-    LessonResponse updateLesson(@RequestBody LessonRequest request, @PathVariable("lessonId") String lessonId) {
+    LessonResponse updateLesson(@RequestBody LessonUpdateRequest request, @PathVariable("lessonId") String lessonId) {
         return courseService.updateLesson(lessonId, request);
     }
     @PutMapping("/chapters/{chapterId}")
-    ChapterResponse updateChapter(@RequestBody ChapterRequest request, @PathVariable("chapterId") String chapterId) {
+    ChapterResponse updateChapter(@RequestBody ChapterUpdateRequest request, @PathVariable("chapterId") String chapterId) {
         return courseService.updateChapter(chapterId, request);
     }
     @PutMapping("/languages/{languageName}")
@@ -137,40 +136,51 @@ public class CourseController {
                 .build();
     }
 
-    @DeleteMapping("/steps/{stepId}")
+    // Sửa toàn bộ nhóm hàm delete
+    @DeleteMapping("/steps/{stepId}") // Đổi từ @PutMapping thành @DeleteMapping
     ApiResponse<Void> deleteStep(@PathVariable("stepId") String stepId) {
-        // 1. Lấy tên permission từ đường dẫn (URL Path)
-        // 2. Gọi Service thực hiện lệnh xóa
         courseService.deleteStep(stepId);
-
-        // 3. Trả về phản hồi trống (chỉ báo thành công)
         return ApiResponse.<Void>builder().build();
     }
+
     @DeleteMapping("/lessons/{lessonId}")
     ApiResponse<Void> deleteLesson(@PathVariable("lessonId") String lessonId) {
-        // 1. Lấy tên permission từ đường dẫn (URL Path)
-        // 2. Gọi Service thực hiện lệnh xóa
         courseService.deleteLesson(lessonId);
-
-        // 3. Trả về phản hồi trống (chỉ báo thành công)
         return ApiResponse.<Void>builder().build();
     }
+
     @DeleteMapping("/chapters/{chapterId}")
     ApiResponse<Void> deleteChapter(@PathVariable("chapterId") String chapterId) {
-        // 1. Lấy tên permission từ đường dẫn (URL Path)
-        // 2. Gọi Service thực hiện lệnh xóa
         courseService.deleteChapter(chapterId);
-
-        // 3. Trả về phản hồi trống (chỉ báo thành công)
         return ApiResponse.<Void>builder().build();
     }
+
     @DeleteMapping("/languages/{languageName}")
     ApiResponse<Void> deleteLanguage(@PathVariable("languageName") String languageName) {
-        // 1. Lấy tên permission từ đường dẫn (URL Path)
-        // 2. Gọi Service thực hiện lệnh xóa
         courseService.deleteLanguage(languageName);
+        return ApiResponse.<Void>builder().build();
+    }
+    @DeleteMapping("/steps/admin/{stepId}") // Đổi từ @PutMapping thành @DeleteMapping
+    ApiResponse<Void> purgeStep(@PathVariable("stepId") String stepId) {
+        courseService.purgeStep(stepId);
+        return ApiResponse.<Void>builder().build();
+    }
 
-        // 3. Trả về phản hồi trống (chỉ báo thành công)
+    @DeleteMapping("/lessons/admin/{lessonId}")
+    ApiResponse<Void> purgeLesson(@PathVariable("lessonId") String lessonId) {
+        courseService.purgeLesson(lessonId);
+        return ApiResponse.<Void>builder().build();
+    }
+
+    @DeleteMapping("/chapters/admin/{chapterId}")
+    ApiResponse<Void> purgeChapter(@PathVariable("chapterId") String chapterId) {
+        courseService.purgeChapter(chapterId);
+        return ApiResponse.<Void>builder().build();
+    }
+
+    @DeleteMapping("/languages/admin/{languageName}")
+    ApiResponse<Void> purgeLanguage(@PathVariable("languageName") String languageName) {
+        courseService.purgeLanguage(languageName);
         return ApiResponse.<Void>builder().build();
     }
 }

@@ -11,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpEntity;
@@ -22,7 +21,6 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,7 +32,7 @@ import java.util.regex.Pattern;
 @Service // Đăng ký lớp này là một Service do Spring quản lý (Bean)
 @RequiredArgsConstructor // Tự động tạo Constructor để tiêm (Inject) các Repository và Mapper vào
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class PistonAPISevice {
+public class Judge0APIService {
     CodeRepository codeRepository;
     CodeMapper codeMapper;
     // --- CẤU HÌNH JUDGE0 API ---
@@ -88,7 +86,7 @@ public class PistonAPISevice {
                 String stderr = (String) response.get("stderr");
                 String compileOut = (String) response.get("compile_output");
                 if((stderr != null && !stderr.isEmpty()) || (compileOut != null && !compileOut.isEmpty())) {
-                    String rawError = decode( stderr != null && stderr.isEmpty() ? compileOut : stderr );
+                    String rawError = decode( stderr != null && !stderr.isEmpty() ? compileOut : stderr );
 
                     parseAndFormatError(rawError ,codeEntity);
                     codeEntity.setStatus(Status.ERROR);

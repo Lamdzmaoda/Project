@@ -55,6 +55,7 @@ public class UserControler {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // In log tên người dùng và các quyền (Role) họ đang có để kiểm tra
+        assert authentication != null;
         log.info("Username: {}", authentication.getName());
         authentication
                 .getAuthorities()

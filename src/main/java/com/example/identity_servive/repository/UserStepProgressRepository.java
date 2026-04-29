@@ -11,4 +11,6 @@ public interface UserStepProgressRepository extends JpaRepository<UserStepProgre
     Optional<UserStepProgress> findByUserAndStep(User user, Step step);
     int countByUserAndStep_LessonAndCompletedStatusTrue(User user, Lesson lesson);
     boolean existsByUserAndStep(User user, Step step);
+
+    void deleteAllByStepId(String stepId);
 }

@@ -12,12 +12,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Slf4j // Hỗ trợ ghi log theo dõi luồng xử lý
 @Service // Đăng ký lớp này là một Service (Bean) do Spring quản lý
 @RequiredArgsConstructor // Tự động tạo Constructor để tiêm (Inject) các Repository và Mapper
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true) // Mặc định các field là 'private final'
+@PreAuthorize("hasRole('ADMIN')")
 public class RoleService {
 
     // Repository để thao tác với bảng Role trong Database
@@ -33,6 +35,7 @@ public class RoleService {
      * Nghiệp vụ: Tạo một Vai trò (Role) mới
      * @param roleRequest Chứa tên Role và danh sách các ID của Permission đi kèm
      */
+
     public RoleRespone create(RoleRequest roleRequest) {
         // 1. Chuyển đổi thông tin cơ bản (name, description) từ Request sang thực thể Role
         var role = roleMapper.toRole(roleRequest);
@@ -64,6 +67,7 @@ public class RoleService {
      * Nghiệp vụ: Xóa một Vai trò cụ thể
      * @param role Tên (hoặc ID) của vai trò cần xóa
      */
+
     public void delete(String role) {
         // Xóa bản ghi Role trong Database theo khóa chính (ID)
         roleRepository.deleteById(role);

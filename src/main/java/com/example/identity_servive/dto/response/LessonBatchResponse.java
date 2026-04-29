@@ -1,5 +1,6 @@
 package com.example.identity_servive.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,8 +12,10 @@ import java.util.List;
 // Object này)
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class LessonBatchResponse {
-    double totalXpGained;
+    Double totalXpGained;
     boolean isLessonCompleted;
+    double progressPercentage;
     List<VerifyResponse> verifyResponses;
 }

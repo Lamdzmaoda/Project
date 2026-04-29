@@ -3,6 +3,7 @@ package com.example.identity_servive.service;
 import com.example.identity_servive.dto.request.EnrollmentRequest;
 import com.example.identity_servive.dto.response.EnrollmentResponse;
 import com.example.identity_servive.entity.*;
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
 import com.example.identity_servive.enums.Status;
@@ -19,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j // Hỗ trợ ghi lại lịch sử hoạt động (Logging)
@@ -30,18 +32,13 @@ public class EnrollmentService {
     LanguageRepository languageRepository;
     UserRepository userRepository;
     EnrollmentMapper enrollmentMapper;
-    ChapterRepository chapterRepository;
-    LessonRepository lessonRepository;
-    UserChapterProgressRepository userChapterProgressRepository;
-    UserLessonProgressRepository userLessonProgressRepository;
-    UserStepProgressRepository userStepProgressRepository;
-    StepRepository stepRepository;
+    LearningService learningService;
 
     @Transactional
     public EnrollmentResponse enrollCourse(EnrollmentRequest request) {
         var context = SecurityContextHolder.getContext();
 
-        String username = context.getAuthentication().getName();
+        String username = Objects.requireNonNull(context.getAuthentication()).getName();
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Language language = languageRepository.findById(request.languageName())
@@ -59,53 +56,14 @@ public class EnrollmentService {
                     .status(Status.IN_PROGRESS)
                     .build();
             enrollmentRepository.save(enrollment);
-            unlockFirstContent(enrollment, user);
+            learningService.initializeLearningProgressForLanguage(language, user);
         }
 
 //        var userLearning = enrollmentRepository.findAllByUser(user);
 //        List<String> users =  userLearning.stream().map(enr -> enr.getUser().getUsername()).toList();
+
         EnrollmentResponse enrollmentResponse = enrollmentMapper.toEnrollmentResponse(enrollment);
         enrollmentResponse.setUserName(username);
         return enrollmentResponse;
-    }
-
-    @Transactional
-    protected void unlockFirstContent(Enrollment enrollment, User user) {
-        Language language = enrollment.getLanguage();
-
-        Chapter firstChapter = chapterRepository.findFirstByLanguageOrderByOrderIndexAsc(language)
-                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
-
-        UserChapterProgress userChapterProgress = UserChapterProgress.builder()
-                .user(user)
-                .chapter(firstChapter)
-                .lockedStatus(IsLocked.FALSE_LOCKED)
-                .completedStatus(IsCompleted.FALSE)
-                .build();
-        userChapterProgressRepository.save(userChapterProgress);
-
-        Lesson firstLesson = lessonRepository.findFirstByChapterOrderByOrderIndexAsc(firstChapter)
-                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
-
-        UserLessonProgress userLessonProgress = UserLessonProgress
-                .builder()
-                .user(user)
-                .lesson(firstLesson)
-                .lockedStatus(IsLocked.FALSE_LOCKED)
-                .completedStatus(IsCompleted.FALSE)
-                .build();
-        userLessonProgressRepository.save(userLessonProgress);
-
-        Step firstStep = stepRepository.findFirstByLessonIdAndOrderIndexGreaterThanOrderByOrderIndexAsc(firstLesson.getId(), 0)
-                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
-        UserStepProgress userStepProgress = UserStepProgress.builder()
-                .user(user)
-                .step(firstStep)
-                .lockedStatus(IsLocked.FALSE_LOCKED)
-                .completedStatus(IsCompleted.FALSE)
-                .build();
-        userStepProgressRepository.save(userStepProgress);
-
-
     }
 }

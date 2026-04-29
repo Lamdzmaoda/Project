@@ -1,5 +1,6 @@
 package com.example.identity_servive.entity;
 
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+
 public class Lesson {
 
     @Id
@@ -56,7 +58,10 @@ public class Lesson {
     @Column(name = "is_completed", nullable = false)
     @Builder.Default
     IsCompleted completedStatus = IsCompleted.FALSE;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    ContentStatus status = ContentStatus.ACTIVE; // Mặc định là ACTIVE
     /**
      * Nội dung tóm tắt bài học (Markdown).
      */

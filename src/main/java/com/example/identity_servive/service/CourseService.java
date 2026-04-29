@@ -3,6 +3,7 @@ package com.example.identity_servive.service;
 import com.example.identity_servive.dto.request.*;
 import com.example.identity_servive.dto.response.*;
 import com.example.identity_servive.entity.*;
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
 import com.example.identity_servive.exception.AppException;
@@ -15,11 +16,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.*;
 
@@ -35,28 +39,21 @@ public class CourseService {
     UserRepository userRepository;
     CourseMapper courseMapper;
     UserStepProgressRepository userStepProgressRepository;
+    UserLessonProgressRepository userLessonProgressRepository;
 
-    ObjectMapper objectMapper = new ObjectMapper();
 
     @Transactional
+    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public StepResponse createStep(StepRequest stepRequest) {
         Step step = courseMapper.toStep(stepRequest);
         var lesson = lessonRepository.findById(stepRequest.getLessonId())
                 .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
-
-        try{
-                String jsonBody = objectMapper.writeValueAsString(stepRequest.getData());
-                step.setData(jsonBody);
-        }catch (JsonProcessingException e){
-            log.error("Lỗi parse dữ liệu: {}", e.getMessage());
-            throw new AppException(ErrorCode.UNAUTHORIZED_EXISTED);
-        }
         step.setLesson(lesson);
         step = stepRepository.save(step);
-        return convertToResponse(step);
+        return courseMapper.toStepResponse(step);
     }
-
     @Transactional
+    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public LessonResponse createLesson(LessonRequest lessonRequest) {
         var chapter = chapterRepository.findById(lessonRequest.getChapterId())
                 .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
@@ -74,6 +71,7 @@ public class CourseService {
         return courseMapper.toLessonResponse(savedLesson);
     }
     @Transactional
+    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public ChapterResponse createChapter(ChapterRequest chapterRequest) {
         var chapter = courseMapper.toChapter(chapterRequest);
 
@@ -91,8 +89,8 @@ public class CourseService {
 
         return courseMapper.toChapterResponse(chapter);
     }
-
     @Transactional
+    @PreAuthorize("hasAuthority('CREATE_COURSE')")
     public LanguageResponse createLanguage(LanguageRequest languageRequest) {
 
         if(languageRepository.existsByName(languageRequest.getName()))
@@ -106,132 +104,150 @@ public class CourseService {
         languageRepository.save(language);
         return courseMapper.toLanguageResponse(language);
     }
+    @PreAuthorize("hasRole('USER')")
     public StepResponse getStepById(String stepId){
-        return courseMapper.toStepResponse(stepRepository.findById(stepId).orElseThrow(()
+        return courseMapper.toStepResponse(stepRepository.findByIdAndStatus(stepId, ContentStatus.ACTIVE).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED)));
     }
+    @PreAuthorize("hasRole('USER')")
     public LessonResponse getLessonById(String lessonId){
-        return courseMapper.toLessonResponse(lessonRepository.findById(lessonId).orElseThrow(()
+        return courseMapper.toLessonResponse(lessonRepository.findByIdAndStatus(lessonId, ContentStatus.ACTIVE).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED)));
     }
-    public ChapterResponse getChapterById(String chapterId){
-        return courseMapper.toChapterResponse(chapterRepository.findById(chapterId).orElseThrow(()
+    @PreAuthorize("hasRole('USER')")
+    public ChapterResponse getChapterById(String chapterId) {
+        return courseMapper.toChapterResponse(chapterRepository.findByIdAndStatus(chapterId, ContentStatus.ACTIVE).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED)));
     }
+    @PreAuthorize("hasRole('USER')")
     public LanguageResponse getLanguageById(String languageName){
-        return courseMapper.toLanguageResponse(languageRepository.findById(languageName).orElseThrow(()
+        return courseMapper.toLanguageResponse(languageRepository.findByNameAndStatus(languageName, ContentStatus.ACTIVE).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED)));
     }
+    @PreAuthorize("hasRole('USER')")
     public List<StepResponse> getStepByLesson(String lessonId){
-        var steps = stepRepository.findByLessonId(lessonId);
-        return steps.stream().map(this::convertToResponse).toList();
+        var steps = stepRepository.findAllByLessonIdAndStatusOrderByOrderIndexAsc(lessonId, ContentStatus.ACTIVE);
+        return steps.stream().map(courseMapper::toStepResponse).toList();
     }
+    @PreAuthorize("hasRole('USER')")
     public List<LessonResponse> getLessonByChapter(String chapterId){
-        var lessons = lessonRepository.findByChapterId(chapterId);
+        var lessons = lessonRepository.findAllByChapterIdAndStatusOrderByOrderIndexAsc(chapterId, ContentStatus.ACTIVE);
         return lessons.stream().map(courseMapper::toLessonResponse).toList();
     }
+    @PreAuthorize("hasRole('USER')")
     public List<ChapterResponse> getChapterByLanguage(String languageName){
-        var chapters = chapterRepository.findByLanguageName(languageName);
+        var chapters = chapterRepository.findAllByLanguageNameAndStatusOrderByOrderIndexAsc(languageName, ContentStatus.ACTIVE);
         return chapters.stream().map(courseMapper::toChapterResponse).toList();
     }
-    public List<StepResponse> getStep() {
-        var steps = stepRepository.findAll();
-
-
-        return steps.stream().map(this::convertToResponse).toList();
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<StepResponse> getAllStepsByLessonForAdmin(String lessonId) {
+        var steps = stepRepository.findAllByLessonIdOrderByOrderIndexAsc(lessonId);
+        return steps.stream().map(courseMapper::toStepResponse).toList();
     }
-    private StepResponse convertToResponse(Step step) {
-        StepResponse stepResponse = courseMapper.toStepResponse(step);
-
-        try{
-            if(step.getData() != null && !step.getData().isEmpty()){
-                Object dataObject = objectMapper.readValue(step.getData(), Object.class);
-                stepResponse.setData(dataObject);
-            }
-        }catch (JsonProcessingException e){
-            log.error("Lỗi parse JSON: {}", e.getMessage());
-        }
-        return stepResponse;
-    }
-    public List<LessonResponse> getLesson() {
-        var lessons = lessonRepository.findAll();
-
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<LessonResponse> getAllLessonsByChapterForAdmin(String chapterId) {
+        var lessons = lessonRepository.findAllByChapterIdOrderByOrderIndexAsc(chapterId);
         return lessons.stream().map(courseMapper::toLessonResponse).toList();
     }
-    public List<ChapterResponse> getChapter() {
-        return chapterRepository.findAll().stream().map(courseMapper::toChapterResponse).toList();
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ChapterResponse> getAllChaptersByLanguageForAdmin(String languageName) {
+        return chapterRepository.findAllByLanguageNameOrderByOrderIndexAsc(languageName).stream().map(courseMapper::toChapterResponse).toList();
     }
+    @PreAuthorize("hasRole('ADMIN')")
     public List<LanguageResponse> getLanguage() {
         return languageRepository.findAll().stream().map(courseMapper::toLanguageResponse).toList();
     }
-    public StepResponse getStepOfUserProgress(String stepId) {
-        Step step = stepRepository.findById(stepId).orElseThrow(()
-                -> new AppException(ErrorCode.ID_NOT_EXISTED));
-
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        if (authentication == null || authentication.getName() == null) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        }
-
-        String name = authentication.getName();
-        User user = userRepository.findByUsername(name)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        // 3. Lấy tiến trình của User cho Step này
-        UserStepProgress progress = userStepProgressRepository.findByUserAndStep(user, step)
-                .orElse(null); // Hoặc tạo mặc định là LOCKED
-
-        // 4. Kiểm tra quyền truy cập (Ví dụ: Nếu bị khóa thì không cho xem)
-        if (progress == null || progress.getLockedStatus() == IsLocked.TRUE_LOCKED) {
-            throw new AppException(ErrorCode.STEP_LOCKED); // Giả sử bạn có mã lỗi này
-        }
-
-        // 5. Chuyển đổi sang Response (Dùng Mapper của bạn)
-        StepResponse response = convertToResponse(step);
-
-        // Gán thêm thông tin tiến trình
-        response.setCompletedStatus(progress.getCompletedStatus());
-        response.setLockedStatus(progress.getLockedStatus());
-
-        return response;
-    }
-
+    @PreAuthorize("hasAuthority('DELETE_COURSE')")
     @Transactional
     public void deleteStep(String stepId) {
-        stepRepository.deleteById(stepId);
+        Step step = stepRepository.findByIdAndStatus(stepId, ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
+                step.setStatus(ContentStatus.DELETED);
+                stepRepository.save(step);
     }
+    @PreAuthorize("hasAuthority('DELETE_COURSE')")
     @Transactional
     public void deleteLesson(String lessonId) {
-        lessonRepository.deleteById(lessonId);
+        Lesson lesson = lessonRepository.findByIdAndStatus(lessonId, ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
+        lesson.getSteps().forEach(step -> {
+            deleteStep(step.getId());
+        });
+        lesson.setStatus(ContentStatus.DELETED);
+        lessonRepository.save(lesson);
     }
+    @PreAuthorize("hasAuthority('DELETE_COURSE')")
     @Transactional
     public void deleteChapter(String chapterId) {
-        chapterRepository.deleteById(chapterId);
+        Chapter chapter = chapterRepository.findByIdAndStatus(chapterId, ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
+        chapter.getLessons().forEach(lesson -> {
+            deleteLesson(lesson.getId());
+        });
+        chapter.setStatus(ContentStatus.DELETED);
+        chapterRepository.save(chapter);
     }
+    @PreAuthorize("hasAuthority('DELETE_COURSE')")
     @Transactional
     public void deleteLanguage(String languageName) {
+
+        Language language = languageRepository.findByNameAndStatus(languageName, ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
+        language.getChapters().forEach(chapter -> {
+            deleteChapter(chapter.getId());
+        });
+
+        language.setStatus(ContentStatus.DELETED);
+        languageRepository.save(language);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void purgeStep(String stepId){
+        Step step = stepRepository.findById(stepId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
+        if(step.getStatus() != ContentStatus.DELETED){
+            throw new AppException(ErrorCode.DELETE_FAILED);
+        }
+        stepRepository.deleteById(stepId);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void purgeLesson(String lessonId){
+        if(lessonRepository.findById(lessonId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED)).getStatus() != ContentStatus.DELETED){
+            throw new AppException(ErrorCode.DELETE_FAILED);
+        }
+        lessonRepository.deleteById(lessonId);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void purgeChapter(String chapterId){
+        if(chapterRepository.findById(chapterId).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED)).getStatus() != ContentStatus.DELETED){
+            throw new AppException(ErrorCode.DELETE_FAILED);
+        }
+        chapterRepository.deleteById(chapterId);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @Transactional
+    public void purgeLanguage(String languageName){
+        if(languageRepository.findById(languageName).orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED)).getStatus() != ContentStatus.DELETED){
+            throw new AppException(ErrorCode.DELETE_FAILED);
+        }
         languageRepository.deleteById(languageName);
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COURSE')")
     @Transactional
-    public StepResponse updateStep(String stepId, StepRequest stepRequest) {
+    public StepResponse updateStep(String stepId, StepUpdateRequest stepRequest) {
         Step step = stepRepository.findById(stepId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));
         courseMapper.updateStep(stepRequest, step);
         if(stepRequest.getData() != null){
-            try{
-                step.setData(objectMapper.writeValueAsString(stepRequest.getData()));
-            }catch (JsonProcessingException e){
-                log.error("Error serializing step data: {}", e.getMessage());
-                throw new AppException(ErrorCode.UNAUTHORIZED_EXISTED);
-            }
+
         }
         stepRepository.save(step);
-        return convertToResponse(step);
+        return courseMapper.toStepResponse(step);
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COURSE')")
     @Transactional
-    public LessonResponse updateLesson(String lessonId, LessonRequest request) {
+    public LessonResponse updateLesson(String lessonId, LessonUpdateRequest request) {
         Lesson lesson = lessonRepository.findById(lessonId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));
         courseMapper.updateLesson(request, lesson);
@@ -245,9 +261,9 @@ public class CourseService {
         var savedlesson = lessonRepository.save(lesson);
         return courseMapper.toLessonResponse(savedlesson);
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COURSE')")
     @Transactional
-    public ChapterResponse updateChapter(String chapterId, ChapterRequest chapterRequest) {
+    public ChapterResponse updateChapter(String chapterId, ChapterUpdateRequest chapterRequest) {
         Chapter chapter = chapterRepository.findById(chapterId).orElseThrow(()
                 -> new AppException(ErrorCode.ID_NOT_EXISTED));
         courseMapper.updateChapter(chapterRequest, chapter);
@@ -259,7 +275,7 @@ public class CourseService {
         var savedchapter = chapterRepository.save(chapter);
         return  courseMapper.toChapterResponse(savedchapter);
     }
-
+    @PreAuthorize("hasRole('ADMIN') or hasAuthority('UPDATE_COURSE')")
     @Transactional
     public LanguageResponse updateLanguage(String languageId, LanguageUpdateRequest request) {
         Language language = languageRepository.findById(languageId).orElseThrow(()

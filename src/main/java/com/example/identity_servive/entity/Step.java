@@ -1,16 +1,16 @@
 /* (C)2026 */
 package com.example.identity_servive.entity;
 
-import com.example.identity_servive.enums.IsCompleted;
-import com.example.identity_servive.enums.IsLocked;
-import com.example.identity_servive.enums.Mode;
-import com.example.identity_servive.enums.Type;
+import com.example.identity_servive.enums.*;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 /**
  * Class Entity đại diện cho bảng 'lesson' trong Database.
@@ -42,6 +42,10 @@ public class Step {
     Mode mode = Mode.LEARN;
 
     int orderIndex;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    ContentStatus status = ContentStatus.ACTIVE; // Mặc định là ACTIVE
 
     @Enumerated(EnumType.STRING)
     @Column(name = "is_locked", nullable = false)
@@ -59,8 +63,9 @@ public class Step {
     @Builder.Default
     boolean requiredToUnlockNext = false;
 
-    @Column(columnDefinition = "LONGTEXT")
-    String data;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "data")
+    Map<String, Object> data;
     @CreationTimestamp
     LocalDateTime createAt;
     /**

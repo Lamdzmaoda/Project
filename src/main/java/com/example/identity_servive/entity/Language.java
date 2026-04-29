@@ -1,5 +1,6 @@
 package com.example.identity_servive.entity;
 
+import com.example.identity_servive.enums.ContentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -28,6 +29,10 @@ public class Language {
     LocalDateTime durationDays;
     double currentXp;
     double totalXp;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    ContentStatus status = ContentStatus.ACTIVE; // Mặc định là ACTIVE
     @CreationTimestamp
     LocalDateTime createAt;
     @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, orphanRemoval = true)

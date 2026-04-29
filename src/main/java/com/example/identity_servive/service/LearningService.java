@@ -8,6 +8,7 @@ import com.example.identity_servive.dto.response.LessonBatchResponse;
 import com.example.identity_servive.dto.response.StepVerificationResult;
 import com.example.identity_servive.dto.response.VerifyResponse;
 import com.example.identity_servive.entity.*;
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
 import com.example.identity_servive.enums.Status;
@@ -24,6 +25,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,72 +43,109 @@ public class LearningService {
     LessonRepository lessonRepository;
     ChapterRepository chapterRepository;
     StepRepository stepRepository;
-    PistonAPISevice codeService; // Service gọi sang API bên ngoài để chạy code Python
+    Judge0APIService codeService; // Service gọi sang API bên ngoài để chạy code Python
     UserRepository userRepository;
     UserStepProgressRepository userStepProgressRepository;
     UserChapterProgressRepository userChapterProgressRepository;
     UserLessonProgressRepository userLessonProgressRepository;
-    ObjectMapper objectMapper = new ObjectMapper(); // Công cụ để đọc/ghi dữ liệu JSON
 
     /**
      * HÀM CHÍNH: XỬ LÝ NỘP BÀI TẬP CỦA CẢ MỘT BÀI HỌC (LESSON)
      * Tư duy: Người dùng gửi lên danh sách câu trả lời của 10 câu, đúng hết mới tính điểm.
      */
+
     @Transactional // Nếu có bất kỳ lỗi nào xảy ra, toàn bộ quá trình sẽ được hủy bỏ (Rollback)
     public LessonBatchResponse verifyLesson(LessonBatchRequest request) {
         // 1. Xác định xem ai là người đang nộp bài
         User user = getCurrentUser();
 
         // 2. Tìm bài học (Lesson) trong database, không thấy thì báo lỗi
-        Lesson lesson = lessonRepository.findById(request.getLessonId())
+        Lesson lesson = lessonRepository.findByIdAndStatus(request.getLessonId(), ContentStatus.ACTIVE)
                 .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
 
-        // 3. Lấy toàn bộ danh sách các bước (Step) thuộc bài học này từ DB
-        List<Step> steps = stepRepository.findByLessonId(request.getLessonId());
+        // 3. Lấy danh sách steps từ lesson (đã có sẵn nhờ quan hệ JPA)
+        Set<Step> lessonSteps = lesson.getSteps().stream().filter(step -> ContentStatus.ACTIVE.equals(step.getStatus())).collect(Collectors.toSet());
 
-        // 4. BIẾN DANH SÁCH THÀNH MAP: Để tìm kiếm Step theo ID nhanh hơn (O(1)) thay vì dùng vòng lặp
-        Map<String, Step> stepMap = steps.stream().collect(Collectors.toMap(Step::getId, step -> step));
+        // KIỂM TRA THIẾU 1: Số lượng step gửi lên phải khớp với số lượng step của bài học
+        if (request.getRequestSteps().size() != lessonSteps.size()) {
+            throw new AppException(ErrorCode.LESSON_INCOMPLETE, "Số lượng câu trả lời không khớp với bài học.");
+        }
+
+        boolean isAlreadyComplete = userLessonProgressRepository.findByUserAndLesson(user, lesson)
+                .map(p -> p.getCompletedStatus() == IsCompleted.TRUE).orElse(false);
+        if(userLessonProgressRepository.findByUserAndLesson(user, lesson).map(p -> p.getLockedStatus()
+                == IsLocked.TRUE_LOCKED).orElse(true)){
+            throw new AppException(ErrorCode.STEP_LOCKED);
+        }
+        // 4. Biến danh sách thành Map để tra cứu nhanh
+        Map<String, Step> stepMap = lessonSteps.stream().collect(Collectors.toMap(Step::getId, step -> step));
         List<VerifyResponse> verifyResponses = new ArrayList<>();
-        double totalXpGained = 0; // Biến dùng để cộng dồn điểm XP
+        double totalXpGained = 0.0; // Biến dùng để cộng dồn điểm XP
 
+        // KIỂM TRA THIẾU 2: Tránh việc gửi trùng ID Step để gian lận
+        Set<String> processedStepIds = new HashSet<>();
+        double progressPercentage = 0.0;
         // 5. DUYỆT QUA CÁC CÂU TRẢ LỜI CỦA USER GỬI LÊN
         for (VerifyRequest answerReq : request.getRequestSteps()) {
+            if (processedStepIds.contains(answerReq.getStepId())) {
+                throw new AppException(ErrorCode.INVALID_KEY, "Phát hiện ID Step bị trùng lặp trong yêu cầu.");
+            }
+
             Step step = stepMap.get(answerReq.getStepId()); // Tìm thông tin Step gốc trong MapStepVerificationResult
-            if(step == null) throw new AppException(ErrorCode.ID_NOT_EXISTED);
+            if(step == null) throw new AppException(ErrorCode.ID_NOT_EXISTED, "Step không thuộc bài học này.");
 
             // CHẤM ĐIỂM: Nếu chỉ cần 1 câu sai, ném lỗi INVALID_ANSWER ngay lập tức
             StepVerificationResult result = checkAnswer(step, answerReq.getAnswer());
 
             if(!result.isCorrect())
-                throw new AppException(ErrorCode.INVALID_ANSWER);
-
+                throw new AppException(ErrorCode.INVALID_ANSWER, result.getLogs());
             // Nếu đúng, tích lũy XP của câu đó vào tổng điểm bài học
-            totalXpGained += step.getXp();
-            verifyResponses.add(VerifyResponse.builder()
-                    .isCorrect(true)
-                    .earnedXp(step.getXp())
-                    .correctAnswer(step.getData())
-                    .userOutput(result.getLogs())
-                    .build());
+            double earnedXp = 0;
+            if(!isAlreadyComplete) {
+                earnedXp = step.getXp();
+                totalXpGained += earnedXp;
+            }
+                verifyResponses.add(VerifyResponse.builder()
+                                .isCorrect(true)
+                                .earnedXp(earnedXp)
+                                .correctAnswer(result.getExpectedValue() != null ? result.getExpectedValue().toString() : "")
+                                .userOutput(result.getLogs())
+                                .build());
+            processedStepIds.add(answerReq.getStepId());
+            progressPercentage = (double) verifyResponses.size() / lessonSteps.size() * 100;;
         }
 
         // 6. NẾU ĐÃ ĐI ĐẾN ĐÂY: Có nghĩa là đúng 100% câu hỏi trong bài
         // -> Đánh dấu hoàn thành cho từng Step (Hiện tích xanh)
-        steps.forEach(step -> updateStepToCompleted(user, step));
-        // -> Đánh dấu hoàn thành cho cả bài Lesson (Hiện tích xanh trên danh sách bài)
-        updateLessonToCompleted(user, lesson);
+        if(!isAlreadyComplete) {
+            List<UserStepProgress> listToSave = new ArrayList<>();
+            lessonSteps.forEach(step -> listToSave.add(updateStepToCompleted(user, step)));
+            // -> Đánh dấu hoàn thành cho cả bài Lesson (Hiện tích xanh trên danh sách bài)
+            updateLessonToCompleted(user, lesson);
 
-        // 7. Cập nhật tổng XP vào tài khoản của người học và lưu lại
-        user.setTotalXp(user.getTotalXp() + totalXpGained);
-        userRepository.save(user);
+            // 7. Cập nhật tổng XP vào tài khoản của người học và lưu lại
+            user.setTotalXp(user.getTotalXp() + totalXpGained);
+            LocalDate today = LocalDate.now();
+            LocalDate yesterday = today.minusDays(1);
+            LocalDate lastActivity = user.getLastActivityDate();
+            if (lastActivity == null || lastActivity.isBefore(yesterday)) {
+                user.setStreak(1); // Mới học hoặc đứt chuỗi
+            } else if (lastActivity.equals(yesterday)) {
+                user.setStreak(user.getStreak() + 1); // Học liên tiếp
+            }
+            user.setLastActivityDate(today);
+            userRepository.save(user);
+            userStepProgressRepository.saveAll(listToSave);
 
-        // 8. Kích hoạt logic tự động mở khóa bài học hoặc chương tiếp theo
-        unlockNextLesson(user, lesson);
+            // 8. Kích hoạt logic tự động mở khóa bài học hoặc chương tiếp theo
+            unlockNextLesson(user, lesson);
+        }
 
         // 9. Trả về kết quả cho Frontend thông báo thành công
         return LessonBatchResponse.builder()
                 .totalXpGained(totalXpGained)
                 .verifyResponses(verifyResponses)
+                .progressPercentage(progressPercentage)
                 .isLessonCompleted(true)
                 .build();
     }
@@ -117,23 +156,24 @@ public class LearningService {
     private StepVerificationResult checkAnswer(Step step, Object userAnswer) {
         try {
             // Đọc cột 'data' (chuỗi JSON) từ DB ra thành một Map để lấy đáp án đúng
-            Map<String, Object> data = objectMapper.readValue(step.getData(), Map.class);
+            Map<String, Object> data = step.getData();
             String answerStr = (userAnswer != null) ? userAnswer.toString() : "";
-            switch (step.getType()) {
-                case QUIZ: // Nếu là trắc nghiệm
+            return switch (step.getType()) {
+                case QUIZ -> {
                     Object correctValue = data.get("correctValue"); // Lấy đáp án đúng trong cấu hình bài tập
-                    return StepVerificationResult.builder()
+                    yield StepVerificationResult.builder()
                             .isCorrect(correctValue != null && userAnswer != null &&
                                     correctValue.toString().equals(userAnswer.toString()))
                             .expectedValue(correctValue)
-                            .build();
-                case CODE: // Nếu là bài tập lập trình
-                    return verifyCodeOutput(data, answerStr);
-                default: // Các loại INFO hoặc QUESTION đơn giản (chỉ cần có trả lời là đúng)
-                    return StepVerificationResult.builder()
-                            .isCorrect(userAnswer != null)
-                            .build();
-            }
+                            .build(); // Lấy đáp án đúng trong cấu hình bài tập
+                }
+                case CODE -> // Nếu là bài tập lập trình
+                        verifyCodeOutput(data, answerStr);
+                default -> // Các loại INFO hoặc QUESTION đơn giản (chỉ cần có trả lời là đúng)
+                        StepVerificationResult.builder()
+                                .isCorrect(userAnswer != null && !answerStr.isEmpty())
+                                .build();
+            };
         }catch (Exception e) {
             log.error("Lỗi khi chấm điểm Step ID {}: {}", step.getId(), e.getMessage());
             return StepVerificationResult.builder()
@@ -151,7 +191,7 @@ public class LearningService {
         Object expectedOutputObj = data.get("expectedOutput");
         String expectedOutput = expectedOutputObj != null ? expectedOutputObj.toString().trim() : "";
 
-        // Gửi code của user sang Piston API (máy chủ chạy code)
+        // Gửi code của user sang Judge0 API
         CodeResponse codeResponse = codeService.executePythonCode(
                 CodeRequest.builder().input(sourceCode).build()
         );
@@ -161,10 +201,8 @@ public class LearningService {
                     .logs("Hệ thống thực thi code không phản hồi.")
                     .build();
         }
-
-        // Lấy output thực tế từ máy chủ Piston
+        // Lấy output thực tế từ máy chủ
         String actualOutput = (codeResponse.getOutput() != null) ? codeResponse.getOutput().trim() : "";
-
         if (codeResponse.getStatus() == Status.ERROR){
             return StepVerificationResult.builder()
                     .isCorrect(false)
@@ -182,78 +220,74 @@ public class LearningService {
 
     // --- CƠ CHẾ MỞ KHÓA TỰ ĐỘNG (AUTO-UNLOCK) ---
 
-    /**
-     * MỞ KHÓA BÀI HỌC TIẾP THEO
-     */
     private void unlockNextLesson(User user, Lesson currentLesson){
-        // Tìm xem bài học sau bài này (cùng Chapter, OrderIndex lớn hơn bài hiện tại)
-        Optional<Lesson> nextLessonOpt = lessonRepository.findFirstByChapterAndOrderIndexGreaterThanOrderByOrderIndexAsc(
-                currentLesson.getChapter(), currentLesson.getOrderIndex());
+        Optional<Lesson> nextLessonOpt = lessonRepository.findFirstByChapterAndStatusAndOrderIndexGreaterThanOrderByOrderIndexAsc(
+                currentLesson.getChapter(),ContentStatus.ACTIVE , currentLesson.getOrderIndex());
 
         if (nextLessonOpt.isPresent()) {
             Lesson nextLesson = nextLessonOpt.get();
-            unlockLessonProgress(user, nextLesson); // Gỡ bỏ "ổ khóa" cho Lesson mới
-
-            // Đồng thời mở luôn "ổ khóa" cho Step đầu tiên của bài đó để user vào học luôn
+            unlockLessonProgress(user, nextLesson);
             nextLesson.getSteps().stream()
+                    .filter(step -> ContentStatus.ACTIVE.equals(step.getStatus()))
                     .min(Comparator.comparingInt(Step::getOrderIndex))
                     .ifPresent(firstStep -> unlockStep(user, firstStep));
         } else {
-            // Nếu đây đã là bài cuối cùng của Chương, tiến hành mở khóa Chương (Chapter) mới
+            // Nếu đây đã là bài cuối cùng của Chương, tiến hành mở khóa Chương (Chapter) mới và đánh dấu hoàn thành
+            updateChapterToCompleted(user, currentLesson.getChapter());
             unlockNextChapter(user, currentLesson.getChapter());
         }
     }
 
-    /**
-     * MỞ KHÓA CHƯƠNG TIẾP THEO
-     */
     private void unlockNextChapter(User user, Chapter currentChapter){
-        // Tìm chương tiếp theo của ngôn ngữ đang học
-        Optional<Chapter> nextChapterOpt = chapterRepository.findFirstByLanguageAndOrderIndexGreaterThanOrderByOrderIndexAsc
-                (currentChapter.getLanguage(), currentChapter.getOrderIndex());
-
+        Optional<Chapter> nextChapterOpt = chapterRepository.findFirstByLanguageAndStatusAndOrderIndexGreaterThanOrderByOrderIndexAsc(
+                currentChapter.getLanguage(), ContentStatus.ACTIVE, currentChapter.getOrderIndex());
         if(nextChapterOpt.isPresent()){
             Chapter nextChapter = nextChapterOpt.get();
-            unlockChapterProgress(user, nextChapter); // Gỡ "ổ khóa" Chương
-
-            // Mở khóa "dây chuyền" xuống bài đầu tiên và câu hỏi đầu tiên của Chương mới
+            unlockChapterProgress(user, nextChapter);
             nextChapter.getLessons().stream()
+                    .filter(lesson -> ContentStatus.ACTIVE.equals(lesson.getStatus()))
                     .min(Comparator.comparingInt(Lesson::getOrderIndex))
                     .ifPresent(firstLesson -> {
                         unlockLessonProgress(user, firstLesson);
                         firstLesson.getSteps().stream()
+                                .filter(step -> ContentStatus.ACTIVE.equals(step.getStatus()))
                                 .min(Comparator.comparingInt(Step::getOrderIndex))
                                 .ifPresent(firstStep -> unlockStep(user, firstStep));
                     });
-        } else {
-            log.info("CHÚC MỪNG: User {} đã phá đảo khóa học!", user.getUsername());
         }
     }
 
     // --- CÁC HÀM TIỆN ÍCH CẬP NHẬT TRẠNG THÁI (DATABASE HELPERS) ---
 
-    private void updateStepToCompleted(User user, Step step) {
-        // Tìm bản ghi tiến độ, nếu chưa có thì tạo mới (Builder)
+    private UserStepProgress updateStepToCompleted(User user, Step step) {
         UserStepProgress progress = userStepProgressRepository.findByUserAndStep(user, step)
                 .orElseGet(() -> UserStepProgress.builder().user(user).step(step).build());
-        progress.setLockedStatus(IsLocked.FALSE_LOCKED); // Mở khóa = FALSE
-        progress.setCompletedStatus(IsCompleted.TRUE); // Hoàn thành = TRUE (Tích xanh)
-        userStepProgressRepository.save(progress);
+        progress.setLockedStatus(IsLocked.FALSE_LOCKED);
+        progress.setCompletedStatus(IsCompleted.TRUE);
+        return progress;
     }
 
     private void updateLessonToCompleted(User user, Lesson lesson) {
         UserLessonProgress progress = userLessonProgressRepository.findByUserAndLesson(user, lesson)
                 .orElseGet(() -> UserLessonProgress.builder().user(user).lesson(lesson).build());
         progress.setLockedStatus(IsLocked.FALSE_LOCKED);
-        progress.setCompletedStatus(IsCompleted.TRUE); // Hoàn thành bài học
+        progress.setCompletedStatus(IsCompleted.TRUE);
         userLessonProgressRepository.save(progress);
+    }
+
+    private void updateChapterToCompleted(User user, Chapter chapter) {
+        UserChapterProgress progress = userChapterProgressRepository.findByUserAndChapter(user, chapter)
+                .orElseGet(() -> UserChapterProgress.builder().user(user).chapter(chapter).build());
+        progress.setLockedStatus(IsLocked.FALSE_LOCKED);
+        progress.setCompletedStatus(IsCompleted.TRUE);
+        userChapterProgressRepository.save(progress);
     }
 
     private void unlockStep(User user, Step step) {
         UserStepProgress progress = userStepProgressRepository.findByUserAndStep(user, step)
                 .orElseGet(() -> UserStepProgress.builder().user(user).step(step).build());
-        progress.setLockedStatus(IsLocked.FALSE_LOCKED); // Đã gỡ khóa
-        progress.setCompletedStatus(IsCompleted.FALSE); // Nhưng chưa học xong (Chưa tích xanh)
+        progress.setLockedStatus(IsLocked.FALSE_LOCKED);
+        progress.setCompletedStatus(IsCompleted.FALSE);
         userStepProgressRepository.save(progress);
     }
 
@@ -261,7 +295,7 @@ public class LearningService {
         UserLessonProgress progress = userLessonProgressRepository.findByUserAndLesson(user, lesson)
                 .orElseGet(() -> UserLessonProgress.builder().user(user).lesson(lesson).build());
         progress.setLockedStatus(IsLocked.FALSE_LOCKED);
-        progress.setCompletedStatus(IsCompleted.FALSE); // Mở bài mới để user thấy
+        progress.setCompletedStatus(IsCompleted.FALSE);
         userLessonProgressRepository.save(progress);
     }
 
@@ -269,19 +303,53 @@ public class LearningService {
         UserChapterProgress progress = userChapterProgressRepository.findByUserAndChapter(user, chapter)
                 .orElseGet(() -> UserChapterProgress.builder().user(user).chapter(chapter).build());
         progress.setLockedStatus(IsLocked.FALSE_LOCKED);
-        progress.setCompletedStatus(IsCompleted.FALSE); // Mở chương mới
+        progress.setCompletedStatus(IsCompleted.FALSE);
         userChapterProgressRepository.save(progress);
     }
 
-    /**
-     * LẤY USER HIỆN TẠI TỪ TOKEN (SPRING SECURITY)
-     */
     private User getCurrentUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || authentication.getName() == null) {
-            throw new AppException(ErrorCode.UNAUTHENTICATED); // Báo lỗi nếu chưa đăng nhập
+            throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
         return userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+    }
+    @Transactional
+    protected void initializeLearningProgressForLanguage(Language language, User user){
+        Chapter firstChapter = chapterRepository.findFirstByLanguageAndStatusOrderByOrderIndexAsc(language, ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_UNDER_CONSTRUCTION));
+        UserChapterProgress userChapterProgress = userChapterProgressRepository.findByUserAndChapter (user, firstChapter)
+                .orElseGet(() -> UserChapterProgress.builder()
+                        .user(user)
+                        .chapter(firstChapter)
+                        .completedStatus(IsCompleted.FALSE)
+                        .build());
+
+        userChapterProgress.setLockedStatus(IsLocked.FALSE_LOCKED);
+        userChapterProgressRepository.save(userChapterProgress);
+
+        Lesson firstLesson = lessonRepository.findFirstByChapterAndStatusOrderByOrderIndexAsc(firstChapter, ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_UNDER_CONSTRUCTION));
+
+        UserLessonProgress userLessonProgress = userLessonProgressRepository.findByUserAndLesson(user, firstLesson)
+                .orElseGet(() -> UserLessonProgress.builder()
+                        .user(user)
+                        .lesson(firstLesson)
+                        .completedStatus(IsCompleted.FALSE)
+                        .build());
+        userLessonProgress.setLockedStatus(IsLocked.FALSE_LOCKED);
+        userLessonProgressRepository.save(userLessonProgress);
+
+        Step firstStep = stepRepository.findFirstByLessonIdAndStatusOrderByOrderIndexAsc(firstLesson.getId(), ContentStatus.ACTIVE)
+                .orElseThrow(() -> new AppException(ErrorCode.COURSE_UNDER_CONSTRUCTION));
+        UserStepProgress userStepProgress = userStepProgressRepository.findByUserAndStep(user, firstStep)
+                .orElseGet(() -> UserStepProgress.builder()
+                        .user(user)
+                        .step(firstStep)
+                        .completedStatus(IsCompleted.FALSE)
+                        .build());
+        userStepProgress.setLockedStatus(IsLocked.FALSE_LOCKED);
+        userStepProgressRepository.save(userStepProgress);
     }
 }

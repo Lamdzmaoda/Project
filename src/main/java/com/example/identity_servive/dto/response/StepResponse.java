@@ -1,9 +1,6 @@
 package com.example.identity_servive.dto.response;
 
-import com.example.identity_servive.enums.IsCompleted;
-import com.example.identity_servive.enums.IsLocked;
-import com.example.identity_servive.enums.Mode;
-import com.example.identity_servive.enums.Type;
+import com.example.identity_servive.enums.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,6 +20,7 @@ public class StepResponse {
     Type type;
     Mode mode;
     int orderIndex;
+    ContentStatus status;
     IsLocked lockedStatus;
     IsCompleted completedStatus;
     double xp;

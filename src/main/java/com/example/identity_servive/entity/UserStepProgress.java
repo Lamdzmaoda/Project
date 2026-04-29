@@ -5,6 +5,9 @@ import com.example.identity_servive.enums.IsLocked;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -36,4 +39,9 @@ public class UserStepProgress {
     @Builder.Default
     IsCompleted completedStatus = IsCompleted.FALSE;
 
+    @Builder.Default
+    double earnedXp = 0.0;
+
+    @CreationTimestamp
+    LocalDateTime completedAt;
 }

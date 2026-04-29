@@ -11,12 +11,14 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Slf4j // Hỗ trợ ghi lại lịch sử hoạt động (Logging)
 @Service // Đăng ký lớp này là một Service do Spring quản lý (Bean)
 @RequiredArgsConstructor // Tự động tạo Constructor để tiêm (Inject) các Repository và Mapper vào
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true) // Mặc định mọi field là 'private final'
+@PreAuthorize("hasRole('ADMIN')")
 public class PermissionService {
 
     // Tiêm Repository để thao tác trực tiếp với bảng Permission trong Database

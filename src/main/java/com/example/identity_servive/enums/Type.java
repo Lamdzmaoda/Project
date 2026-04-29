@@ -5,5 +5,6 @@ public enum Type {
     INFO,
     QUESTION,
     QUIZ,
-    FILL_CODE
+    FILL_INLINE,
+    FILL_CHOICE
 }

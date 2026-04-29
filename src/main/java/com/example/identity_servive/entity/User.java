@@ -44,14 +44,28 @@ public class User {
   // Tên của người dùng
   String firstName;
 
-    // Họ của người dùng
+  // Họ của người dùng
   String lastName;
+
+  static final int XP_PER_LEVEL = 1000;
+
+  @Builder.Default
+  int streak = 0;
+
+  LocalDate lastActivityDate;
 
   // Ngày sinh (Ánh xạ kiểu DATE trong Database)
   LocalDate birthDate;
 
-    @Column(name = "total_xp")
-    private Double totalXp = 0.0;
+  @Builder.Default
+  @Column(name = "total_xp")
+  Double totalXp = 0.0;
 
   @ManyToMany Set<Role> roles;
+  
+  @Transient
+  public int getLevel() {
+    if (totalXp == null) return 1;
+    return (int) (this.totalXp / XP_PER_LEVEL) + 1;
+  }
 }

@@ -56,7 +56,7 @@ public class ChatService {
 
         ChatMemory chatMemory = MessageWindowChatMemory.builder()
                 .chatMemoryRepository(jdbcChatMemoryRepository)
-                .maxMessages(30)
+                .maxMessages(20)
                 .build();
 
         this.chatClient = builder
@@ -87,7 +87,7 @@ public class ChatService {
         Step step = stepRepository.findById(chatRequest.stepId())
                 .orElseThrow(() -> new AppException(ErrorCode.ID_NOT_EXISTED));
 
-        Map<String, Object> data = objectMapper.readValue(step.getData(), Map.class);
+        Map<String, Object> data = step.getData();
         String stepContext = "Tiêu đề bài học: " + step.getTitle() + "\n"
                 + "Loại bài tập: " + step.getType() + "\n"
                 + "Nội dung chi tiết: " + data.toString();
@@ -103,7 +103,7 @@ public class ChatService {
                 .prompt(prompt)
                 .advisors(advisorSpec -> advisorSpec.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .call()
-                .entity(new ParameterizedTypeReference<ChatResponse>() {});
+                .entity(ChatResponse.class);
 
         OpenAI chatEntity = OpenAI.builder()
                 .user(user)

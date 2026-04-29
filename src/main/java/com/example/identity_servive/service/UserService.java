@@ -1,9 +1,11 @@
 /* (C)2026 */
 package com.example.identity_servive.service;
 
+import com.example.identity_servive.constant.PredefinedRole;
 import com.example.identity_servive.dto.request.UserCreationRequest;
 import com.example.identity_servive.dto.request.UserUpdateRequest;
 import com.example.identity_servive.dto.response.UserResponse;
+import com.example.identity_servive.entity.Role;
 import com.example.identity_servive.entity.User;
 import com.example.identity_servive.exception.AppException;
 import com.example.identity_servive.exception.ErrorCode;
@@ -12,6 +14,9 @@ import com.example.identity_servive.repository.RoleRepository;
 import com.example.identity_servive.repository.UserRepository;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -47,6 +52,11 @@ public class UserService {
 
         // 3. Mã hóa mật khẩu (BCrypt) để đảm bảo an toàn nếu DB bị rò rỉ
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        Role userRole = roleRepository.findById(PredefinedRole.USER_ROLE)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHORIZED_EXISTED));
+        var roles = new HashSet<Role>();
+        roles.add(userRole);
+        user.setRoles(roles);
 
         try {
             // 4. Lưu User vào cơ sở dữ liệu
@@ -63,21 +73,23 @@ public class UserService {
     /**
      * Nghiệp vụ: Lấy thông tin cá nhân của người dùng đang đăng nhập
      */
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getMyInfo() {
         // 1. Lấy thông tin xác thực từ Security Context (lấy từ Token gửi kèm)
         var context = SecurityContextHolder.getContext();
-        String name = context.getAuthentication().getName();
+        String name = Objects.requireNonNull(context.getAuthentication()).getName();
 
         // 2. Truy vấn User từ DB dựa trên username trong Token
         User user = userRepository.findByUsername(name)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
+        user.getLevel();
         return userMapper.toUserResponse(user);
     }
 
     /**
      * Nghiệp vụ: Cập nhật thông tin người dùng
      */
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.name")
     public UserResponse updateUser(UserUpdateRequest request, String userId) {
         // 1. Tìm user hiện tại, nếu không có ném lỗi
         User user = userRepository.findById(userId)
@@ -92,6 +104,7 @@ public class UserService {
         // 4. Tìm kiếm và cập nhật danh sách các Role mới cho User
         var roles = roleRepository.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
+        user.getLevel();
 
         // 5. Lưu và trả về kết quả
         return userMapper.toUserResponse(userRepository.save(user));
@@ -114,7 +127,7 @@ public class UserService {
      * @PostAuthorize: Kiểm tra SAU KHI hàm chạy xong.
      * Đảm bảo: Chỉ ADMIN hoặc CHÍNH CHỦ tài khoản đó mới được xem thông tin này.
      */
-    @PostAuthorize("returnObject.username == authentication.name")
+    @PreAuthorize("hasPermission('ADMIN') or #userId == authentication.name")
     public UserResponse getUserById(String id) {
         log.info("Fetching user detail for id: {}", id);
         return userMapper.toUserResponse(
@@ -125,6 +138,7 @@ public class UserService {
     /**
      * Nghiệp vụ: Xóa người dùng
      */
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
     }

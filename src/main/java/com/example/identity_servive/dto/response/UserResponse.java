@@ -40,5 +40,8 @@ public class UserResponse {
   // Ngày sinh
   LocalDate birthDate;
 
+  int streak;
+  int level;
+
   Set<RoleRespone> roles;
 }

@@ -1,6 +1,7 @@
 /* (C)2026 */
 package com.example.identity_servive.entity;
 
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsLocked;
 import jakarta.persistence.*;
 import lombok.*;
@@ -44,6 +45,10 @@ public class Chapter {
      * Quan hệ Nhiều - Một trỏ về Course.
      * JoinColumn định nghĩa cột 'course_id' trong bảng chapter để lưu khóa ngoại.
      */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    @Builder.Default
+    ContentStatus status = ContentStatus.ACTIVE; // Mặc định là ACTIVE
     @ManyToOne
     @JoinColumn(name = "language_id")
     Language language;

@@ -43,7 +43,7 @@ public class ApplicationInitConfig {
             if (userRepository.findByUsername(ADMIN_USER_NAME).isEmpty()) {
 
                 // 1. Tạo và lưu quyền USER vào bảng Role
-                roleRepository.save(
+                var userrole = roleRepository.save(
                         Role.builder().name(PredefinedRole.USER_ROLE).description("User role").build());
 
                 // 2. Tạo và lưu quyền ADMIN vào bảng Role
@@ -54,6 +54,8 @@ public class ApplicationInitConfig {
                 // Tạo một tập hợp (Set) chứa các quyền của Admin
                 var roles = new HashSet<Role>();
                 roles.add(adminRole);
+                roles.add(userrole);
+
 
                 // 3. Khởi tạo đối tượng User Admin
                 User user =

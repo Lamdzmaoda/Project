@@ -1,5 +1,6 @@
 package com.example.identity_servive.dto.response;
 
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsLocked;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -19,6 +20,7 @@ public class ChapterResponse {
     String languageName;
     String title;
     int orderIndex;
+    ContentStatus status;
     IsLocked lockedStatus;
     LocalDateTime createAt;
     List<LessonResponse> lessons;

@@ -1,12 +1,8 @@
 package com.example.identity_servive.dto.request;
 
-
-import com.example.identity_servive.enums.ContentStatus;
+import com.example.identity_servive.enums.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -14,12 +10,16 @@ import java.util.List;
 // Object này)
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LanguageUpdateRequest {
-    String name;
-    String description;
-    String icon;
-    int level;
+public class StepUpdateRequest {
+    String lessonId;
+    String title;
+    Type type;
+    Mode mode;
+    int orderIndex;
     ContentStatus status;
-    LocalDateTime durationDays;
-    List<String> chapters;
+    IsCompleted completedStatus;
+    IsLocked lockedStatus;
+    double xp;
+    boolean requiredToUnlockNext;
+    Object data;
 }

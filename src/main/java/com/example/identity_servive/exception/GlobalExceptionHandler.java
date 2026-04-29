@@ -53,7 +53,12 @@ public class GlobalExceptionHandler {
 
         // Gán mã code và tin nhắn tương ứng từ Enum ErrorCode vào phản hồi
         response.setCode(errorCode.getCode());
-        response.setMessage(errorCode.getMessage());
+        // Logic quan trọng: Nếu có logs chi tiết từ Piston, ưu tiên hiển thị nó
+        // Nếu không có, hiển thị thông báo mặc định của ErrorCode
+        String finalMessage = (ex.getDetailMessage() != null && !ex.getDetailMessage().isEmpty())
+                ? ex.getDetailMessage()
+                : errorCode.getMessage();
+        response.setMessage(finalMessage);
 
         // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
         return ResponseEntity.status(errorCode.getStatusCode()).body(response);
@@ -103,7 +108,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     ResponseEntity<ApiResponse> handleException(MethodArgumentNotValidException ex) {
         // Lấy message key từ Annotation (VD: @Size(message = "PASSWORD_INVALID"))
-        String enumkey = ex.getFieldError().getDefaultMessage();
+        String enumkey = Objects.requireNonNull(ex.getFieldError()).getDefaultMessage();
 
         ErrorCode errorCode = ErrorCode.INVALID_KEY; // Mặc định nếu không tìm thấy key trong Enum
         Map<String, Object> attributes = null;

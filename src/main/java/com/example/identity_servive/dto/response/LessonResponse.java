@@ -1,5 +1,6 @@
 package com.example.identity_servive.dto.response;
 
+import com.example.identity_servive.enums.ContentStatus;
 import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
 import lombok.*;
@@ -22,6 +23,7 @@ public class LessonResponse {
     int orderIndex;
     double xp;
     double progress;
+    ContentStatus status;
     IsLocked lockedStatus;
     IsCompleted completedStatus;
     LocalDateTime createAt;

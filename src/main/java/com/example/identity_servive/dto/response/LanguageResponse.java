@@ -1,14 +1,11 @@
 package com.example.identity_servive.dto.response;
 
-import com.example.identity_servive.entity.Chapter;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
+import com.example.identity_servive.enums.ContentStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -20,6 +17,7 @@ public class LanguageResponse {
     String name;
     String description;
     String icon;
+    ContentStatus status;
     int level;
     LocalDateTime createAt;
     List<ChapterResponse> chapters;
