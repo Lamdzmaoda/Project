@@ -119,7 +119,7 @@ public class Judge0APIService {
             return "[Lỗi giải mã dữ liệu]";
         }
     }
-    private  void parseAndFormatError(String rawError, Code entity) {
+    private void parseAndFormatError(String rawError, Code entity) {
         Pattern linePattern = Pattern.compile("line (\\d+)");
         Matcher matcher = linePattern.matcher(rawError);
 

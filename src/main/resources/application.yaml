@@ -13,7 +13,7 @@ spring:
     username: ${DBMS_USER:root}
     password: ${DBMS_PASSWORD:lamdzbodoi}
 
-    driver-class-name: "com.mysql.cj.jdbc.Driver"
+    driver-class-name: org.postgresql.Driver
   ai:
     openai:
       api-key: ${GEMINI_KEY}
@@ -41,7 +41,7 @@ spring:
     properties:
       hibernate:
         # Khai báo phương ngôn SQL sử dụng cho MySQL
-        dialect: org.hibernate.dialect.MySQLDialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
   # Khóa bí mật (HS512) dùng để ký tên lên Token. Phải giữ kín khóa này!
