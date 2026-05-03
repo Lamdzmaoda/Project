@@ -7,7 +7,7 @@ spring:
   datasource:
     # URL kết nối đến MySQL. Port 3636 là cổng đã được map từ Docker ra máy thật.
     # ${DBMS_CONNECTION:...} giúp linh hoạt thay đổi URL khi chạy trên server thật.
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3636/identity-servive}
+    url: ${DBMS_CONNECTION:jdbc:mysql://root:vQZLxSsYYDUeERkYtEAqMbWGJuTztuXX@mainline.proxy.rlwy.net:22028/railway/identity_servivce}
 
     # Tài khoản và mật khẩu kết nối Database
     username: ${DBMS_USER:root}
