@@ -1,5 +1,5 @@
 server:
-  port: 8080 # Ứng dụng chạy trên cổng 8080
+  port: ${PORT:8080} # Ứng dụng chạy trên cổng 8080
   servlet:
     context-path: /identity # Đường dẫn gốc của API (VD: http://localhost:8080/identity/users)
 
@@ -7,7 +7,7 @@ spring:
   datasource:
     # URL kết nối đến MySQL. Port 3636 là cổng đã được map từ Docker ra máy thật.
     # ${DBMS_CONNECTION:...} giúp linh hoạt thay đổi URL khi chạy trên server thật.
-    url: ${DBMS_CONNECTION:jdbc:mysql://root:vQZLxSsYYDUeERkYtEAqMbWGJuTztuXX@mainline.proxy.rlwy.net:22028/railway/identity_servivce}
+    url: ${DBMS_CONNECTION:jdbc:mysql://mainline.proxy.rlwy.net:22028/railway}
 
     # Tài khoản và mật khẩu kết nối Database
     username: ${DBMS_USER:root}
