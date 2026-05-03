@@ -1,14 +1,19 @@
 server:
-  port: ${PORT:8080} # Ứng dụng chạy trên cổng 8080
+  port: 8080 # Ứng dụng chạy trên cổng 8080
   servlet:
     context-path: /identity # Đường dẫn gốc của API (VD: http://localhost:8080/identity/users)
 
 spring:
   datasource:
-    url: ${DBMS_CONNECTION}
-    username: ${DBMS_USER}
-    password: ${DBMS_PASSWORD}
-    driver-class-name: org.postgresql.Driver
+    # URL kết nối đến MySQL. Port 3636 là cổng đã được map từ Docker ra máy thật.
+    # ${DBMS_CONNECTION:...} giúp linh hoạt thay đổi URL khi chạy trên server thật.
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3636/identity-servive}
+
+    # Tài khoản và mật khẩu kết nối Database
+    username: ${DBMS_USER:root}
+    password: ${DBMS_PASSWORD:lamdzbodoi}
+
+    driver-class-name: "com.mysql.cj.jdbc.Driver"
   ai:
     openai:
       api-key: ${GEMINI_KEY}
@@ -18,21 +23,25 @@ spring:
         options :
           model : gemini-3-flash-preview
     chat:
-        memory:
-          repository:
-            jdbc:
-              initialize-schema: always
+      memory:
+        repository:
+          jdbc:
+            initialize-schema: always
     sql:
       init:
         mode: always
 
   jpa:
     hibernate:
+      # 'update': Hibernate sẽ tự động so sánh Entity và DB để thêm/sửa cột mà không xóa dữ liệu cũ
       ddl-auto: update
+
+    # 'show-sql: true': In các câu lệnh SQL mà Hibernate thực thi ra màn hình console để tiện debug
     show-sql: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        # Khai báo phương ngôn SQL sử dụng cho MySQL
+        dialect: org.hibernate.dialect.MySQLDialect
 
 jwt:
   # Khóa bí mật (HS512) dùng để ký tên lên Token. Phải giữ kín khóa này!
