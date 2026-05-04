@@ -46,6 +46,9 @@
             android:name=".ui.CourseEditorActivity"
             android:exported="false"/>
 
+        <activity android:name=".ui.UserManagerActivity"
+            android:exported="false"/>
+
         <activity
             android:name=".ui.ChapterEditorActivity"
             android:exported="false"/>
@@ -56,6 +59,13 @@
 
         <activity
             android:name=".ui.StepEditorActivity"
+            android:exported="false"/>
+
+
+
+        <!-- ✅ THÊM DÒNG NÀY -->
+        <activity
+            android:name=".ui.StepListActivity"
             android:exported="false"/>
 
         <!-- 🔥 LESSON -->

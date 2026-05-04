@@ -15,24 +15,31 @@ public interface ApiService {
     // =========================
     // 🔐 LOGIN
     // =========================
+
     @POST("auth/token")
-    Call<AuthResponse> login(@Body LoginRequest request);
+    Call<AuthResponse> login(
+            @Body LoginRequest request
+    );
 
     // =========================
     // 📝 REGISTER
     // =========================
+
     @POST("users")
-    Call<Object> register(@Body RegisterRequest request);
+    Call<Object> register(
+            @Body RegisterRequest request
+    );
 
     // =========================
     // 👤 USER
     // =========================
+
     @GET("users/myInfo")
     Call<ApiResponse<UserResponse>> getMyInfo(
             @Header("Authorization") String token
     );
 
-    // 🔥 FIX CHỖ NÀY (THÊM TOKEN)
+    // update profile (cần token)
     @FormUrlEncoded
     @PUT("users/update")
     Call<Void> updateProfile(
@@ -50,24 +57,31 @@ public interface ApiService {
     // =========================
     // 📚 GET DATA
     // =========================
+    // 🔥 QUAN TRỌNG:
+    // dùng @Query bản cũ chuẩn backend thật
+    // KHÔNG dùng BetterLanguage / BetterChapter / BetterLesson
+    // =========================
 
     @GET("course/languages")
     Call<ApiResponse<List<Language>>> getLanguages(
             @Header("Authorization") String token
     );
 
+    // ✅ CHAPTER
     @GET("course/chapters")
     Call<ApiResponse<List<Chapter>>> getChapters(
             @Query("languageName") String languageName,
             @Header("Authorization") String token
     );
 
+    // ✅ LESSON
     @GET("course/lessons")
     Call<ApiResponse<List<Lesson>>> getLessons(
             @Query("chapterId") String chapterId,
             @Header("Authorization") String token
     );
 
+    // ✅ STEP
     @GET("course/steps")
     Call<ApiResponse<List<LessonStep>>> getSteps(
             @Query("lessonId") String lessonId,
@@ -103,13 +117,16 @@ public interface ApiService {
     );
 
     // =========================
-    // 🔥 UPDATE (BACK VỀ ID)
+    // ✏️ UPDATE
+    // =========================
+    // language update dùng NAME
+    // còn chapter/lesson/step dùng ID thật
     // =========================
 
-    @PUT("course/languages/{id}")
+    @PUT("course/languages/{name}")
     Call<Object> updateLanguage(
             @Header("Authorization") String token,
-            @Path("id") String id,
+            @Path("name") String name,
             @Body RequestBody body
     );
 
@@ -135,13 +152,16 @@ public interface ApiService {
     );
 
     // =========================
-    // ❌ DELETE (BACK VỀ ID)
+    // ❌ DELETE
+    // =========================
+    // language delete dùng NAME
+    // còn lại dùng ID thật
     // =========================
 
-    @DELETE("course/languages/{id}")
+    @DELETE("course/languages/{name}")
     Call<Object> deleteLanguage(
             @Header("Authorization") String token,
-            @Path("id") String id
+            @Path(value = "name", encoded = true) String name
     );
 
     @DELETE("course/chapters/{id}")
@@ -160,5 +180,31 @@ public interface ApiService {
     Call<Object> deleteStep(
             @Header("Authorization") String token,
             @Path("id") String id
+    );
+
+
+    // =========================
+// 👑 ADMIN - USER MANAGEMENT
+// =========================
+
+    // 🔥 Lấy danh sách user
+    @GET("users")
+    Call<ApiResponse<List<UserResponse>>> getUsers(
+            @Header("Authorization") String token
+    );
+
+    // 🔥 Xóa user
+    @DELETE("users/{id}")
+    Call<Object> deleteUser(
+            @Header("Authorization") String token,
+            @Path("id") String id
+    );
+
+    // 🔥 Update user (nếu backend có)
+    @PUT("users/{id}")
+    Call<Object> updateUser(
+            @Header("Authorization") String token,
+            @Path("id") String id,
+            @Body RequestBody body
     );
 }

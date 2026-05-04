@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-82:12
-INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-82:12
-INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-82:12
-INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-82:12
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-92:12
+INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-92:12
+INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-92:12
+INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:2:1-92:12
 MERGED from [com.google.android.material:material:1.13.0] C:\Users\Admin\.gradle\caches\9.2.1\transforms\a9693a0ecab96a972367c834b2648d83\workspace\transformed\material-1.13.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.1] C:\Users\Admin\.gradle\caches\9.2.1\transforms\02aec67c069e8068a0ff46f518c8e36b\workspace\transformed\constraintlayout-2.2.1\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.appcompat:appcompat-resources:1.7.1] C:\Users\Admin\.gradle\caches\9.2.1\transforms\7f3b50a179cffcec651d5183dd9f1b59\workspace\transformed\appcompat-resources-1.7.1\AndroidManifest.xml:2:1-7:12
@@ -60,8 +60,8 @@ ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:6:5-67
 	android:name
 		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:6:22-64
 application
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:8:5-80:19
-INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:8:5-80:19
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:8:5-90:19
+INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:8:5-90:19
 MERGED from [com.google.android.material:material:1.13.0] C:\Users\Admin\.gradle\caches\9.2.1\transforms\a9693a0ecab96a972367c834b2648d83\workspace\transformed\material-1.13.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.13.0] C:\Users\Admin\.gradle\caches\9.2.1\transforms\a9693a0ecab96a972367c834b2648d83\workspace\transformed\material-1.13.0\AndroidManifest.xml:22:5-20
 MERGED from [androidx.constraintlayout:constraintlayout:2.2.1] C:\Users\Admin\.gradle\caches\9.2.1\transforms\02aec67c069e8068a0ff46f518c8e36b\workspace\transformed\constraintlayout-2.2.1\AndroidManifest.xml:7:5-20
@@ -140,48 +140,60 @@ ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:45:9-47:3
 		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:47:13-37
 	android:name
 		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:46:13-52
+activity#com.example.appcodetest.ui.UserManagerActivity
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:49:9-50:39
+	android:exported
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:50:13-37
+	android:name
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:49:19-57
 activity#com.example.appcodetest.ui.ChapterEditorActivity
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:49:9-51:39
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:52:9-54:39
 	android:exported
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:51:13-37
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:54:13-37
 	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:50:13-53
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:53:13-53
 activity#com.example.appcodetest.ui.LessonEditorActivity
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:53:9-55:39
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:56:9-58:39
 	android:exported
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:55:13-37
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:58:13-37
 	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:54:13-52
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:57:13-52
 activity#com.example.appcodetest.ui.StepEditorActivity
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:57:9-59:39
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:60:9-62:39
 	android:exported
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:59:13-37
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:62:13-37
 	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:58:13-50
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:61:13-50
+activity#com.example.appcodetest.ui.StepListActivity
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:67:9-69:39
+	android:exported
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:69:13-37
+	android:name
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:68:13-48
 activity#com.example.appcodetest.ui.LessonLearnActivity
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:62:9-64:39
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:72:9-74:39
 	android:exported
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:64:13-37
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:74:13-37
 	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:63:13-51
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:73:13-51
 activity#com.example.appcodetest.ui.LessonPracticeActivity
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:66:9-68:39
-	android:exported
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:68:13-37
-	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:67:13-54
-activity#com.example.appcodetest.ui.ProfileActivity
-ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:71:9-73:39
-	android:exported
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:73:13-37
-	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:72:13-47
-activity#com.example.appcodetest.ui.RegisterActivity
 ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:76:9-78:39
 	android:exported
 		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:78:13-37
 	android:name
-		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:77:13-48
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:77:13-54
+activity#com.example.appcodetest.ui.ProfileActivity
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:81:9-83:39
+	android:exported
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:83:13-37
+	android:name
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:82:13-47
+activity#com.example.appcodetest.ui.RegisterActivity
+ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:86:9-88:39
+	android:exported
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:88:13-37
+	android:name
+		ADDED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml:87:13-48
 uses-sdk
 INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\Admin\AppCodeTest\app\src\main\AndroidManifest.xml

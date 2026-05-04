@@ -29,50 +29,84 @@
             android:padding="12dp"
             android:layout_marginTop="12dp"/>
 
-        <!-- OPTIONS -->
-        <EditText
-            android:id="@+id/edtOption1"
-            android:hint="Đáp án 1"
-            style="@style/InputStyle"/>
+        <!-- ========================= -->
+        <!-- 🔥 QUIZ -->
+        <!-- ========================= -->
 
-        <EditText
-            android:id="@+id/edtOption2"
-            android:hint="Đáp án 2"
-            style="@style/InputStyle"/>
+        <LinearLayout
+            android:id="@+id/layoutOptions"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"/>
 
-        <EditText
-            android:id="@+id/edtOption3"
-            android:hint="Đáp án 3"
-            style="@style/InputStyle"/>
-
-        <!-- RADIO -->
         <RadioGroup
             android:id="@+id/radioCorrect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="8dp"/>
 
-            <RadioButton
-                android:id="@+id/radio1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đáp án đúng: 1"
-                android:textColor="#FFFFFF"/>
+        <Button
+            android:id="@+id/btnAddOption"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="+ Thêm đáp án"
+            android:background="#334155"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="10dp"/>
 
-            <RadioButton
-                android:id="@+id/radio2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Đáp án đúng: 2"
-                android:textColor="#FFFFFF"/>
+        <!-- ========================= -->
+        <!-- 🔥 FILL -->
+        <!-- ========================= -->
 
-            <RadioButton
-                android:id="@+id/radio3"
-                android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/layoutFillCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="12dp"
+            android:visibility="gone">
+
+            <TextView
+                android:text="Template"
+                android:textColor="#94A3B8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/edtTemplate"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Đáp án đúng: 3"
-                android:textColor="#FFFFFF"/>
-        </RadioGroup>
+                android:hint="VD: print ( [0] ) hoặc age = [0]"
+                android:textColor="#FFFFFF"
+                android:textColorHint="#888"
+                android:background="#020617"
+                android:padding="12dp"
+                android:layout_marginTop="6dp"/>
+
+            <TextView
+                android:text="Danh sách đáp án:"
+                android:textColor="#94A3B8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"/>
+
+            <LinearLayout
+                android:id="@+id/layoutFillInputs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+
+            <Button
+                android:id="@+id/btnAddFill"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="+ Thêm đáp án"
+                android:background="#334155"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="10dp"/>
+
+        </LinearLayout>
 
         <!-- SAVE -->
         <Button
@@ -85,4 +119,5 @@
             android:layout_marginTop="16dp"/>
 
     </LinearLayout>
+
 </ScrollView>

@@ -2,7 +2,7 @@ package com.example.appcodetest.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +10,7 @@ import com.example.appcodetest.R;
 
 public class AdminActivity extends AppCompatActivity {
 
-    Button btnLanguage, btnProfile, btnHome;
+    LinearLayout btnLanguage, btnProfile, btnHome, btnPreview, btnUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,20 +20,28 @@ public class AdminActivity extends AppCompatActivity {
         btnLanguage = findViewById(R.id.btnLanguage);
         btnProfile = findViewById(R.id.btnProfile);
         btnHome = findViewById(R.id.btnHome);
+        btnPreview = findViewById(R.id.btnPreview);
+        btnUsers = findViewById(R.id.btnUsers); // 🔥 thêm
 
-        // 📚 MỞ LANGUAGE (CourseEditor)
         btnLanguage.setOnClickListener(v ->
                 startActivity(new Intent(this, CourseEditorActivity.class))
         );
 
-        // 👤 PROFILE
         btnProfile.setOnClickListener(v ->
                 startActivity(new Intent(this, ProfileActivity.class))
         );
 
-        // 🏠 HOME
         btnHome.setOnClickListener(v ->
                 startActivity(new Intent(this, MainActivity.class))
+        );
+
+        btnPreview.setOnClickListener(v ->
+                startActivity(new Intent(this, MainActivity.class))
+        );
+
+        // 🔥 MỞ USER MANAGER
+        btnUsers.setOnClickListener(v ->
+                startActivity(new Intent(this, UserManagerActivity.class))
         );
     }
 }

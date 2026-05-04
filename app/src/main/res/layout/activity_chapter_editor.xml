@@ -4,28 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- HEADER -->
     <TextView
         android:text="CHAPTER MANAGER"
         android:textColor="#FFFFFF"
-        android:textSize="20sp"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:padding="16dp"
         android:gravity="center"
         android:background="#7C3AED"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <!-- LIST -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="8dp"/>
+        android:padding="12dp"
+        android:clipToPadding="false"/>
 
-    <Button
-        android:id="@+id/btnAdd"
-        android:text="+ Thêm Chapter"
+    <!-- BUTTON -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:background="#6366F1"
-        android:textColor="#FFFFFF"/>
+        android:layout_height="80dp"
+        android:padding="12dp">
+
+        <Button
+            android:id="@+id/btnAdd"
+            android:text="+ Thêm Chapter"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:backgroundTint="#6366F1"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:elevation="6dp"/>
+    </FrameLayout>
+
 </LinearLayout>

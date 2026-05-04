@@ -1,118 +1,178 @@
 [
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-hdpi_ic_launcher.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-hdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-xxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-xxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-xxxhdpi_ic_launcher.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-xxxhdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_item.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_item.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-xxhdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-xxhdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-hdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-hdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_item_card.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/item_card.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_profile.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_profile.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-xxxhdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-xxxhdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-xxxhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-xxxhdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-xhdpi_ic_launcher.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-xhdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-anydpi_ic_launcher_round.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-anydpi\\ic_launcher_round.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-anydpi_ic_launcher.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-anydpi/ic_launcher.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-anydpi_ic_launcher.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-anydpi\\ic_launcher.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-mdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-mdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_user_manager.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_user_manager.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_step_editor.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_step_editor.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_lesson_editor.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_lesson_editor.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-xhdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-xhdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_step_list.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_step_list.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/drawable/ic_launcher_foreground.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_lesson_learn.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_lesson_learn.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_lesson_learn.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_lesson_learn.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_ic_launcher_foreground.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\ic_launcher_foreground.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/drawable_ic_launcher_background.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/drawable/ic_launcher_background.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_step_editor.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_step_editor.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-mdpi_ic_launcher.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-mdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-mdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-mdpi\\ic_launcher.webp"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_lesson_editor.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_lesson_editor.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\xml_backup_rules.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\xml\\backup_rules.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_main.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_main.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_main.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_main.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_course_editor.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_course_editor.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_register.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_register.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/xml_backup_rules.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/xml/backup_rules.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-xxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-xxhdpi\\ic_launcher_round.webp"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_dashboard.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_dashboard.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_course_editor.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_course_editor.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_chapter_editor.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_chapter_editor.xml"
+        "merged": "com.example.appcodetest.app-debug-35:/layout_dialog_edit_user.xml.flat",
+        "source": "com.example.appcodetest.app-main-37:/layout/dialog_edit_user.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_register.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_register.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_code_block.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_code_block.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-hdpi_ic_launcher_round.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-hdpi/ic_launcher_round.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_button.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_button.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_login.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_login.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_chapter_editor.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_chapter_editor.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-anydpi_ic_launcher_round.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-anydpi/ic_launcher_round.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_option.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_option.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/xml_data_extraction_rules.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/xml/data_extraction_rules.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_item_lesson.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\item_lesson.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_admin.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_admin.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_ic_launcher_background.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\ic_launcher_background.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/mipmap-xxhdpi_ic_launcher.webp.flat",
-        "source": "com.example.appcodetest.app-main-37:/mipmap-xxhdpi/ic_launcher.webp"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_answer.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_answer.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_lesson_practice.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_lesson_practice.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_dashboard.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_dashboard.xml"
     },
     {
-        "merged": "com.example.appcodetest.app-debug-35:/layout_activity_profile.xml.flat",
-        "source": "com.example.appcodetest.app-main-37:/layout/activity_profile.xml"
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-xhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-xhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_login.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_login.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_admin.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_admin.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-hdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-hdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-xxxhdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-xxxhdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_item_fill_inline.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\item_fill_inline.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-mdpi_ic_launcher_round.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-mdpi\\ic_launcher_round.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_card.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_avatar.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_avatar.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\xml_data_extraction_rules.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\xml\\data_extraction_rules.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\mipmap-xhdpi_ic_launcher.webp.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\mipmap-xhdpi\\ic_launcher.webp"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_item_user.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\item_user.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_item_card.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\item_card.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\layout_activity_lesson_practice.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\layout\\activity_lesson_practice.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_bg_info.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\bg_info.xml"
+    },
+    {
+        "merged": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-debug-35:\\drawable_item_fill_choice.xml.flat",
+        "source": "C:\\Users\\Admin\\.gradle\\daemon\\9.2.1\\com.example.appcodetest.app-main-37:\\drawable\\item_fill_choice.xml"
     }
 ]

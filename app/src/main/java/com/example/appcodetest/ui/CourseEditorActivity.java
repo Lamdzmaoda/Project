@@ -2,9 +2,7 @@ package com.example.appcodetest.ui;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.*;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,9 +14,12 @@ import com.example.appcodetest.api.ApiService;
 import com.example.appcodetest.api.RetrofitClient;
 import com.example.appcodetest.model.ApiResponse;
 import com.example.appcodetest.model.Language;
+import com.example.appcodetest.utils.Prefs;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,10 +32,15 @@ public class CourseEditorActivity extends AppCompatActivity {
     RecyclerView recyclerCourse;
     Button btnAdd;
 
+    // Danh sách course (language)
     List<Language> courses = new ArrayList<>();
+
+    // Adapter dùng chung
     BaseAdapter<Language> adapter;
 
     ApiService api;
+
+    // Bearer token gọi API
     String token;
 
     @Override
@@ -47,14 +53,14 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         recyclerCourse.setLayoutManager(new LinearLayoutManager(this));
 
-        // =========================
-        // 🔥 FIX TOKEN (KEY + FORMAT)
-        // =========================
-        SharedPreferences prefs = getSharedPreferences("APP", MODE_PRIVATE);
-        String rawToken = prefs.getString("token", "");
+        // 🔥 Lấy token đã lưu
+        String rawToken = Prefs.getToken(this);
 
-        if (rawToken.isEmpty()) {
-            Toast.makeText(this, "Token hết hạn, login lại!", Toast.LENGTH_SHORT).show();
+        // 🔥 Kiểm tra token
+        // nếu token hết hạn thì quay về Login
+        if (rawToken == null || rawToken.isEmpty()) {
+            Toast.makeText(this, "Token hết hạn!", Toast.LENGTH_SHORT).show();
+
             startActivity(new Intent(this, LoginActivity.class));
             finish();
             return;
@@ -62,14 +68,15 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         token = "Bearer " + rawToken;
 
-        Log.d("TOKEN", token);
-
+        // Khởi tạo API
         api = RetrofitClient.getClient().create(ApiService.class);
 
         adapter = new BaseAdapter<>(courses, new BaseAdapter.Listener<Language>() {
 
             @Override
             public void onClick(Language l) {
+
+                // Click course → vào danh sách chapter
                 startActivity(new Intent(CourseEditorActivity.this,
                         ChapterEditorActivity.class)
                         .putExtra("COURSE_ID", l.name));
@@ -77,11 +84,13 @@ public class CourseEditorActivity extends AppCompatActivity {
 
             @Override
             public void onEdit(Language l) {
+                // Sửa course
                 showEditDialog(l);
             }
 
             @Override
             public void onDelete(Language l) {
+                // Xóa course
                 deleteCourse(l.name);
             }
 
@@ -93,14 +102,17 @@ public class CourseEditorActivity extends AppCompatActivity {
 
         recyclerCourse.setAdapter(adapter);
 
+        // Load dữ liệu ban đầu
         loadCourses();
 
+        // Nút thêm course
         btnAdd.setOnClickListener(v -> showCreateDialog());
     }
 
     // =========================
-    // LOAD
+    // LOAD COURSE
     // =========================
+
     private void loadCourses() {
 
         api.getLanguages(token)
@@ -116,24 +128,24 @@ public class CourseEditorActivity extends AppCompatActivity {
 
                             courses.clear();
                             courses.addAll(response.body().result);
+
                             adapter.notifyDataSetChanged();
-                        } else {
-                            Toast.makeText(CourseEditorActivity.this,
-                                    "Token lỗi hoặc hết hạn!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ApiResponse<List<Language>>> call, Throwable t) {
                         Toast.makeText(CourseEditorActivity.this,
-                                "Lỗi load API", Toast.LENGTH_SHORT).show();
+                                "Lỗi load API",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     // =========================
-    // CREATE
+    // DIALOG CREATE
     // =========================
+
     private void showCreateDialog() {
 
         EditText edt = new EditText(this);
@@ -146,8 +158,11 @@ public class CourseEditorActivity extends AppCompatActivity {
 
                     String name = edt.getText().toString().trim();
 
+                    // Không cho tạo rỗng
                     if (name.isEmpty()) {
-                        Toast.makeText(this, "Nhập tên!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this,
+                                "Nhập tên!",
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -158,12 +173,26 @@ public class CourseEditorActivity extends AppCompatActivity {
                 .show();
     }
 
+    // =========================
+    // CREATE COURSE
+    // =========================
+
     private void createCourse(String name) {
 
         try {
             JSONObject json = new JSONObject();
+
+            // 🔥 Backend yêu cầu đầy đủ field
             json.put("name", name);
-            json.put("description", "New Course");
+            json.put("description", "Mô tả cho " + name);
+            json.put("icon", "https://example.com/default-icon.png");
+            json.put("level", 1);
+
+            // Backend đang dùng kiểu datetime
+            json.put("durationDays", "2026-12-31T23:59:59");
+
+            // Backend yêu cầu chapters
+            json.put("chapters", new JSONArray());
 
             RequestBody body = RequestBody.create(
                     MediaType.parse("application/json"),
@@ -175,15 +204,19 @@ public class CourseEditorActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call<Object> call, Response<Object> response) {
+
                             Toast.makeText(CourseEditorActivity.this,
-                                    "Tạo thành công 🚀", Toast.LENGTH_SHORT).show();
+                                    "Tạo thành công 🚀",
+                                    Toast.LENGTH_SHORT).show();
+
                             loadCourses();
                         }
 
                         @Override
                         public void onFailure(Call<Object> call, Throwable t) {
                             Toast.makeText(CourseEditorActivity.this,
-                                    "Lỗi mạng", Toast.LENGTH_SHORT).show();
+                                    "Lỗi mạng",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
 
@@ -193,8 +226,45 @@ public class CourseEditorActivity extends AppCompatActivity {
     }
 
     // =========================
-    // UPDATE
+    // DELETE COURSE
     // =========================
+
+    private void deleteCourse(String name) {
+
+        try {
+            // Encode để tránh lỗi tên có dấu cách
+            String encoded = URLEncoder.encode(name, "UTF-8");
+
+            api.deleteLanguage(token, encoded)
+                    .enqueue(new Callback<Object>() {
+
+                        @Override
+                        public void onResponse(Call<Object> call, Response<Object> response) {
+
+                            Toast.makeText(CourseEditorActivity.this,
+                                    "Đã xóa",
+                                    Toast.LENGTH_SHORT).show();
+
+                            loadCourses();
+                        }
+
+                        @Override
+                        public void onFailure(Call<Object> call, Throwable t) {
+                            Toast.makeText(CourseEditorActivity.this,
+                                    "Lỗi xóa",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // =========================
+    // EDIT COURSE
+    // =========================
+
     private void showEditDialog(Language l) {
 
         EditText edt = new EditText(this);
@@ -207,6 +277,8 @@ public class CourseEditorActivity extends AppCompatActivity {
 
                     try {
                         JSONObject json = new JSONObject();
+
+                        // sửa tên language
                         json.put("name", edt.getText().toString());
 
                         RequestBody body = RequestBody.create(
@@ -214,21 +286,16 @@ public class CourseEditorActivity extends AppCompatActivity {
                                 json.toString()
                         );
 
-                        // ✅ FIX: chỉ gọi 1 lần
                         api.updateLanguage(token, l.name, body)
                                 .enqueue(new Callback<Object>() {
 
                                     @Override
                                     public void onResponse(Call<Object> call, Response<Object> response) {
-                                        Toast.makeText(CourseEditorActivity.this,
-                                                "Đã cập nhật", Toast.LENGTH_SHORT).show();
                                         loadCourses();
                                     }
 
                                     @Override
                                     public void onFailure(Call<Object> call, Throwable t) {
-                                        Toast.makeText(CourseEditorActivity.this,
-                                                "Lỗi update", Toast.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -239,28 +306,5 @@ public class CourseEditorActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Huỷ", null)
                 .show();
-    }
-
-    // =========================
-    // DELETE
-    // =========================
-    private void deleteCourse(String name) {
-
-        api.deleteLanguage(token, name)
-                .enqueue(new Callback<Object>() {
-
-                    @Override
-                    public void onResponse(Call<Object> call, Response<Object> response) {
-                        Toast.makeText(CourseEditorActivity.this,
-                                "Đã xóa", Toast.LENGTH_SHORT).show();
-                        loadCourses();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Object> call, Throwable t) {
-                        Toast.makeText(CourseEditorActivity.this,
-                                "Lỗi xóa", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 }

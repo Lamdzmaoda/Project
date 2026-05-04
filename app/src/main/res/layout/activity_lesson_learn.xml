@@ -24,7 +24,6 @@
             android:layout_height="1dp"
             android:layout_weight="1"/>
 
-        <!-- 🔥 XP -->
         <TextView
             android:id="@+id/txtXP"
             android:text="XP: 0"
@@ -33,14 +32,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-        <!-- 🔥 LEVEL -->
         <TextView
             android:id="@+id/txtLevel"
             android:text="Lv 1"
             android:textColor="#22C55E"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
     </LinearLayout>
 
     <!-- PROGRESS -->
@@ -65,25 +62,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- INFO -->
+            <!-- 🔥 INFO (CENTER + TO HƠN) -->
             <LinearLayout
                 android:id="@+id/layoutInfo"
                 android:visibility="gone"
-                android:background="#1E293B"
-                android:padding="16dp"
-                android:layout_marginBottom="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="40dp"
+                android:paddingBottom="100dp">
 
+                <!-- TEXT CONTENT -->
                 <TextView
                     android:id="@+id/txtInfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:lineSpacingExtra="6dp"
+                    android:gravity="start"/>
+
             </LinearLayout>
 
-            <!-- QUESTION -->
+            <!-- QUIZ -->
             <LinearLayout
                 android:id="@+id/layoutQuestion"
                 android:orientation="vertical"
@@ -99,29 +101,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <Button
-                    android:id="@+id/option1"
-                    android:backgroundTint="#312E81"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginBottom="12dp"
+                <LinearLayout
+                    android:id="@+id/layoutAnswers"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"/>
-
-                <Button
-                    android:id="@+id/option2"
-                    android:backgroundTint="#312E81"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginBottom="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"/>
-
-                <Button
-                    android:id="@+id/option3"
-                    android:backgroundTint="#312E81"
-                    android:textColor="#FFFFFF"
-                    android:layout_marginBottom="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"/>
+                    android:layout_height="wrap_content"/>
             </LinearLayout>
 
             <!-- FILL CODE -->
@@ -132,48 +116,63 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/txtCodeResult"
-                    android:textColor="#22C55E"
-                    android:background="#000000"
+                <!-- CODE BLOCK -->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:background="#111827"
                     android:padding="16dp"
-                    android:textSize="18sp"
-                    android:layout_marginBottom="12dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <!-- 🔥 FIX: WRAP -->
-                <LinearLayout
-                    android:id="@+id/layoutWords"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <Button
-                        android:id="@+id/btnCheckFill"
-                        android:text="Kiểm tra"
-                        android:backgroundTint="#22C55E"
-                        android:textColor="#FFFFFF"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
+                    <!-- FILE NAME -->
+                    <TextView
+                        android:text="🐍 main.py"
+                        android:textColor="#94A3B8"
+                        android:textSize="14sp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                    <Button
-                        android:id="@+id/btnResetFill"
-                        android:text="Reset"
-                        android:backgroundTint="#EF4444"
-                        android:textColor="#FFFFFF"
-                        android:layout_weight="1"
-                        android:layout_width="0dp"
+                    <!-- CODE LINE -->
+                    <LinearLayout
+                        android:id="@+id/layoutFillSlots"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
+
+                <!-- WORD BANK -->
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/layoutWords"
+                        android:orientation="horizontal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                </HorizontalScrollView>
+
+                <!-- BUTTONS -->
+                <Button
+                    android:id="@+id/btnCheckFill"
+                    android:text="KIỂM TRA"
+                    android:backgroundTint="#6366F1"
+                    android:textColor="#FFFFFF"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:id="@+id/btnResetFill"
+                    android:text="LÀM LẠI"
+                    android:backgroundTint="#334155"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
             </LinearLayout>
 
         </LinearLayout>
@@ -197,6 +196,48 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <!-- 🤖 AI BUTTON -->
+        <LinearLayout
+            android:id="@+id/btnAI"
+            android:orientation="horizontal"
+            android:background="#111827"
+            android:padding="14dp"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="🤖"
+                android:textSize="22sp"
+                android:layout_marginEnd="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Cần làm rõ hơn và kèm ví dụ không nè?"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:text="🤗 Hỏi Simzy"
+                    android:textColor="#60A5FA"
+                    android:textSize="13sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- CHECK -->
         <Button
             android:id="@+id/btnCheck"
             android:text="KIỂM TRA"
@@ -205,6 +246,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <!-- NEXT -->
         <Button
             android:id="@+id/btnNext"
             android:text="TIẾP TỤC"

@@ -1,0 +1,32 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="6dp">
+
+    <!-- CHECK -->
+    <CheckBox
+        android:id="@+id/checkCorrect"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"/>
+
+    <!-- VALUE -->
+    <EditText
+        android:id="@+id/edtValue"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="50dp"
+        android:background="#374151"
+        android:textColor="#FFFFFF"
+        android:padding="10dp"
+        android:hint="value"/>
+
+    <!-- DELETE -->
+    <Button
+        android:id="@+id/btnDelete"
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:text="❌"
+        android:background="#E5E7EB"/>
+
+</LinearLayout>

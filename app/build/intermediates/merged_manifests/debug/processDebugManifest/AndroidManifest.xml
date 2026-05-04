@@ -63,6 +63,9 @@
             android:name="com.example.appcodetest.ui.CourseEditorActivity"
             android:exported="false" />
         <activity
+            android:name="com.example.appcodetest.ui.UserManagerActivity"
+            android:exported="false" />
+        <activity
             android:name="com.example.appcodetest.ui.ChapterEditorActivity"
             android:exported="false" />
         <activity
@@ -70,6 +73,11 @@
             android:exported="false" />
         <activity
             android:name="com.example.appcodetest.ui.StepEditorActivity"
+            android:exported="false" />
+
+        <!-- ✅ THÊM DÒNG NÀY -->
+        <activity
+            android:name="com.example.appcodetest.ui.StepListActivity"
             android:exported="false" />
 
         <!-- 🔥 LESSON -->

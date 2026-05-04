@@ -1,47 +1,155 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:background="#0F172A"
-    android:gravity="center"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="20dp">
 
-    <!-- TITLE -->
+    <!-- HEADER -->
     <TextView
-        android:text="👑 CHÀO MỪNG ADMIN"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:padding="20dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <!-- BUTTON LANGUAGE -->
-    <Button
-        android:id="@+id/btnLanguage"
-        android:text="📚 Chỉnh sửa ngôn ngữ"
+        android:layout_height="wrap_content"
+        android:text="👑 Admin Panel"
+        android:textSize="26sp"
+        android:textStyle="bold"
         android:textColor="#FFFFFF"
-        android:background="#6366F1"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginBottom="20dp"/>
 
-    <!-- BUTTON PROFILE -->
-    <Button
-        android:id="@+id/btnProfile"
-        android:text="👤 Hồ sơ"
-        android:textColor="#FFFFFF"
-        android:background="#6366F1"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"/>
+    <!-- CARD CONTAINER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <!-- BUTTON HOME -->
-    <Button
-        android:id="@+id/btnHome"
-        android:text="🏠 Về Home"
-        android:textColor="#FFFFFF"
-        android:background="#6366F1"
-        android:layout_width="250dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"/>
+        <!-- LANGUAGE -->
+        <LinearLayout
+            android:id="@+id/btnLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📚"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Quản lý Course"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <!-- 🔥 USER MANAGER -->
+        <LinearLayout
+            android:id="@+id/btnUsers"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👥"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Quản lý User"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <!-- PROFILE -->
+        <LinearLayout
+            android:id="@+id/btnProfile"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="👤"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Hồ sơ"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <!-- HOME -->
+        <LinearLayout
+            android:id="@+id/btnHome"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/bg_card"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="12dp"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🏠"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Về Home"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+        <!-- 🔥 NEW: QUICK VIEW APP -->
+        <LinearLayout
+            android:id="@+id/btnPreview"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#7C3AED"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🚀"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Xem App (MainActivity)"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:layout_marginStart="10dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
 
 </LinearLayout>
