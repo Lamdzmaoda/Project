@@ -1,0 +1,270 @@
+9. LỘ TRÌNH SẢN XUẤT (PRODUCTION ROADMAP)
+9.1 ROADMAP DIRECTION
+
+Roadmap không nên:
+
+build mọi thứ cùng lúc 😭
+VÌ
+feature overload + technical debt
+NÊN
+build core trước
+THỨ TỰ ĐÚNG
+Core Learning
+↓
+Practice
+↓
+AI
+↓
+Retention
+↓
+Social
+↓
+Realtime
+↓
+Creator Ecosystem
+9.2 PHASE 1 — CORE LEARNING FOUNDATION
+Mục tiêu
+build nền móng app
+FEATURE
+- auth
+- language
+- chapter
+- lesson
+- step
+- progress
+- continue learning
+FRONTEND
+- MainActivity
+- Fragment system
+- ViewModel
+- Repository
+- navigation
+BACKEND
+- auth service
+- learning service
+- JWT
+- progress API
+DATABASE
+- users
+- languages
+- chapters
+- lessons
+- steps
+- progress
+UX GOAL
+học mượt 😭
+KHÔNG CẦN VỘI
+social + realtime
+9.3 PHASE 2 — PRACTICE CODING SYSTEM
+Mục tiêu
+run code thật 😭
+FEATURE
+- coding problem
+- testcase
+- submission
+- judge
+- result
+SANDBOX
+Docker
+Queue
+Worker
+PRACTICE UX
+TAB:
+Description
+Code
+Result
+AI
+CODE EDITOR
+- syntax highlight
+- line number
+- auto save
+KHÔNG CẦN VỘI
+pair coding 😭
+9.4 PHASE 3 — AI FOUNDATION
+Mục tiêu
+AI-assisted learning
+FEATURE
+- AI explain
+- AI debug
+- AI simplify
+- AI recommendation
+AI FLOW
+Android
+↓
+Backend AI Service
+↓
+Gemini
+BACKEND CẦN
+- prompt builder
+- AI limit
+- AI analytics
+- AI cache
+UX GOAL
+AI nhanh + dễ hiểu 😭
+9.5 PHASE 4 — RETENTION SYSTEM
+Mục tiêu
+giữ user quay lại 😭
+FEATURE
+- XP
+- level
+- streak
+- quest
+- badge
+- ranking
+UX
+🔥 7 DAY STREAK
+🎉 +50 XP
+RETENTION LOOP
+Learn
+↓
+Gain XP
+↓
+Unlock reward
+↓
+Return tomorrow
+9.6 PHASE 5 — SOCIAL SYSTEM
+Mục tiêu
+coding community
+FEATURE
+- post
+- comment
+- follow
+- save
+- feed
+- trending
+PROFILE
+coding identity 😭
+PROFILE HIỂN THỊ
+- level
+- badge
+- streak
+- ranking
+9.7 PHASE 6 — ADMIN & MODERATION
+FEATURE
+- report
+- moderator
+- permission
+- analytics
+- admin dashboard
+MODERATOR FLOW
+User report
+↓
+Moderator review
+↓
+Action
+9.8 PHASE 7 — REALTIME SYSTEM
+FEATURE
+- realtime ranking
+- realtime notification
+- online status
+- chat
+TECHNOLOGY
+WebSocket
+9.9 PHASE 8 — PERFORMANCE & SCALING
+FEATURE
+- Redis cache
+- CDN
+- distributed queue
+- image optimization
+SCALE DIRECTION
+- sandbox cluster
+- AI service riêng
+- websocket server riêng
+9.10 PHASE 9 — CREATOR ECOSYSTEM
+FEATURE
+- creator lesson
+- creator challenge
+- creator page
+- monetize
+PURPOSE
+community-generated content 😭
+9.11 PHASE 10 — ADVANCED AI FEATURES
+FEATURE
+- AI coding interview
+- AI pair coding
+- AI generated lesson
+- AI mentor
+9.12 MVP PRIORITY
+MVP nên chỉ gồm:
+- auth
+- learning
+- progress
+- practice
+- AI explain
+KHÔNG NÊN MVP
+- marketplace
+- livestream
+- realtime battle 😭
+9.13 DEVELOPMENT PRIORITY
+Ưu tiên đúng:
+UX
+↓
+Core logic
+↓
+Performance
+↓
+Feature quantity
+KHÔNG NÊN
+thêm feature liên tục 😭
+9.14 TECHNICAL DEBT WARNING
+
+Nếu build nhanh quá:
+
+sau này sửa rất đau 😭
+VÌ THẾ
+architecture trước
+9.15 TEAM STRUCTURE FUTURE
+
+Sau này có thể tách:
+
+- Android
+- Backend
+- AI
+- DevOps
+- Design
+- Content
+9.16 CONTENT SYSTEM
+Cực quan trọng 😭
+Vì app học code:
+content > code
+CONTENT BAO GỒM
+- lesson quality
+- AI quality
+- challenge quality
+- explanation quality
+9.17 ANALYTICS PRIORITY
+
+Track:
+
+- lesson completion
+- AI usage
+- retention
+- streak
+- daily active user
+PURPOSE
+understand user behavior
+9.18 FUTURE BUSINESS MODEL
+
+Sau này có thể:
+
+- premium AI
+- premium lesson
+- creator monetization
+- mentor subscription
+9.19 FINAL PRODUCT DIRECTION
+Learning Platform
++
+AI Platform
++
+Coding Platform
++
+Social Platform
++
+Creator Ecosystem
+9.20 ĐIỀU QUAN TRỌNG NHẤT
+
+Roadmap mạnh không phải vì:
+
+nhiều feature
+MÀ VÌ
+build đúng thứ đúng thời điểm 😭

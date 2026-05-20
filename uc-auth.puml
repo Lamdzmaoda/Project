@@ -1,0 +1,105 @@
+@startuml
+left to right direction
+actor "Người Dùng" as USER
+actor "Quản Trị" as ADMIN
+actor "Google OAuth" as GOOGLE
+
+rectangle "Auth" {
+
+  usecase "UC1: Đăng ký" as UC1
+  note right of UC1
+    POST /users
+    Input: username, email, password
+    Output: UserResponse + JWT
+  end note
+
+  usecase "UC2: Đăng nhập" as UC2
+  note right of UC2
+    POST /auth/token
+    Input: username/email + password
+    Output: JWT token
+  end note
+
+  usecase "UC3: Đăng nhập Google" as UC3
+  note right of UC3
+    POST /auth/outbound/authentication
+    Input: authorization code
+    Output: JWT token
+  end note
+
+  usecase "UC4: Refresh Token" as UC4
+  note right of UC4
+    POST /auth/refresh
+    Input: old token
+    Output: new JWT token
+  end note
+
+  usecase "UC5: Logout" as UC5
+  note right of UC5
+    POST /auth/logout
+    → Blacklist JWT
+  end note
+
+  usecase "UC6: Xem thông tin cá nhân" as UC6
+  note right of UC6
+    GET /users/myInfo
+    Output: UserResponse (level, xp, streak...)
+  end note
+
+  usecase "UC7: Cập nhật thông tin" as UC7
+  note right of UC7
+    PUT /users/{userId}
+    Update: password, roles...
+  end note
+
+  usecase "UC8: Xem danh sách user" as UC8
+  note right of UC8
+    GET /users (ADMIN only)
+  end note
+
+  usecase "UC9: Xem user theo ID" as UC9
+  note right of UC9
+    GET /users/{userId}
+    ADMIN or owner
+  end note
+
+  usecase "UC10: Xoá user" as UC10
+
+  usecase "UC11: CRUD Role" as UC11
+  note right of UC11
+    RoleService
+    • create / getAll / delete
+    Role ↔ Permission (ManyToMany)
+  end note
+
+  usecase "UC12: CRUD Permission" as UC12
+  note right of UC12
+    PermissionService
+    • create / getAll / delete
+  end note
+}
+
+' --- Quan hệ Actor → Use Case ---
+
+USER --> UC1
+USER --> UC2
+USER --> UC4
+USER --> UC5
+USER --> UC6
+USER --> UC7
+USER --> UC9
+
+GOOGLE ..> UC3 : <<include>>
+
+ADMIN --> UC8
+ADMIN --> UC9
+ADMIN --> UC10
+ADMIN --> UC11
+ADMIN --> UC12
+
+' --- Mở rộng / Bao gồm ---
+
+UC2 ..> UC1 : <<extend>>\n(nếu chưa có tài khoản)
+UC3 ..> UC2 : <<include>>\nsau OAuth → tạo token
+
+@enduml

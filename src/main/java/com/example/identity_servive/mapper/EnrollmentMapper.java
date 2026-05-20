@@ -1,10 +1,9 @@
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.EnrollmentRequest;
-import com.example.identity_servive.dto.response.EnrollmentResponse;
-import com.example.identity_servive.entity.Enrollment;
+import com.example.identity_servive.dto.request.learningRequest.EnrollmentRequest;
+import com.example.identity_servive.dto.response.progress.EnrollmentResponse;
+import com.example.identity_servive.entity.progress.Enrollment;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface EnrollmentMapper {

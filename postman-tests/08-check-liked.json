@@ -1,0 +1,10 @@
+{
+  "step": 8,
+  "name": "Check Liked",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}/liked",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Kết quả phải là true nếu đã like ở bước 7."
+}

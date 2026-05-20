@@ -1,0 +1,16 @@
+{
+  "step": 4,
+  "name": "Create Comment",
+  "method": "POST",
+  "url": "http://localhost:8080/api/community/comments",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "body": {
+    "postId": "{POST_ID}",
+    "content": "Great post! Very helpful.",
+    "parentId": null
+  },
+  "note": "Thay {POST_ID} bằng id từ bước 1. Copy 'result.id' để dùng cho reply."
+}

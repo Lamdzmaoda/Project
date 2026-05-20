@@ -1,0 +1,10 @@
+{
+  "step": 3,
+  "name": "Get Post By ID",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Thay {POST_ID} bằng id từ bước 1."
+}

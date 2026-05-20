@@ -1,7 +1,8 @@
 /* (C)2026 */
 package com.example.identity_servive.controller;
 
-import com.example.identity_servive.dto.response.UserResponse;
+import com.example.identity_servive.dto.request.AuthRequest.UserCreationRequest;
+import com.example.identity_servive.dto.response.authResponse.UserResponse;
 import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,16 +32,15 @@ class UserControllerIntegrationTest {
     dob = LocalDate.of(2005, 10, 6);
     request =
         UserCreationRequest.builder()
-            .userName("lamdzbodoi")
+            .username("lamdzbodoi")
             .password("lamdzbodoi")
             .build();
 
     userResponse =
         UserResponse.builder()
             .id("9900193e-1262-451e-b17b-b9be5f62af78")
-            .userName("lamdzbodoi")
-            .firstName("lamdzbodoi")
-            .lastName("dzbodoi")
+            .username("lamdzbodoi")
+            .displayName("lamdzbodoi")
             .birthDate(dob)
             .build();
   }

@@ -1,0 +1,21 @@
+1. PRODUCT / SYSTEM DESIGN DOCUMENT
+(TÀI LIỆU THIẾT KẾ HỆ THỐNG) (mấy cái 1 đến 12 đó)
+
+Đây là loại bạn làm hồi nãy 😭
+
+VÍ DỤ
+7. GAMIFICATION & SOCIAL SYSTEM
+NÓ TRẢ LỜI 😭
+APP CÓ GÌ?
+WHY?
+USER EXPERIENCE?
+BAO GỒM 😭
+- XP là gì
+- streak là gì
+- retention logic
+- reward UX
+- community purpose
+ĐÂY GỌI LÀ 😭
+Product/System Design Layer
+THƯỜNG TOTAL
+~10-15 documents 😭

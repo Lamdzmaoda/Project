@@ -1,0 +1,75 @@
+@startuml
+left to right direction
+actor "Người Dùng" as USER
+actor "Quản Trị" as ADMIN
+actor "Judge0 API" as JUDGE0
+actor "OpenAI API" as OPENAI
+
+rectangle "AI Tutor" {
+
+  usecase "Chat với AI" as A1
+  note right of A1
+    POST /chats
+    Input: message + stepId
+    Context: step title, type, data
+    Personality: Gojo Satoru
+    Rules:
+    • Không đưa đáp án trực tiếp
+    • Chỉ gợi ý, giải thích
+    Output: hints, aiExplanation,
+            suggestedCode, motivation
+  end note
+
+  usecase "Xem lịch sử chat" as A2
+  note right of A2
+    GET /chats/user
+    Lịch sử của user hiện tại
+  end note
+
+  usecase "Xem ALL lịch sử" as A3
+  note right of A3
+    GET /chats
+    Toàn bộ chat (ADMIN)
+  end note
+}
+
+rectangle "System" {
+
+  usecase "Chạy code Python" as S1
+  note right of S1
+    POST /api/v1/code/run
+    1. Mã hoá code → Base64
+    2. Gửi Judge0 (language_id=71)
+    3. Nhận stdout / stderr
+    4. Giải mã Base64
+  end note
+
+  usecase "Parse lỗi code" as S2
+  note right of S2
+    Phân tích stderr:
+    • Dòng lỗi (line N)
+    • Cột lỗi (dấu ^)
+    • Loại lỗi (SyntaxError...)
+    • Dịch sang tiếng Việt
+    Lưu vào bảng Code entity
+  end note
+
+  usecase "Lưu Submission" as S3
+  note right of S3
+    Tự động lưu sau submit:
+    Submission { user, lesson,
+    problem, code, output, passed }
+  end note
+}
+
+USER --> A1
+USER --> A2
+USER --> S1
+
+ADMIN --> A3
+
+S1 ..> JUDGE0 : <<gọi API>>
+S1 ..> S2 : <<include>>
+S1 ..> S3 : <<include>>
+
+@enduml

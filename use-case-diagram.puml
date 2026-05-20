@@ -1,0 +1,86 @@
+@startuml
+left to right direction
+
+actor "Người Dùng" as USER
+actor "Quản Trị" as ADMIN
+actor "Hệ Thống" as SYSTEM
+
+rectangle Auth {
+  usecase "Đăng ký" as UC1
+  usecase "Đăng nhập" as UC2
+  usecase "Google OAuth" as UC3
+  usecase "Refresh Token" as UC4
+  usecase "Logout" as UC5
+  usecase "Xem thông tin cá nhân" as UC6
+  usecase "Cập nhật thông tin" as UC7
+  usecase "CRUD Vai trò" as UC8
+  usecase "CRUD Quyền hạn" as UC9
+  usecase "Xem danh sách user" as UC10
+  usecase "Xoá user" as UC11
+
+  USER --> UC1
+  USER --> UC2
+  USER --> UC3
+  USER --> UC4
+  USER --> UC5
+  USER --> UC6
+  USER --> UC7
+  ADMIN --> UC8
+  ADMIN --> UC9
+  ADMIN --> UC10
+  ADMIN --> UC11
+}
+
+rectangle "Quản lý Khóa học" {
+  usecase "CRUD Language" as LC1
+  usecase "CRUD Chapter" as LC2
+  usecase "CRUD Lesson" as LC3
+  usecase "CRUD Step" as LC4
+  usecase "CRUD Problem" as LC5
+  usecase "Purge (xoá hẳn)" as LC6
+
+  ADMIN --> LC1
+  ADMIN --> LC2
+  ADMIN --> LC3
+  ADMIN --> LC4
+  ADMIN --> LC5
+  ADMIN --> LC6
+}
+
+rectangle "Học tập" {
+  usecase "Ghi danh khóa học" as L1
+  usecase "Xem cây học tập" as L2
+  usecase "Nộp bài LEARN" as L3
+  usecase "Nộp code PRACTICE" as L4
+  usecase "Hoàn tất PRACTICE" as L5
+  usecase "Xem tiến độ" as L6
+  usecase "Reset tiến độ" as L7
+  usecase "Tự động unlock" as L8
+
+  USER --> L1
+  USER --> L2
+  USER --> L3
+  USER --> L4
+  USER --> L5
+  USER --> L6
+  USER --> L7
+  SYSTEM --> L8
+}
+
+rectangle "AI Tutor" {
+  usecase "Chat với AI" as A1
+  usecase "Xem lịch sử chat" as A2
+
+  USER --> A1
+  USER --> A2
+}
+
+rectangle "Hệ Thống" {
+  usecase "Chạy code Python" as S1
+  usecase "Parse lỗi code" as S2
+
+  USER --> S1
+  SYSTEM --> S2
+}
+
+@enduml

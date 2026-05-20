@@ -1,0 +1,80 @@
+@startuml
+|Người Dùng|
+start
+:Chọn ngôn ngữ → Ghi danh\n(POST /enrollment);
+
+|EnrollmentService|
+:Tìm User từ SecurityContext;
+:Tìm Language theo name;
+if (Đã ghi danh trước đó?) then (có)
+  :Trả về enrollment cũ;
+  stop
+else (chưa)
+endif
+
+:Tạo Enrollment mới\n(status=IN_PROGRESS);
+
+|LearningProgressService|
+:Tìm chapter đầu tiên của language;
+:Tạo UserChapterProgress\n(Chapter đầu → unlocked);
+:Duyệt ALL lessons trong chapter;
+:Tạo UserLessonProgress cho từng lesson\n(đều unlocked);
+
+|Người Dùng|
+:Xem cây học tập\n(GET /my-learning/{language});
+
+|CourseService|
+:Duyệt chapters ACTIVE;
+  :Với mỗi chapter → tìm chapterProgress;
+  :Với mỗi lesson → tìm lessonProgress;
+  :Gắn lockedStatus +\ncompletedStatus;
+:Trả về cây học\n(UserChapterResponse[]);
+
+|Người Dùng|
+:Chọn bài LEARN →\nXem steps của lesson;
+:Trả lời từng step;
+:Nộp tất cả steps\n(POST /my-learning/verify);
+
+|LearningService|
+if (Số lượng steps\nkhông khớp?) then (có)
+  :Lỗi LESSON_INCOMPLETE;
+  stop
+else (khớp)
+endif
+
+:Map StepId → Step từ DB;
+:Khởi tạo Set rỗng\ntheo dõi ID đã xử lý;
+
+while (Duyệt từng answer trong request)
+  :Kiểm tra step hợp lệ;
+  :So sánh answer với\ncorrectValue trong Step.data;
+  if (Sai?) then (có)
+    :Lỗi INVALID_ANSWER;
+    stop
+  else (đúng)
+  endif
+  :Tích luỹ XP;
+  :Thêm StepId vào\ntập đã xử lý;
+endwhile
+
+|LearningProgressService|
+if (Bài đã hoàn thành\ntrước đó?) then (có)
+  :Bỏ qua cộng XP;
+else (chưa)
+  :completeLesson:
+  - updateLessonToCompleted
+  - Cộng XP vào user
+  - Tăng streak
+  - Update enrollment %
+  - Update chapter progress;
+  :Kiểm tra đủ XP\n→ unlock chapter tiếp theo;
+endif
+
+|Người Dùng|
+:Nhận kết quả:
+- totalXpGained
+- isNewlyCompleted
+- danh sách verifyResponses;
+
+stop
+@enduml

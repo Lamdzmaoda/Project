@@ -1,0 +1,272 @@
+6. SANDBOX SYSTEM
+(HỆ THỐNG CHẠY CODE)
+
+6.1 SANDBOX DIRECTION
+(ĐỊNH HƯỚNG SANDBOX)
+Sandbox là:
+core system 😭
+
+VÌ
+Đây là thứ giúp app:
+run code thật 😭
+
+PURPOSE
+- coding practice- judge system- realtime feedback
+
+6.2 SANDBOX FLOW
+(LUỒNG SANDBOX)
+Android↓Backend API↓Queue↓Sandbox Worker↓Docker Container↓Execute Code↓Judge Result↓Return Response
+
+PURPOSE
+safe code execution 😭
+
+6.3 MAIN SANDBOX STACK
+(CÔNG NGHỆ SANDBOX)
+Main Technologies
+DockerJavaLinux Worker
+
+PURPOSE
+isolated execution 😭
+
+6.4 WHY DOCKER
+(VÌ SAO DÙNG DOCKER)
+Docker giúp:
+- isolate process- limit resource- secure execution- reproducible environment
+
+PURPOSE
+production sandbox 😭
+
+6.5 EXECUTION FLOW
+(LUỒNG CHẠY CODE)
+User Submit Code↓Save Submission↓Push Queue↓Worker Receive↓Create Docker Container↓Compile↓Run↓Judge↓Save Result↓Return Response
+
+PURPOSE
+structured execution 😭
+
+6.6 SUPPORTED LANGUAGES
+(NGÔN NGỮ HỖ TRỢ)
+Giai đoạn đầu:
+- Java- Python- C++- JavaScript
+
+NOTE
+không nên support quá nhiều sớm 😭
+
+PURPOSE
+maintenance easier 😭
+
+6.7 SUBMISSION FLOW
+(LUỒNG SUBMISSION)
+Write Code↓Run/Test↓Submit↓Judge↓Result
+
+PURPOSE
+real coding experience 😭
+
+6.8 JUDGE SYSTEM
+(HỆ THỐNG CHẤM BÀI)
+Judge sẽ:
+- compile code- run testcase- compare output- calculate runtime
+
+VERDICTS
+ACCEPTEDWRONG_ANSWERTIME_LIMITRUNTIME_ERRORCOMPILE_ERROR
+
+PURPOSE
+competitive coding feel 😭
+
+6.9 TESTCASE SYSTEM
+(HỆ THỐNG TESTCASE)
+Mỗi problem có:
+- public testcase- hidden testcase
+
+PURPOSE
+prevent hardcoding 😭
+
+6.10 EXECUTION LIMITS
+(GIỚI HẠN CHẠY)
+Mỗi container cần:
+- memory limit- CPU limit- timeout
+
+EXAMPLE
+2 seconds256MB RAM
+
+PURPOSE
+prevent abuse 😭
+
+6.11 SANDBOX SECURITY
+(BẢO MẬT SANDBOX)
+Sandbox phải chặn:
+- internet access- file access- process spawning- infinite loop
+
+PURPOSE
+safe execution 😭
+
+6.12 CONTAINER ISOLATION
+(CÔ LẬP CONTAINER)
+Mỗi submission:
+1 container riêng 😭
+
+PURPOSE
+execution isolation 😭
+
+6.13 QUEUE SYSTEM
+(HỆ THỐNG HÀNG ĐỢI)
+Queue dùng để:
+- tránh overload- async processing- scale worker
+
+FLOW
+Submission↓Queue↓Worker
+
+PURPOSE
+stable execution 😭
+
+6.14 SANDBOX WORKER
+(WORKER SANDBOX)
+Worker chịu trách nhiệm:
+- receive job- execute code- cleanup container
+
+PURPOSE
+execution engine 😭
+
+6.15 CLEANUP SYSTEM
+(HỆ THỐNG DỌN DẸP)
+Sau khi execute:
+container phải bị xóa 😭
+
+PURPOSE
+save resource 😭
+
+6.16 RESULT SYSTEM
+(HỆ THỐNG KẾT QUẢ)
+Response gồm:
+- verdict- runtime- memory- testcase result
+
+EXAMPLE
+{  \"verdict\": \"ACCEPTED\",  \"runtime\": 120,  \"memory\": 32}
+
+PURPOSE
+real coding feedback 😭
+
+6.17 PRACTICE UX FLOW
+(LUỒNG UX PRACTICE)
+Problem↓Editor↓Run Code↓Result↓AI Explain
+
+PURPOSE
+learning + practice 😭
+
+6.18 CODE EDITOR INTEGRATION
+(TÍCH HỢP CODE EDITOR)
+Editor cần:
+- syntax highlight- auto save- line number- dark theme
+
+FUTURE
+autocomplete 😭
+
+6.19 RUN VS SUBMIT
+(RUN VÀ SUBMIT)
+RUN
+test nhanh 😭
+
+SUBMIT
+judge chính thức 😭
+
+PURPOSE
+better coding workflow 😭
+
+6.20 AI + SANDBOX INTEGRATION
+(KẾT HỢP AI & SANDBOX)
+Sau khi fail:
+AI có thể explain error 😭
+
+EXAMPLE
+Bạn bị TIME_LIMITvì vòng lặp chưa tối ưu 😭
+
+PURPOSE
+learning feedback 😭
+
+6.21 SUBMISSION DATABASE MODEL
+(MODEL SUBMISSION)
+TABLE
+submissions
+
+MODEL
+Submission- id- userId- problemId- language- sourceCode- verdict- runtime- memory- createdAt
+
+PURPOSE
+submission history 😭
+
+6.22 TESTCASE DATABASE MODEL
+(MODEL TESTCASE)
+TABLE
+testcases
+
+MODEL
+TestCase- id- problemId- input- expectedOutput- hidden
+
+PURPOSE
+judge system 😭
+
+6.23 PRACTICE ANALYTICS
+(PHÂN TÍCH PRACTICE)
+Track:
+- solve rate- fail rate- popular problem- average runtime
+
+PURPOSE
+improve challenge quality 😭
+
+6.24 SANDBOX LOGGING
+(LOGGING SANDBOX)
+Log:
+- execution time- compile error- container crash- worker status
+
+PURPOSE
+debug production 😭
+
+6.25 SANDBOX SCALING
+(MỞ RỘNG SANDBOX)
+Giai đoạn đầu:
+1 worker 😭
+
+FUTURE
+multiple workersdistributed queue
+
+PURPOSE
+high concurrent execution 😭
+
+6.26 RATE LIMIT SYSTEM
+(GIỚI HẠN REQUEST)
+Ví dụ:
+FREE:limited run/dayPREMIUM:higher limit
+
+PURPOSE
+prevent abuse 😭
+
+6.27 PRACTICE CONTENT STRUCTURE
+(CẤU TRÚC BÀI PRACTICE)
+Mỗi problem gồm:
+- title- description- constraint- example- testcase- hint
+
+PURPOSE
+clear challenge structure 😭
+
+6.28 SANDBOX RISKS
+(RỦI RO SANDBOX)
+Sandbox dễ gặp:
+- infinite loop- memory abuse- heavy CPU usage- queue overload
+
+NÊN CẦN
+- timeout- memory limit- monitoring- cleanup
+
+6.29 FUTURE FEATURES
+(TÍNH NĂNG TƯƠNG LAI)
+Future:
+- realtime battle- pair coding- multiplayer coding
+
+NOTE
+không cần build quá sớm 😭
+
+6.30 FINAL SANDBOX PHILOSOPHY
+(TRIẾT LÝ SANDBOX CUỐI)
+Sandbox mạnh không phải vì:
+run được nhiều language 😭
+
+MÀ VÌ
+- stable- secure- fast- feedback rõ ràng

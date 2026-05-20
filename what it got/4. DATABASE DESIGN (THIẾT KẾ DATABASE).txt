@@ -1,0 +1,486 @@
+4. DATABASE DESIGN
+(THIẾT KẾ DATABASE)
+4.1 DATABASE DIRECTION
+(ĐỊNH HƯỚNG DATABASE)
+
+Database được thiết kế theo hướng:
+
+production-ready 😭
+MỤC TIÊU
+- scalable
+- maintainable
+- relational rõ ràng
+- tối ưu query
+NOTE
+
+App kiểu này có:
+
+- learning
+- AI
+- social
+- gamification
+- realtime
+NÊN DATABASE:
+không thể thiết kế sơ sài 😭
+4.2 MAIN DATABASE STACK
+(CÔNG NGHỆ DATABASE)
+Main Database
+PostgreSQL
+CACHE DATABASE
+Redis
+PURPOSE
+- fast query
+- caching
+- leaderboard
+- realtime
+4.3 DATABASE STRUCTURE
+(CẤU TRÚC DATABASE)
+
+Database chia thành:
+
+- auth
+- learning
+- practice
+- AI
+- social
+- gamification
+- analytics
+- admin
+PURPOSE
+clear separation 😭
+4.4 USER TABLE
+(BẢNG USER)
+TABLE
+users
+PURPOSE
+lưu thông tin user 😭
+MODEL
+User
+
+- id
+- email
+- username
+- passwordHash
+- avatarUrl
+- bio
+- roleId
+- status
+- verified
+- xp
+- coin
+- level
+- streak
+- createdAt
+- updatedAt
+- lastOnlineAt
+FIELD EXPLANATION
+(GIẢI THÍCH FIELD)
+roleId
+role hiện tại của user
+status
+ACTIVE
+BANNED
+SUSPENDED
+verified
+đã xác minh account chưa
+streak
+chuỗi ngày học liên tục 😭
+4.5 ROLE TABLE
+(BẢNG ROLE)
+TABLE
+roles
+MODEL
+Role
+
+- id
+- name
+- description
+DATA
+USER
+MODERATOR
+ADMIN
+SUPER_ADMIN
+PURPOSE
+permission hierarchy 😭
+4.6 PERMISSION TABLE
+(BẢNG PERMISSION)
+TABLE
+permissions
+MODEL
+Permission
+
+- id
+- code
+- description
+EXAMPLE
+DELETE_POST
+BAN_USER
+MANAGE_ROLE
+PURPOSE
+flexible authorization 😭
+4.7 ROLE_PERMISSION TABLE
+(BẢNG ROLE_PERMISSION)
+TABLE
+role_permissions
+PURPOSE
+many-to-many relationship 😭
+FLOW
+Role
+↓
+Permissions
+4.8 LANGUAGE TABLE
+(BẢNG NGÔN NGỮ)
+TABLE
+languages
+MODEL
+Language
+
+- id
+- name
+- slug
+- iconUrl
+- description
+- difficulty
+- createdAt
+EXAMPLE
+Java
+Python
+C++
+JavaScript
+4.9 CHAPTER TABLE
+(BẢNG CHAPTER)
+TABLE
+chapters
+MODEL
+Chapter
+
+- id
+- languageId
+- title
+- description
+- orderIndex
+RELATIONSHIP
+Language
+↓
+Many Chapters
+4.10 LESSON TABLE
+(BẢNG LESSON)
+TABLE
+lessons
+MODEL
+Lesson
+
+- id
+- chapterId
+- title
+- description
+- difficulty
+- estimatedMinute
+- thumbnailUrl
+- orderIndex
+- published
+PURPOSE
+core learning content 😭
+4.11 LESSON STEP TABLE
+(BẢNG STEP)
+TABLE
+lesson_steps
+MODEL
+LessonStep
+
+- id
+- lessonId
+- type
+- title
+- content
+- codeTemplate
+- orderIndex
+STEP TYPES
+TEXT
+CODE
+QUIZ
+PRACTICE
+AI_HINT
+PURPOSE
+step-by-step learning 😭
+4.12 USER PROGRESS TABLE
+(BẢNG TIẾN TRÌNH)
+TABLE
+user_progress
+MODEL
+UserProgress
+
+- id
+- userId
+- languageId
+- chapterId
+- lessonId
+- lastStepId
+- progressPercent
+- completed
+- updatedAt
+PURPOSE
+continue learning 😭
+NOTE
+lastStepId cực kỳ quan trọng 😭
+4.13 PROBLEM TABLE
+(BẢNG BÀI TẬP CODE)
+TABLE
+problems
+MODEL
+Problem
+
+- id
+- languageId
+- title
+- description
+- difficulty
+- starterCode
+- memoryLimit
+- timeLimit
+PURPOSE
+coding practice 😭
+4.14 TESTCASE TABLE
+(BẢNG TESTCASE)
+TABLE
+testcases
+MODEL
+TestCase
+
+- id
+- problemId
+- input
+- expectedOutput
+- hidden
+PURPOSE
+judge system 😭
+4.15 SUBMISSION TABLE
+(BẢNG SUBMISSION)
+TABLE
+submissions
+MODEL
+Submission
+
+- id
+- userId
+- problemId
+- language
+- sourceCode
+- verdict
+- runtime
+- memory
+- createdAt
+VERDICT TYPES
+ACCEPTED
+WRONG_ANSWER
+TIME_LIMIT
+RUNTIME_ERROR
+PURPOSE
+real coding experience 😭
+4.16 POST TABLE
+(BẢNG BÀI VIẾT)
+TABLE
+posts
+MODEL
+Post
+
+- id
+- userId
+- content
+- imageUrl
+- codeSnippet
+- likeCount
+- commentCount
+- createdAt
+PURPOSE
+community system 😭
+4.17 COMMENT TABLE
+(BẢNG BÌNH LUẬN)
+TABLE
+comments
+MODEL
+Comment
+
+- id
+- postId
+- userId
+- content
+- createdAt
+PURPOSE
+social interaction 😭
+4.18 FOLLOW TABLE
+(BẢNG FOLLOW)
+TABLE
+follows
+MODEL
+Follow
+
+- followerId
+- followingId
+- createdAt
+PURPOSE
+social graph 😭
+4.19 QUEST TABLE
+(BẢNG QUEST)
+TABLE
+quests
+MODEL
+Quest
+
+- id
+- title
+- description
+- rewardXp
+- rewardCoin
+- type
+EXAMPLE
+Learn 1 lesson
+Solve 1 problem
+Comment 1 post
+PURPOSE
+daily retention 😭
+4.20 USER QUEST TABLE
+(BẢNG QUEST USER)
+TABLE
+user_quests
+MODEL
+UserQuest
+
+- userId
+- questId
+- progress
+- completed
+- claimed
+PURPOSE
+track quest progress 😭
+4.21 BADGE TABLE
+(BẢNG BADGE)
+TABLE
+badges
+MODEL
+Badge
+
+- id
+- name
+- iconUrl
+- description
+PURPOSE
+achievement system 😭
+4.22 USER BADGE TABLE
+(BẢNG BADGE USER)
+TABLE
+user_badges
+MODEL
+UserBadge
+
+- userId
+- badgeId
+- unlockedAt
+PURPOSE
+badge ownership 😭
+4.23 NOTIFICATION TABLE
+(BẢNG THÔNG BÁO)
+TABLE
+notifications
+MODEL
+Notification
+
+- id
+- userId
+- type
+- title
+- content
+- read
+- createdAt
+PURPOSE
+engagement 😭
+4.24 SUBSCRIPTION TABLE
+(BẢNG GÓI PREMIUM)
+TABLE
+subscriptions
+MODEL
+Subscription
+
+- id
+- userId
+- type
+- startDate
+- endDate
+- active
+TYPES
+FREE
+PREMIUM
+PRO
+PURPOSE
+monetization 😭
+4.25 ANALYTICS EVENT TABLE
+(BẢNG EVENT ANALYTICS)
+TABLE
+analytics_events
+MODEL
+AnalyticsEvent
+
+- id
+- userId
+- eventType
+- metadata
+- createdAt
+PURPOSE
+product analytics 😭
+4.26 INDEX STRATEGY
+(CHIẾN LƯỢC INDEX)
+
+Cần index:
+
+- email
+- username
+- lessonId
+- userId
+- createdAt
+PURPOSE
+fast query 😭
+4.27 SOFT DELETE STRATEGY
+(CHIẾN LƯỢC SOFT DELETE)
+
+Không nên:
+
+DELETE thật 😭
+NÊN DÙNG
+deleted
+deletedAt
+PURPOSE
+recover data 😭
+4.28 AUDIT FIELDS
+(FIELD KIỂM TOÁN)
+
+Nhiều table nên có:
+
+createdAt
+updatedAt
+createdBy
+updatedBy
+PURPOSE
+tracking 😭
+4.29 DATABASE SCALING DIRECTION
+(ĐỊNH HƯỚNG SCALE DATABASE)
+
+Giai đoạn đầu:
+
+single PostgreSQL 😭
+FUTURE
+- read replica
+- partition
+- analytics DB
+PURPOSE
+production scaling 😭
+4.30 FINAL DATABASE PHILOSOPHY
+(TRIẾT LÝ DATABASE CUỐI)
+
+Database mạnh không phải vì:
+
+nhiều table 😭
+MÀ VÌ
+- relation rõ ràng
+- query nhanh
+- dễ maintain
+- support product tốt

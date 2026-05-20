@@ -1,0 +1,405 @@
+{
+  "community_api_tests": {
+    "base_url": "http://localhost:8080",
+    "headers": {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer {YOUR_TOKEN}"
+    },
+
+    "1_posts": {
+      "create_post": {
+        "method": "POST",
+        "endpoint": "/api/community/posts",
+        "request": {
+          "content": "Hello community! This is my first post about Java Spring Boot.",
+          "imageUrl": "https://example.com/image.jpg",
+          "codeSnippet": "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World!\");\n    }\n}"
+        },
+        "expected_response": {
+          "code": 200,
+          "result": {
+            "id": "uuid-string",
+            "userId": "user-uuid",
+            "username": "testuser",
+            "userAvatar": "https://example.com/avatar.jpg",
+            "content": "Hello community! This is my first post about Java Spring Boot.",
+            "imageUrl": "https://example.com/image.jpg",
+            "codeSnippet": "public class HelloWorld {...}",
+            "likeCount": 0,
+            "commentCount": 0,
+            "likedByMe": false,
+            "savedByMe": false,
+            "createdAt": "2026-05-17T10:00:00",
+            "updatedAt": "2026-05-17T10:00:00"
+          }
+        }
+      },
+
+      "create_post_minimal": {
+        "method": "POST",
+        "endpoint": "/api/community/posts",
+        "request": {
+          "content": "Just a simple text post without image or code."
+        }
+      },
+
+      "get_feed": {
+        "method": "GET",
+        "endpoint": "/api/community/posts?page=0&size=10&sort=createdAt,desc"
+      },
+
+      "get_post_by_id": {
+        "method": "GET",
+        "endpoint": "/api/community/posts/{postId}"
+      },
+
+      "get_user_posts": {
+        "method": "GET",
+        "endpoint": "/api/community/users/{userId}/posts?page=0&size=5"
+      },
+
+      "delete_post": {
+        "method": "DELETE",
+        "endpoint": "/api/community/posts/{postId}"
+      }
+    },
+
+    "2_comments": {
+      "create_comment": {
+        "method": "POST",
+        "endpoint": "/api/community/comments",
+        "request": {
+          "postId": "{postId}",
+          "content": "Great post! Very helpful.",
+          "parentId": null
+        },
+        "expected_response": {
+          "code": 200,
+          "result": {
+            "id": "comment-uuid",
+            "postId": "post-uuid",
+            "userId": "user-uuid",
+            "username": "commenter",
+            "userAvatar": "https://example.com/avatar.jpg",
+            "content": "Great post! Very helpful.",
+            "parentId": null,
+            "replies": [],
+            "createdAt": "2026-05-17T10:05:00"
+          }
+        }
+      },
+
+      "create_reply": {
+        "method": "POST",
+        "endpoint": "/api/community/comments",
+        "request": {
+          "postId": "{postId}",
+          "content": "Thanks for the feedback!",
+          "parentId": "{parentCommentId}"
+        }
+      },
+
+      "get_comments": {
+        "method": "GET",
+        "endpoint": "/api/community/posts/{postId}/comments",
+        "expected_response": {
+          "code": 200,
+          "result": [
+            {
+              "id": "comment-1",
+              "postId": "post-uuid",
+              "userId": "user-1",
+              "username": "user1",
+              "userAvatar": null,
+              "content": "Great post!",
+              "parentId": null,
+              "replies": [
+                {
+                  "id": "comment-2",
+                  "postId": "post-uuid",
+                  "userId": "user-2",
+                  "username": "user2",
+                  "userAvatar": null,
+                  "content": "Thanks!",
+                  "parentId": "comment-1",
+                  "replies": [],
+                  "createdAt": "2026-05-17T10:06:00"
+                }
+              ],
+              "createdAt": "2026-05-17T10:05:00"
+            }
+          ]
+        }
+      },
+
+      "delete_comment": {
+        "method": "DELETE",
+        "endpoint": "/api/community/comments/{commentId}"
+      }
+    },
+
+    "3_likes": {
+      "like_post": {
+        "method": "POST",
+        "endpoint": "/api/community/posts/{postId}/like",
+        "expected_response": {
+          "code": 200,
+          "result": {
+            "id": "like-uuid",
+            "postId": "post-uuid",
+            "userId": "user-uuid",
+            "username": "liker",
+            "createdAt": "2026-05-17T10:10:00"
+          }
+        }
+      },
+
+      "unlike_post": {
+        "method": "DELETE",
+        "endpoint": "/api/community/posts/{postId}/like"
+      },
+
+      "check_liked": {
+        "method": "GET",
+        "endpoint": "/api/community/posts/{postId}/liked",
+        "expected_response": {
+          "code": 200,
+          "result": true
+        }
+      }
+    },
+
+    "4_follows": {
+      "follow_user": {
+        "method": "POST",
+        "endpoint": "/api/community/follow/{followeeId}",
+        "expected_response": {
+          "code": 200,
+          "result": {
+            "id": "follow-uuid",
+            "followerId": "follower-uuid",
+            "followerName": "follower",
+            "followerAvatar": "https://example.com/follower-avatar.jpg",
+            "followeeId": "followee-uuid",
+            "followeeName": "followee",
+            "followeeAvatar": "https://example.com/followee-avatar.jpg",
+            "createdAt": "2026-05-17T10:15:00"
+          }
+        }
+      },
+
+      "unfollow_user": {
+        "method": "DELETE",
+        "endpoint": "/api/community/follow/{followeeId}"
+      },
+
+      "get_following": {
+        "method": "GET",
+        "endpoint": "/api/community/users/{userId}/following"
+      },
+
+      "get_followers": {
+        "method": "GET",
+        "endpoint": "/api/community/users/{userId}/followers"
+      },
+
+      "get_following_count": {
+        "method": "GET",
+        "endpoint": "/api/community/users/{userId}/following/count",
+        "expected_response": {
+          "code": 200,
+          "result": 5
+        }
+      },
+
+      "get_follower_count": {
+        "method": "GET",
+        "endpoint": "/api/community/users/{userId}/followers/count",
+        "expected_response": {
+          "code": 200,
+          "result": 10
+        }
+      },
+
+      "check_following": {
+        "method": "GET",
+        "endpoint": "/api/community/follow/{followeeId}/check",
+        "expected_response": {
+          "code": 200,
+          "result": true
+        }
+      }
+    },
+
+    "5_saved_posts": {
+      "save_post": {
+        "method": "POST",
+        "endpoint": "/api/community/posts/{postId}/save",
+        "expected_response": {
+          "code": 200,
+          "result": {
+            "id": "saved-uuid",
+            "postId": "post-uuid",
+            "post": {
+              "id": "post-uuid",
+              "userId": "author-uuid",
+              "username": "author",
+              "userAvatar": null,
+              "content": "Saved post content",
+              "imageUrl": null,
+              "codeSnippet": null,
+              "likeCount": 3,
+              "commentCount": 1,
+              "likedByMe": true,
+              "savedByMe": true,
+              "createdAt": "2026-05-17T09:00:00",
+              "updatedAt": "2026-05-17T09:00:00"
+            },
+            "createdAt": "2026-05-17T10:20:00"
+          }
+        }
+      },
+
+      "unsave_post": {
+        "method": "DELETE",
+        "endpoint": "/api/community/posts/{postId}/save"
+      },
+
+      "get_saved_posts": {
+        "method": "GET",
+        "endpoint": "/api/community/saved-posts"
+      },
+
+      "check_saved": {
+        "method": "GET",
+        "endpoint": "/api/community/posts/{postId}/saved",
+        "expected_response": {
+          "code": 200,
+          "result": true
+        }
+      }
+    },
+
+    "6_admin": {
+      "admin_delete_post": {
+        "method": "DELETE",
+        "endpoint": "/admin/community/posts/{postId}",
+        "headers": {
+          "Authorization": "Bearer {ADMIN_TOKEN}"
+        }
+      },
+
+      "admin_delete_comment": {
+        "method": "DELETE",
+        "endpoint": "/admin/community/comments/{commentId}",
+        "headers": {
+          "Authorization": "Bearer {ADMIN_TOKEN}"
+        }
+      }
+    },
+
+    "test_scenarios": {
+      "full_user_journey": [
+        {
+          "step": 1,
+          "action": "Create a post",
+          "request": {
+            "method": "POST",
+            "endpoint": "/api/community/posts",
+            "body": {
+              "content": "My first post in the community!",
+              "imageUrl": null,
+              "codeSnippet": null
+            }
+          }
+        },
+        {
+          "step": 2,
+          "action": "Like the post",
+          "request": {
+            "method": "POST",
+            "endpoint": "/api/community/posts/{postId}/like"
+          }
+        },
+        {
+          "step": 3,
+          "action": "Comment on the post",
+          "request": {
+            "method": "POST",
+            "endpoint": "/api/community/comments",
+            "body": {
+              "postId": "{postId}",
+              "content": "Self comment for testing!",
+              "parentId": null
+            }
+          }
+        },
+        {
+          "step": 4,
+          "action": "Save the post",
+          "request": {
+            "method": "POST",
+            "endpoint": "/api/community/posts/{postId}/save"
+          }
+        },
+        {
+          "step": 5,
+          "action": "Follow another user",
+          "request": {
+            "method": "POST",
+            "endpoint": "/api/community/follow/{otherUserId}"
+          }
+        },
+        {
+          "step": 6,
+          "action": "Verify feed contains post",
+          "request": {
+            "method": "GET",
+            "endpoint": "/api/community/posts?page=0&size=10"
+          }
+        },
+        {
+          "step": 7,
+          "action": "Check saved posts",
+          "request": {
+            "method": "GET",
+            "endpoint": "/api/community/saved-posts"
+          }
+        }
+      ],
+
+      "error_cases": [
+        {
+          "name": "Like post twice",
+          "action": "POST /api/community/posts/{postId}/like (2 lần)",
+          "expected_error": "ALREADY_EXISTED"
+        },
+        {
+          "name": "Follow yourself",
+          "action": "POST /api/community/follow/{ownUserId}",
+          "expected_error": "INVALID_REQUEST"
+        },
+        {
+          "name": "Follow same user twice",
+          "action": "POST /api/community/follow/{followeeId} (2 lần)",
+          "expected_error": "ALREADY_EXISTED"
+        },
+        {
+          "name": "Save post twice",
+          "action": "POST /api/community/posts/{postId}/save (2 lần)",
+          "expected_error": "ALREADY_EXISTED"
+        },
+        {
+          "name": "Delete other user's post",
+          "action": "DELETE /api/community/posts/{otherUserPostId}",
+          "expected_error": "UNAUTHORIZED_EXISTED"
+        },
+        {
+          "name": "Comment on non-existent post",
+          "action": "POST /api/community/comments với postId không tồn tại",
+          "expected_error": "ID_NOT_EXISTED"
+        }
+      ]
+    }
+  }
+}

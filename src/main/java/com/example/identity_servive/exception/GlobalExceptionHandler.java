@@ -1,15 +1,17 @@
 /* (C)2026 */
 package com.example.identity_servive.exception;
 
-import com.example.identity_servive.dto.request.ApiResponse;
+import com.example.identity_servive.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
 import java.util.Map;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,11 +37,20 @@ public class GlobalExceptionHandler {
         // In lỗi ra log để lập trình viên kiểm tra
         log.error("Runtime Exception: ", ex);
 
-        // Trả về mã lỗi chung để tránh lộ thông tin hệ thống nhạy cảm
+        // Kiểm tra message để xác định loại lỗi
+        String message = ex.getMessage();
+        if (message != null && message.matches("(?i).*(JWT|token|Unauthorized).*"))  {
+            // Lỗi liên quan đến authentication/JWT - trả về 401
+            response.setCode(ErrorCode.UNAUTHENTICATED.getCode());
+            response.setMessage(ErrorCode.UNAUTHENTICATED.getMessage());
+            return ResponseEntity.status(ErrorCode.UNAUTHENTICATED.getStatusCode()).body(response);
+        }
+
+        // Lỗi khác - trả về 500
         response.setCode(ErrorCode.UNAUTHORIZED_EXISTED.getCode());
         response.setMessage(ErrorCode.UNAUTHORIZED_EXISTED.getMessage());
 
-        return ResponseEntity.badRequest().body(response);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
     /**
@@ -101,6 +112,31 @@ public class GlobalExceptionHandler {
                                 .message(errorCode.getMessage())
                                 .build());
     }
+
+    /**
+     * 4. Bắt lỗi AuthenticationException - Xảy ra khi không có token hoặc token sai
+     */
+    @ExceptionHandler(value = org.springframework.security.core.AuthenticationException.class)
+    ResponseEntity<ApiResponse> handlingAuthenticationException(
+            org.springframework.security.core.AuthenticationException ex) {
+        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED; // Lỗi 401 Unauthorized
+
+        return ResponseEntity.status(errorCode.getStatusCode())
+                .body(
+                        ApiResponse.builder()
+                                .code(errorCode.getCode())
+                                .message(errorCode.getMessage())
+                                .build());
+    }
+//    @ExceptionHandler(value = org.springframework.security.authentication.AuthenticationServiceException.class)
+//    ResponseEntity<ApiResponse> handlingJwtException(JwtException ex){
+//        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED; // Lỗi 401 Unauthorized
+//        return ResponseEntity.status(errorCode.getStatusCode())
+//                .body(ApiResponse.builder()
+//                        .code(errorCode.getCode())
+//                        .message(errorCode.getMessage())
+//                        .build());
+//    }
 
     /**
      * 4. Bắt lỗi Validation (Dữ liệu đầu vào sai định dạng, vi phạm @Size, @Email, @Min...).

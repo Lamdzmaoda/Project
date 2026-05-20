@@ -1,15 +1,16 @@
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.*;
-import com.example.identity_servive.dto.response.*;
-import com.example.identity_servive.entity.*;
+import com.example.identity_servive.dto.request.learningRequest.*;
+import com.example.identity_servive.dto.response.learningResponse.*;
+import com.example.identity_servive.entity.learning.*;
 import org.mapstruct.*;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public interface CourseMapper {
-
     // --- LANGUAGE MAPPING ---
     @Mapping(target = "chapters", ignore = true)
     Language toLanguage(LanguageRequest request);
@@ -32,11 +33,12 @@ public interface CourseMapper {
 
 
     // --- LESSON MAPPING ---
+    @Mapping(target = "problems", ignore = true)
     @Mapping(target = "steps", ignore = true)
     Lesson toLesson(LessonRequest lessonRequest);
 
     LessonResponse toLessonResponse(Lesson lesson);
-
+    @Mapping(target = "problems", ignore = true)
     @Mapping(target = "steps", ignore = true)
     void updateLesson(LessonUpdateRequest request, @MappingTarget Lesson lesson);
 
@@ -50,6 +52,22 @@ public interface CourseMapper {
 
     @Mapping(target = "data", ignore = true)
     void updateStep(StepUpdateRequest request, @MappingTarget Step step);
+
+    Problem toProblem(ProblemRequest problemRequest);
+    @Mapping(target = "conditions" , expression = "java(mapConditions(problem.getConditions()))")
+    ProblemResponse toProblemResponse(Problem problem);
+    @Mapping(target = "conditions" , ignore = true)
+    void updateProblem(ProblemUpdateRequest request, @MappingTarget Problem problem);
+
+    default List<ProblemConditionResponse> mapConditions(Set<ProblemCondition> conditions){
+        if(conditions == null) return List.of();
+        return conditions.stream().map(c -> ProblemConditionResponse
+                .builder()
+                .expectedCode(c.getExpectedCode())
+                .orderIndex(c.getOrderIndex())
+                .hint(c.getHint())
+                .build()).toList();
+    }
 
     /**
      * Helper method để MapStruct xử lý việc ép kiểu từ Object sang Map.

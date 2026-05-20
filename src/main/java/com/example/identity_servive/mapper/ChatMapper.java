@@ -1,8 +1,8 @@
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.ChatRequest;
-import com.example.identity_servive.dto.response.ChatResponse;
-import com.example.identity_servive.entity.OpenAI;
+import com.example.identity_servive.dto.request.ai.ChatRequest;
+import com.example.identity_servive.dto.response.ai.ChatResponse;
+import com.example.identity_servive.entity.AI.OpenAI;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

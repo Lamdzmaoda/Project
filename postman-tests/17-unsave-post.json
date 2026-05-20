@@ -1,0 +1,10 @@
+{
+  "step": 17,
+  "name": "Unsave Post",
+  "method": "DELETE",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}/save",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Bỏ lưu bài viết."
+}

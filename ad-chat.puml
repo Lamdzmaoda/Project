@@ -1,0 +1,40 @@
+@startuml
+|Người Dùng|
+start
+:Chọn step (bài học)\nđang gặp khó khăn;
+:Nhập câu hỏi về\nbài học / code / khái niệm;
+:Gửi request\n(POST /chats);
+
+|ChatService|
+:Lấy User từ SecurityContext;
+:Lấy Step từ DB (tiêu đề, type, data);
+:Tạo context cho AI;
+:Tạo SystemMessage\n(prompt: tính cách Gojo + rules);
+:Tạo Prompt\n(system + user message);
+
+|Spring AI / OpenAI API|
+:Gọi ChatClient với\nconversationId = userId_stepId;
+:AI xử lý prompt;
+:Trả về JSON:\n{hints, aiExplanation,\nsuggestedCode, motivationMessage};
+
+|ChatService|
+:Parse response;
+:Tạo OpenAI entity;
+:Lưu vào DB:
+{ user, step, userMessage,
+  hints, aiExplanation,
+  suggestedCode, motivationMessage };
+:Map sang ChatResponse;
+
+|Người Dùng|
+:Nhận câu trả lời:
+- Gợi ý (hints)
+- Giải thích (aiExplanation)
+- Code đề xuất (suggestedCode)
+- Tin nhắn động viên;
+
+:Nếu muốn hỏi tiếp →\nlặp lại với cùng step;
+:Nếu xong → xem lịch sử\n(GET /chats/user);
+
+stop
+@enduml

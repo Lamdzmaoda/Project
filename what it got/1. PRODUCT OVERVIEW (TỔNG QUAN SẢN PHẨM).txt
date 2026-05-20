@@ -1,0 +1,311 @@
+1. PRODUCT OVERVIEW
+(TỔNG QUAN SẢN PHẨM)
+1.1 PRODUCT NAME
+(TÊN SẢN PHẨM)
+AppCodeTest
+1.2 PRODUCT TYPE
+(LOẠI SẢN PHẨM)
+Mobile-first Coding Learning Ecosystem
+(Hệ sinh thái học lập trình ưu tiên điện thoại)
+
++
+AI-assisted Learning Platform
+(Nền tảng học tập có AI hỗ trợ)
+
++
+Social Coding Platform
+(Nền tảng cộng đồng lập trình)
+1.3 PRODUCT GOAL
+(MỤC TIÊU SẢN PHẨM)
+
+Ứng dụng được xây dựng để:
+
+- học lập trình
+- luyện code thực tế
+- hỗ trợ AI
+- xây dựng thói quen học mỗi ngày
+- tạo hệ sinh thái coding dài hạn
+1.4 TARGET USERS
+(ĐỐI TƯỢNG NGƯỜI DÙNG)
+Beginner Users
+
+(Người mới học)
+
+- chưa biết code
+- cần học từng bước
+- cần AI giải thích dễ hiểu
+Intermediate Users
+
+(Người đã có nền tảng)
+
+- luyện bài tập
+- luyện thuật toán
+- cải thiện kỹ năng
+Advanced Users
+
+(Người dùng nâng cao)
+
+- luyện interview
+- xây portfolio
+- tham gia community
+- tạo content
+1.5 CORE PRODUCT DIRECTION
+(ĐỊNH HƯỚNG CỐT LÕI)
+
+Ứng dụng không chỉ là:
+
+app học code 😭
+MÀ LÀ
+Learning Platform
+(Nền tảng học tập)
+
++
+AI Platform
+(Nền tảng AI hỗ trợ học)
+
++
+Coding Platform
+(Nền tảng luyện code)
+
++
+Social Platform
+(Nền tảng cộng đồng)
+
++
+Creator Ecosystem
+(Hệ sinh thái creator)
+
++
+Career Ecosystem
+(Hệ sinh thái nghề nghiệp)
+1.6 PRODUCT INSPIRATION
+(NGUỒN CẢM HỨNG SẢN PHẨM)
+
+Hướng phát triển:
+
+Duolingo
++
+LeetCode
++
+Reddit
++
+Discord
++
+ChatGPT
+1.7 CORE PRODUCT LOOP
+(VÒNG LẶP CỐT LÕI)
+Learn
+(Học)
+
+↓
+Practice
+(Luyện tập)
+
+↓
+AI Help
+(Hỗ trợ AI)
+
+↓
+Reward
+(Phần thưởng)
+
+↓
+Community
+(Cộng đồng)
+
+↓
+Return Tomorrow
+(Quay lại ngày mai)
+NOTE
+
+Đây là:
+
+retention loop 😭
+
+Nếu loop này mạnh:
+
+user sẽ hình thành thói quen học mỗi ngày
+1.8 CORE FEATURES
+(TÍNH NĂNG CỐT LÕI)
+1. LEARNING SYSTEM
+(HỆ THỐNG HỌC)
+- theory
+- quiz
+- fill code
+- mini coding
+- AI explain
+- roadmap
+- chapter
+- step learning
+2. PRACTICE SYSTEM
+(HỆ THỐNG LUYỆN CODE)
+- viết code thật
+- run code thật
+- testcase
+- runtime
+- memory usage
+- judge system
+3. AI SYSTEM
+(HỆ THỐNG AI)
+- AI explain
+- AI debug
+- AI mentor
+- AI recommendation
+- AI simplify
+4. SOCIAL SYSTEM
+(HỆ THỐNG CỘNG ĐỒNG)
+- post
+- comment
+- follow
+- trending
+- save post
+- creator
+5. GAMIFICATION SYSTEM
+(HỆ THỐNG TRÒ CHƠI HÓA)
+- XP
+- coin
+- level
+- streak
+- ranking
+- achievement
+- badge
+- quest
+6. CAREER SYSTEM
+(HỆ THỐNG NGHỀ NGHIỆP)
+- roadmap
+- portfolio
+- skill profile
+- interview
+- certificate
+1.9 MOBILE-FIRST PRINCIPLE
+(NGUYÊN TẮC MOBILE-FIRST)
+
+Ứng dụng ưu tiên:
+
+mobile experience 😭
+UX DIRECTION
+- vertical layout
+- tab navigation
+- one-hand UX
+- short interaction
+- focused screen
+- minimal typing
+NOTE
+
+Đây không phải:
+
+desktop app thu nhỏ 😭
+MÀ LÀ
+ứng dụng được thiết kế riêng cho điện thoại
+1.10 HOME SCREEN STRUCTURE
+(CẤU TRÚC MÀN HÌNH CHÍNH)
+
+Home Screen nên gồm:
+
+- Continue Learning
+- Daily Quest
+- Streak
+- XP Bar
+- Ranking Preview
+- Recommendation
+- Language List
+PURPOSE
+daily habit 😭
+1.11 CONTINUE LEARNING UX
+(TRẢI NGHIỆM HỌC TIẾP)
+Continue lesson?
+Step 5 / 8
+
+[ Continue ]
+[ Restart ]
+BACKEND CẦN LƯU
+lastLanguageId
+lastChapterId
+lastLessonId
+lastStepId
+PURPOSE
+giảm friction 😭
+1.12 PRODUCT STRUCTURE
+(CẤU TRÚC TỔNG THỂ)
+AppCodeTest
+│
+├── ai/
+├── analytics/
+├── api/
+├── cache/
+├── data/
+├── model/
+├── notification/
+├── repository/
+├── sandbox/
+├── security/
+├── socket/
+├── ui/
+├── utils/
+└── worker/
+NOTE
+
+Structure này giúp:
+
+- dễ scale
+- dễ maintain
+- dễ onboarding dev mới
+1.13 UI STRUCTURE
+(CẤU TRÚC UI)
+ui/
+│
+├── admin/
+├── auth/
+├── community/
+├── gamification/
+├── home/
+├── learning/
+├── main/
+├── practice/
+├── profile/
+└── base/
+PURPOSE
+feature-based architecture 😭
+1.14 MAIN ACTIVITY STRUCTURE
+(CẤU TRÚC MAIN ACTIVITY)
+
+MainActivity chỉ nên chứa:
+
+- fragmentContainer
+- footer navigation
+- openFragment()
+KHÔNG NÊN
+nhét toàn bộ logic vào MainActivity 😭
+1.15 FOOTER NAVIGATION
+(THANH ĐIỀU HƯỚNG CHÍNH)
+Home
+Practice
+Community
+Progress
+Profile
+NOTE
+
+Footer phải:
+
+đơn giản + dễ nhớ 😭
+1.16 FINAL PRODUCT PHILOSOPHY
+(TRIẾT LÝ SẢN PHẨM CUỐI)
+
+Ứng dụng mạnh không phải vì:
+
+nhiều feature 😭
+MÀ VÌ
+user thật sự:
+- học được
+- code được
+- tiến bộ được
+- quay lại mỗi ngày được
+1.17 FINAL PRODUCT SUMMARY
+(TÓM TẮT CUỐI CÙNG)
+
+Đây là một:
+
+production-level AI coding learning ecosystem 😭🔥
+ĐƯỢC XÂY DỰNG THEO HƯỚNG
+real software architecture document
+(Tài liệu kiến trúc phần mềm thật như công ty phát triển ứng dụng)

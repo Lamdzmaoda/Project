@@ -1,0 +1,10 @@
+{
+  "step": 9,
+  "name": "Unlike Post",
+  "method": "DELETE",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}/like",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Hủy like bài viết."
+}

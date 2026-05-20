@@ -1,0 +1,10 @@
+{
+  "step": 19,
+  "name": "Delete Post",
+  "method": "DELETE",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Xóa bài viết của mình. Chạy cuối cùng."
+}

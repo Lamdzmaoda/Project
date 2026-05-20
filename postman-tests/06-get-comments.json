@@ -1,0 +1,10 @@
+{
+  "step": 6,
+  "name": "Get Comments By Post",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}/comments",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Xem tất cả comment + reply của bài viết."
+}

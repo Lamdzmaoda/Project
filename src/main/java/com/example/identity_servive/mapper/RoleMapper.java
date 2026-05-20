@@ -1,9 +1,10 @@
 /* (C)2026 */
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.RoleRequest;
-import com.example.identity_servive.dto.response.RoleRespone;
-import com.example.identity_servive.entity.Role;
+import com.example.identity_servive.dto.request.AuthRequest.RoleRequest;
+import com.example.identity_servive.dto.response.authResponse.RoleRespone;
+
+import com.example.identity_servive.entity.auth.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

@@ -1,0 +1,362 @@
+5. AI SYSTEM
+(HỆ THỐNG TRÍ TUỆ NHÂN TẠO)
+5.1 AI SYSTEM DIRECTION
+(ĐỊNH HƯỚNG HỆ THỐNG AI)
+
+AI là:
+
+core feature 😭
+NHƯNG
+
+AI không nên:
+
+thay user học 😭
+MÀ PHẢI
+hỗ trợ user học tốt hơn
+5.2 MAIN AI STACK
+(CÔNG NGHỆ AI CHÍNH)
+Main Model
+
+Google Gemini API
+
+PURPOSE
+AI tutor 😭
+BACKEND FLOW
+Android
+↓
+Backend
+↓
+Prompt Builder
+↓
+Gemini API
+↓
+Response Validation
+↓
+Android
+NOTE
+Android không nên gọi Gemini trực tiếp 😭
+VÌ
+- lộ API key
+- khó kiểm soát cost
+- khó validate response
+5.3 AI CORE FEATURES
+(TÍNH NĂNG AI CHÍNH)
+- AI explain
+- AI debug
+- AI simplify
+- AI example
+- AI recommendation
+- AI mentor
+PURPOSE
+AI-assisted learning 😭
+5.4 AI MODES
+(CHẾ ĐỘ AI)
+EXPLAIN MODE
+giải thích concept 😭
+DEBUG MODE
+giải thích lỗi code 😭
+SIMPLIFY MODE
+giải thích dễ hiểu hơn 😭
+EXAMPLE MODE
+cho ví dụ 😭
+HINT MODE
+gợi ý thay vì giải luôn 😭
+5.5 AI QUICK ACTIONS
+(NÚT AI NHANH)
+
+Trong lesson nên có:
+
+[ Explain ]
+[ Simplify ]
+[ Example ]
+[ Ask AI ]
+PURPOSE
+low friction AI 😭
+5.6 AI REQUEST FLOW
+(LUỒNG REQUEST AI)
+User Ask
+↓
+AI Controller
+↓
+AI Service
+↓
+Prompt Builder
+↓
+Gemini API
+↓
+Response Validation
+↓
+Response Formatter
+↓
+Android
+PURPOSE
+structured AI pipeline 😭
+5.7 PROMPT BUILDER SYSTEM
+(HỆ THỐNG BUILD PROMPT)
+
+Prompt Builder là:
+
+core AI logic 😭
+RESPONSIBILITY
+- build prompt
+- inject context
+- inject lesson info
+- inject AI mode
+PURPOSE
+AI hiểu user đang học gì 😭
+5.8 PROMPT CONTEXT
+(CONTEXT AI)
+
+Prompt nên inject:
+
+- language
+- lesson
+- lesson step
+- user level
+- AI mode
+- current problem
+EXAMPLE
+User is learning Java basic loop 😭
+PURPOSE
+context-aware response 😭
+5.9 AI RESPONSE RULES
+(QUY TẮC RESPONSE AI)
+
+AI phải:
+
+- beginner friendly
+- ít text thừa
+- chia block rõ
+- có ví dụ
+- readable
+KHÔNG NÊN
+wall of text 😭
+5.10 AI RESPONSE FORMAT
+(FORMAT RESPONSE AI)
+
+Ví dụ:
+
+1. Explanation
+2. Why error happens
+3. Correct solution
+4. Example
+PURPOSE
+clear learning flow 😭
+5.11 AI TOKEN CONTROL
+(KIỂM SOÁT TOKEN AI)
+
+AI rất tốn tiền 😭
+
+NÊN CẦN
+- token limit
+- request limit
+- cache
+- cooldown
+PURPOSE
+AI cost optimization 😭
+5.12 AI CACHE SYSTEM
+(CACHE AI)
+
+Có thể cache:
+
+- common explanation
+- repeated question
+- lesson explain
+PURPOSE
+giảm cost 😭
+5.13 AI SECURITY
+(BẢO MẬT AI)
+
+Cần chặn:
+
+- prompt injection
+- spam request
+- abuse
+PURPOSE
+safe AI 😭
+5.14 AI RATE LIMIT
+(GIỚI HẠN AI)
+
+Ví dụ:
+
+FREE:
+20 request/day
+
+PREMIUM:
+higher limit
+PURPOSE
+cost control 😭
+5.15 AI CONVERSATION HISTORY
+(LỊCH SỬ AI)
+
+Có thể lưu:
+
+- user question
+- AI answer
+- lesson context
+PURPOSE
+context continuity 😭
+5.16 AI RECOMMENDATION SYSTEM
+(HỆ THỐNG GỢI Ý AI)
+
+AI có thể suggest:
+
+- next lesson
+- easier lesson
+- harder challenge
+- review topic
+BASED ON
+- progress
+- AI history
+- solved problem
+- weak topic
+PURPOSE
+personalized learning 😭
+5.17 AI DEBUG SYSTEM
+(HỆ THỐNG AI DEBUG)
+
+AI debug nên:
+
+giải thích lỗi 😭
+KHÔNG CHỈ
+đưa code đúng 😭
+EXAMPLE
+Bạn bị NullPointerException
+vì object chưa khởi tạo 😭
+PURPOSE
+real learning 😭
+5.18 AI HINT SYSTEM
+(HỆ THỐNG GỢI Ý)
+
+Hint nên:
+
+gợi ý từng phần 😭
+KHÔNG NÊN
+show full answer luôn 😭
+PURPOSE
+encourage thinking 😭
+5.19 AI CONTENT GENERATION
+(TẠO NỘI DUNG BẰNG AI)
+
+Future feature 😭
+
+AI có thể tạo:
+- quiz
+- example
+- practice problem
+- explanation
+NHƯNG
+phải review 😭
+PURPOSE
+content scaling 😭
+5.20 AI LEARNING STYLE
+(PHONG CÁCH AI)
+
+AI nên:
+
+- friendly
+- motivating
+- concise
+- educational
+KHÔNG NÊN
+robotic 😭
+5.21 AI UX PRINCIPLE
+(NGUYÊN TẮC UX AI)
+
+AI interaction phải:
+
+- nhanh
+- đơn giản
+- ít click
+- dễ đọc
+PURPOSE
+mobile-first AI 😭
+5.22 AI MESSAGE UI
+(GIAO DIỆN TIN NHẮN AI)
+
+AI response nên:
+
+- code block
+- syntax highlight
+- collapsible section
+- step explanation
+PURPOSE
+readability 😭
+5.23 AI ERROR HANDLING
+(XỬ LÝ LỖI AI)
+
+Nếu AI fail:
+
+- retry
+- fallback message
+- cached response
+KHÔNG NÊN
+crash app 😭
+5.24 AI ANALYTICS
+(PHÂN TÍCH AI)
+
+Track:
+
+- AI usage
+- popular question
+- response quality
+- token usage
+PURPOSE
+optimize AI system 😭
+5.25 AI DATABASE MODELS
+(MODEL DATABASE AI)
+TABLE
+ai_conversations
+MODEL
+AIConversation
+
+- id
+- userId
+- lessonId
+- mode
+- question
+- answer
+- tokenUsage
+- createdAt
+PURPOSE
+AI history 😭
+5.26 AI RESPONSE VALIDATION
+(KIỂM TRA RESPONSE AI)
+
+Backend nên validate:
+
+- empty response
+- dangerous content
+- malformed code
+PURPOSE
+safe AI 😭
+5.27 AI FUTURE FEATURES
+(TÍNH NĂNG AI TƯƠNG LAI)
+
+Future:
+
+- AI interview
+- AI roadmap
+- AI pair coding
+- AI lesson generation
+NOTE
+không cần build quá sớm 😭
+5.28 AI COST RISK
+(RỦI RO CHI PHÍ AI)
+
+AI sẽ là:
+
+1 trong những cost lớn nhất 😭
+NÊN CẦN
+- cache
+- rate limit
+- optimization
+- monitoring
+5.29 FINAL AI PHILOSOPHY
+(TRIẾT LÝ AI CUỐI)
+
+AI mạnh không phải vì:
+
+trả lời dài 😭
+MÀ VÌ
+user hiểu bài tốt hơn

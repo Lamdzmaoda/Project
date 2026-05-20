@@ -2,9 +2,7 @@ package com.example.identity_servive.enums;
 
 public enum Type {
     CODE,
-    INFO,
-    QUESTION,
+    TEXT,
     QUIZ,
-    FILL_INLINE,
-    FILL_CHOICE
+    PRACTICE
 }

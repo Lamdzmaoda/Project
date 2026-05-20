@@ -1,10 +1,10 @@
 /* (C)2026 */
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.UserCreationRequest;
-import com.example.identity_servive.dto.request.UserUpdateRequest;
-import com.example.identity_servive.dto.response.UserResponse;
-import com.example.identity_servive.entity.User;
+import com.example.identity_servive.dto.request.AuthRequest.UserCreationRequest;
+import com.example.identity_servive.dto.request.AuthRequest.UserUpdateRequest;
+import com.example.identity_servive.dto.response.authResponse.UserResponse;
+import com.example.identity_servive.entity.auth.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;

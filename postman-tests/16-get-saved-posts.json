@@ -1,0 +1,10 @@
+{
+  "step": 16,
+  "name": "Get Saved Posts",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/saved-posts",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Xem danh sách bài đã lưu."
+}

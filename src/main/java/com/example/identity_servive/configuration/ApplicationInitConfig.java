@@ -2,10 +2,12 @@
 package com.example.identity_servive.configuration;
 
 import com.example.identity_servive.constant.PredefinedRole;
-import com.example.identity_servive.entity.Role;
-import com.example.identity_servive.entity.User;
-import com.example.identity_servive.repository.RoleRepository;
-import com.example.identity_servive.repository.UserRepository;
+
+
+import com.example.identity_servive.entity.auth.Role;
+import com.example.identity_servive.entity.auth.User;
+import com.example.identity_servive.repository.auth.RoleRepository;
+import com.example.identity_servive.repository.auth.UserRepository;
 import java.util.HashSet;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +63,7 @@ public class ApplicationInitConfig {
                 User user =
                         User.builder()
                                 .username(ADMIN_USER_NAME) // Gán username = admin
+                                .email("admin@example.com") // Gán email mặc định
                                 .password(passwordEncoder.encode(ADMIN_PASSWORD)) // Mã hóa mật khẩu 'admin' trước khi gán
                                 .roles(roles) // Gán danh sách quyền đã tạo ở trên
                                 .build();

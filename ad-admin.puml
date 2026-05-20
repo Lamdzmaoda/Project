@@ -1,0 +1,122 @@
+@startuml
+|Quản Trị (ADMIN)|
+start
+:Đăng nhập với\nrole ADMIN;
+
+|Authentication|
+:Xác thực JWT;
+:Kiểm tra authorities\ncó "ROLE_ADMIN" không;
+if (Không phải ADMIN?) then (có)
+  :Trả về 403 Forbidden;
+  stop
+else (đúng)
+endif
+
+|Admin chọn thao tác|
+
+while (Quản lý nội dung)
+  if (Chọn thao tác) then (Tạo mới)
+
+    :Chọn cấp độ muốn tạo:\nLanguage / Chapter / Lesson\n/ Step(LEARN) / Problem(PRACTICE);
+
+    if (Cấp độ?) then (Language)
+      :Nhập: name, description,\nslug, icon, durationDays;
+      :Chọn chapters có sẵn\n(hoặc để trống tạo sau);
+      |CourseService|
+      :Kiểm tra name đã tồn tại?;
+      if (Đã tồn tại?) then (có)
+        :Lỗi NAME_EXISTED;
+        stop
+      else (chưa)
+      endif
+      :Map request → Language entity;
+      :Gán chapters;
+      :Save Language;
+
+    elseif (Chapter)
+      :Nhập: title, description,\nslug, orderIndex;
+      :Chọn Language cha;
+      :Chọn lessons có sẵn;
+      |CourseService|
+      :Tìm Language;
+      :Map → Chapter entity;
+      :Gán lessons;
+      :Save Chapter;
+
+    elseif (Lesson)
+      :Chọn loại: LEARN hoặc PRACTICE;
+      :Nhập: title, slug,\norderIndex, lessonType;
+      :Chọn Chapter cha;
+      if (LEARN?) then (có)
+        :Chọn steps có sẵn (hoặc tạo sau);
+      else (PRACTICE)
+        :Chọn problems có sẵn (hoặc tạo sau);
+      endif
+      |CourseService|
+      :Tạo Lesson + gán chapter;
+      :Save Lesson;
+      :Tính lại tổng XP của Chapter;
+
+    elseif (Step - LEARN)
+      :Nhập: title, orderIndex,\ntype(QUIZ/CODE/INFO/QUESTION);
+      :Nhập data dạng JSON\n(correctValue, options...);
+      :Chọn Lesson LEARN cha;
+      |CourseService|
+      :Tạo Step;
+      :Gán Lesson;
+
+    elseif (Problem - PRACTICE)
+      :Nhập: title, description,\nhint, difficulty, methodName;
+      :Nhập solutionCode,\nexpectedOutput;
+      :Chọn Language cho problem;
+      :Chọn Lesson PRACTICE cha;
+      :Tạo ProblemConditions\n(expectedCode + hint);
+      |CourseService|
+      :Tạo Problem + Conditions;
+    endif
+
+  elseif (Xem / Đọc) then (Xem)
+    if (Xem loại?) then (Chi tiết 1 node)
+      :GET /course/{type}/{id};\nChỉ lấy ACTIVE;
+    else (Danh sách)
+      :GET /course/{type}/admin/{parentId};\nLấy ALL (cả DELETED);
+    endif
+
+  elseif (Sửa) then (Sửa)
+    :Chọn node cần sửa;
+    :Gửi request với các field cần update\n(PUT /course/{type}/{id});
+    |CourseService|
+    :Mapper update từ request;
+    if (Lesson và có thay đổi\nsteps/problems?) then (có)
+      :Xoá collection cũ;\nThêm collection mới;
+    endif
+    :Save;
+    :Tính lại tổng XP nếu\ncần (Lesson/Chapter/Language);
+
+  elseif (Xoá mềm) then (Xoá mềm)
+    :Chọn node cần xoá\n(DELETE /course/{type}/{id});
+    |CourseService|
+    :Tìm node với status ACTIVE;
+    :Set status = DELETED;
+    if (Cấp độ cha?) then (Chapter/Language)
+      :Cascade xuống tất cả con\n(cũng set DELETED);
+    endif
+    :Save;
+
+  elseif (Xoá hẳn - Purge) then (Purge)
+    :Chọn node cần purge\n(DELETE /course/{type}/admin/{id});
+    |CourseService|
+    :Tìm node theo ID;
+    if (Status != DELETED?) then (có)
+      :Lỗi DELETE_FAILED\n(phải soft-delete trước);
+      stop
+    else (đã deleted)
+    endif
+    :Xoá hẳn khỏi DB\n(deleteById);
+  endif
+
+  :Hiển thị kết quả cho Admin;
+endwhile
+
+stop
+@enduml

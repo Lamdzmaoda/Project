@@ -1,0 +1,10 @@
+{
+  "step": 12,
+  "name": "Get Followers Count",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/users/{OTHER_USER_ID}/followers/count",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Xem số người follow user đó."
+}

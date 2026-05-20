@@ -1,0 +1,10 @@
+{
+  "step": 2,
+  "name": "Get Feed",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/posts?page=0&size=10&sort=createdAt,desc",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Xem danh sách bài viết mới nhất."
+}

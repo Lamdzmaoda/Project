@@ -1,0 +1,10 @@
+{
+  "step": 11,
+  "name": "Check Following",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/follow/{OTHER_USER_ID}/check",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Kết quả phải là true nếu đã follow ở bước 10."
+}

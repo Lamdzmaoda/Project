@@ -1,0 +1,51 @@
+@startuml
+|Đăng ký|
+start
+:User gửi request\n(POST /users);
+if (Username/Email đã tồn tại?) then (có)
+  :Trả về lỗi\nUSER_EXISTED;
+  stop
+else (không)
+endif
+
+:Mapper chuyển\nRequest → User entity;
+:Mã hoá password\n(BCrypt);
+:Gán role USER mặc định;
+:Save user vào DB;
+
+|Hệ thống|
+if (Lưu thành công?) then (có)
+  :Trả về UserResponse;
+else (trùng unique key)
+  :Bắt DataIntegrityViolation\n→ lỗi USER_EXISTED;
+  stop
+endif
+
+|Đăng nhập|
+:User gửi request\n(POST /auth/token);
+:Tìm user bằng\nusername hoặc email;
+
+if (Không tìm thấy?) then (có)
+  :Lỗi USER_NOT_EXISTED;
+  stop
+else (có user)
+endif
+
+:So khớp password\n(BCrypt.matches);
+if (Sai mật khẩu?) then (có)
+  :Lỗi UNAUTHENTICATED;
+  stop
+else (đúng)
+endif
+
+:Tạo JWT:
+- Header: HS512
+- Payload: subject, scope, expiry
+- Sign: MACSigner;
+:Trả về token cho client;
+
+|Client|
+:Lưu JWT vào\nlocalStorage/Header;
+
+stop
+@enduml

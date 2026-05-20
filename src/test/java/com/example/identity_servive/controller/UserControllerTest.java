@@ -4,9 +4,12 @@ package com.example.identity_servive.controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.example.identity_servive.dto.response.UserResponse;
-import com.example.identity_servive.service.UserService;
+import com.example.identity_servive.dto.request.AuthRequest.UserCreationRequest;
+import com.example.identity_servive.dto.response.authResponse.UserResponse;
+import com.example.identity_servive.service.auth.UserService;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +24,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import tools.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Slf4j
 @SpringBootTest
@@ -38,18 +41,18 @@ public class UserControllerTest {
   @BeforeEach
   void initData() {
     dob = LocalDate.of(2005, 10, 6);
+
     request =
         UserCreationRequest.builder()
-            .userName("lamdzbodoi")
+            .username("lamdzbodoi")
             .password("lamdzbodoi")
             .build();
 
     userResponse =
         UserResponse.builder()
             .id("9900193e-1262-451e-b17b-b9be5f62af78")
-            .userName("lamdzbodoi")
-            .firstName("lamdzbodoi")
-            .lastName("dzbodoi")
+            .username("lamdzbodoi")
+            .displayName("lamdzbodoi")
             .birthDate(dob)
             .build();
   }
@@ -58,7 +61,7 @@ public class UserControllerTest {
   void CreateUser_validRequest_success() throws Exception {
     // GIVEN
     ObjectMapper mapper = new ObjectMapper();
-    mapper.registeredModules();
+    mapper.registerModule(new JavaTimeModule());
     String content = mapper.writeValueAsString(request);
 
     Mockito.when(userService.createUser(ArgumentMatchers.any())).thenReturn(userResponse);
@@ -71,7 +74,7 @@ public class UserControllerTest {
         .andExpect(status().isOk())
         .andExpect(jsonPath("code").value(1000))
         .andExpect(
-            MockMvcResultMatchers.jsonPath("result.id")
+            jsonPath("result.id")
                 .value("9900193e-1262-451e-b17b-b9be5f62af78"));
 
     // THEN
@@ -80,9 +83,9 @@ public class UserControllerTest {
   @Test
   void CreateUser_usernameInvalid_success() throws Exception {
     // GIVEN
-    request.setUserName("lamdz");
+    request.setUsername("lamdz");
     ObjectMapper mapper = new ObjectMapper();
-    mapper.registeredModules();
+    mapper.registerModule(new JavaTimeModule());
     String content = mapper.writeValueAsString(request);
 
     // WHEN

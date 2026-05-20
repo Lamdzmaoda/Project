@@ -1,0 +1,10 @@
+{
+  "step": 18,
+  "name": "Delete Comment",
+  "method": "DELETE",
+  "url": "http://localhost:8080/api/community/comments/{COMMENT_ID}",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Xóa comment của mình."
+}

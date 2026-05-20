@@ -1,8 +1,8 @@
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.CodeRequest;
-import com.example.identity_servive.dto.response.CodeResponse;
-import com.example.identity_servive.entity.Code;
+import com.example.identity_servive.dto.request.ai.CodeRequest;
+import com.example.identity_servive.dto.response.ai.CodeResponse;
+import com.example.identity_servive.entity.System.Code;
 
 import org.mapstruct.Mapper;
 

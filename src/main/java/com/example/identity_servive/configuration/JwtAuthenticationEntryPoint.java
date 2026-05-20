@@ -1,7 +1,7 @@
 /* (C)2026 */
 package com.example.identity_servive.configuration;
 
-import com.example.identity_servive.dto.request.ApiResponse;
+import com.example.identity_servive.dto.response.ApiResponse;
 import com.example.identity_servive.exception.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

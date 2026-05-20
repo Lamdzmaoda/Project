@@ -1,0 +1,10 @@
+{
+  "step": 14,
+  "name": "Save Post",
+  "method": "POST",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}/save",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Lưu bài viết."
+}

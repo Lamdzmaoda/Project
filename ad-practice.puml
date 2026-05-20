@@ -1,0 +1,54 @@
+@startuml
+|Người Dùng|
+start
+:Chọn bài PRACTICE →\nXem problems của lesson;
+:Viết code trên editor;
+:Nộp code\n(POST /my-learning/practice/submit);
+
+|PracticeService|
+:Tìm Problem từ DB;
+:Gửi CodeRequest;
+
+|Judge0APIService|
+:Mã hoá code → Base64;
+:Gọi Judge0 API\nPOST /submissions?base64_encoded=true;
+if (Có lỗi?) then (stderr/compile_output)
+  :Parse lỗi:
+  - Tìm dòng (line N)
+  - Tìm cột (dấu ^)
+  - Xác định loại lỗi
+  - Dịch sang tiếng Việt;
+  :Lưu vào bảng Code\n(status = ERROR);
+  :Trả về CodeResponse\nvới thông tin lỗi;
+else (stdout)
+  :Giải mã Base64;
+  :Lưu vào bảng Code\n(status = SUCCESS);
+endif
+
+|PracticeService|
+:So sánh output với\nexpectedOutput;
+:Duyệt ProblemConditions:
+  Kiểm tra code có chứa\nexpectedCode không;
+:Kết luận overallPassed\n= outputPassed + allConditionsPassed;
+:Lưu Submission:
+  { user, lesson, problem,
+    code, output, passed };
+
+|Người Dùng|
+:Thấy kết quả:
+- passed/failed
+- output
+- conditions results
+- expected output;
+
+if (Tất cả problems\nđã passed?) then (có)
+  :Gọi complete:\nPOST practice/complete;
+  |LearningProgressService|
+  :completeLesson →\ncộng XP, unlock tiếp;
+  |Người Dùng|
+  :Nhận thông báo\n"Hoàn thành!";
+else (chưa)
+endif
+
+stop
+@enduml

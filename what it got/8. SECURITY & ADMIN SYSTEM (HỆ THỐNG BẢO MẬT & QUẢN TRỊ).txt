@@ -1,0 +1,349 @@
+8. SECURITY & ADMIN SYSTEM
+(HỆ THỐNG BẢO MẬT & QUẢN TRỊ)
+8.1 SECURITY DIRECTION
+(ĐỊNH HƯỚNG BẢO MẬT)
+
+Security là:
+
+mandatory 😭
+ĐẶC BIỆT VỚI APP KIỂU NÀY
+
+Vì có:
+
+- AI
+- sandbox
+- social
+- realtime
+- authentication
+NÊN
+security không thể làm sơ sài 😭
+8.2 AUTHENTICATION SYSTEM
+(HỆ THỐNG XÁC THỰC)
+
+Sử dụng:
+
+JWT
++
+Refresh Token
+FLOW
+Login
+↓
+Access Token
+↓
+Authenticated API
+↓
+Refresh Token
+↓
+New Access Token
+PURPOSE
+secure session 😭
+8.3 ACCESS TOKEN
+(ACCESS TOKEN)
+
+Access Token:
+
+sống ngắn 😭
+EXAMPLE
+15 phút
+PURPOSE
+reduce security risk 😭
+8.4 REFRESH TOKEN
+(REFRESH TOKEN)
+
+Refresh Token:
+
+sống lâu hơn 😭
+EXAMPLE
+30 ngày
+PURPOSE
+keep login state 😭
+8.5 ROLE SYSTEM
+(HỆ THỐNG ROLE)
+MAIN ROLES
+USER
+MODERATOR
+ADMIN
+SUPER_ADMIN
+PURPOSE
+permission hierarchy 😭
+8.6 ROLE EXPLANATION
+(GIẢI THÍCH ROLE)
+USER
+user bình thường 😭
+MODERATOR
+quản lý community 😭
+ADMIN
+quản lý hệ thống 😭
+SUPER_ADMIN
+quyền cao nhất 😭
+8.7 PERMISSION SYSTEM
+(HỆ THỐNG QUYỀN)
+
+Role:
+
+nhóm quyền 😭
+Permission:
+quyền cụ thể 😭
+EXAMPLE
+DELETE_POST
+BAN_USER
+MANAGE_ROLE
+VIEW_ANALYTICS
+PURPOSE
+flexible authorization 😭
+8.8 PERMISSION CHECK FLOW
+(LUỒNG KIỂM TRA QUYỀN)
+Request
+↓
+JWT Validation
+↓
+Role Check
+↓
+Permission Check
+↓
+Execute API
+PURPOSE
+secure access 😭
+8.9 USER STATUS SYSTEM
+(HỆ THỐNG TRẠNG THÁI USER)
+USER STATUS
+ACTIVE
+SUSPENDED
+BANNED
+PURPOSE
+account control 😭
+8.10 VERIFIED SYSTEM
+(HỆ THỐNG VERIFIED)
+verified = true
+PURPOSE
+trusted account 😭
+VERIFIED USER CÓ THỂ LÀ
+- creator
+- mentor
+- admin
+8.11 PASSWORD SECURITY
+(BẢO MẬT PASSWORD)
+
+Không bao giờ lưu:
+
+password thật 😭
+PHẢI LƯU
+passwordHash
+PURPOSE
+protect user 😭
+8.12 RATE LIMIT SYSTEM
+(GIỚI HẠN REQUEST)
+
+Rate limit dùng cho:
+
+- login
+- AI request
+- sandbox
+- spam API
+PURPOSE
+prevent abuse 😭
+EXAMPLE
+100 request/minute
+8.13 AI SECURITY
+(BẢO MẬT AI)
+
+Cần chặn:
+
+- prompt injection
+- spam AI
+- jailbreak
+PURPOSE
+safe AI 😭
+8.14 SANDBOX SECURITY
+(BẢO MẬT SANDBOX)
+
+Sandbox phải chặn:
+
+- internet access
+- file access
+- process abuse
+- memory abuse
+PURPOSE
+secure execution 😭
+8.15 REQUEST VALIDATION
+(KIỂM TRA REQUEST)
+
+Backend phải validate:
+
+- null field
+- invalid data
+- invalid format
+KHÔNG NÊN
+trust frontend 😭
+PURPOSE
+safe backend 😭
+8.16 REPORT SYSTEM
+(HỆ THỐNG REPORT)
+
+User có thể report:
+
+- post
+- comment
+- user
+PURPOSE
+community moderation 😭
+8.17 REPORT DATABASE MODEL
+(MODEL REPORT)
+TABLE
+reports
+MODEL
+Report
+
+- id
+- reporterId
+- targetType
+- targetId
+- reason
+- status
+- createdAt
+PURPOSE
+moderation workflow 😭
+8.18 MODERATOR SYSTEM
+(HỆ THỐNG MODERATOR)
+
+Moderator có thể:
+
+- delete post
+- warn user
+- handle report
+PURPOSE
+community safety 😭
+8.19 ADMIN SYSTEM
+(HỆ THỐNG ADMIN)
+
+Admin có thể:
+
+- manage content
+- manage user
+- manage event
+PURPOSE
+system management 😭
+8.20 SUPER_ADMIN SYSTEM
+(HỆ THỐNG SUPER_ADMIN)
+
+SUPER_ADMIN có thể:
+
+- manage role
+- manage moderator
+- analytics
+- AI monitor
+- server monitor
+PURPOSE
+full administration 😭
+8.21 SEARCH USER SYSTEM
+(HỆ THỐNG TÌM USER)
+
+Admin có thể:
+
+search user by ID 😭
+PURPOSE
+support + moderation 😭
+8.22 DEVICE SESSION SYSTEM
+(HỆ THỐNG PHIÊN THIẾT BỊ)
+
+Có thể lưu:
+
+- device name
+- login time
+- last active
+PURPOSE
+account security 😭
+FUTURE
+logout all device 😭
+8.23 AUDIT LOG SYSTEM
+(HỆ THỐNG AUDIT LOG)
+
+Track:
+
+- role change
+- admin action
+- ban action
+- delete action
+PURPOSE
+admin tracking 😭
+8.24 API SECURITY
+(BẢO MẬT API)
+
+API cần:
+
+- HTTPS
+- JWT validation
+- request validation
+- permission check
+PURPOSE
+production API 😭
+8.25 FILE UPLOAD SECURITY
+(BẢO MẬT UPLOAD FILE)
+
+Cần validate:
+
+- file type
+- file size
+- image only
+PURPOSE
+prevent malicious upload 😭
+8.26 SPAM PREVENTION
+(CHỐNG SPAM)
+
+Cần chặn:
+
+- spam comment
+- spam AI
+- spam submission
+METHODS
+- cooldown
+- rate limit
+- captcha
+PURPOSE
+healthy platform 😭
+8.27 SECURITY MONITORING
+(GIÁM SÁT BẢO MẬT)
+
+Track:
+
+- failed login
+- suspicious activity
+- AI abuse
+- sandbox abuse
+PURPOSE
+production monitoring 😭
+8.28 BACKUP STRATEGY
+(CHIẾN LƯỢC BACKUP)
+
+Cần:
+
+- daily backup
+- database snapshot
+- restore strategy
+PURPOSE
+data safety 😭
+8.29 SECURITY RISKS
+(RỦI RO BẢO MẬT)
+
+App kiểu này dễ gặp:
+
+- AI abuse
+- sandbox attack
+- token leak
+- spam
+- fake account
+NÊN CẦN
+- validation
+- monitoring
+- rate limit
+- permission system
+8.30 FINAL SECURITY PHILOSOPHY
+(TRIẾT LÝ BẢO MẬT CUỐI)
+
+Security mạnh không phải vì:
+
+nhiều rule 😭
+MÀ VÌ
+- bảo vệ user
+- bảo vệ system
+- không phá UX

@@ -1,0 +1,16 @@
+{
+  "step": 1,
+  "name": "Create Post",
+  "method": "POST",
+  "url": "http://localhost:8080/api/community/posts",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "body": {
+    "content": "Hello community! This is my first post about Java Spring Boot.",
+    "imageUrl": "https://example.com/image.jpg",
+    "codeSnippet": "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World!\");\n    }\n}"
+  },
+  "note": "Chạy đầu tiên. Copy kết quả 'result.id' để dùng cho các bước sau."
+}

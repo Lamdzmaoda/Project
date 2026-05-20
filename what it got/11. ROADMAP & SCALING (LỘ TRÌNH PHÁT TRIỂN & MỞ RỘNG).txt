@@ -1,0 +1,323 @@
+11. ROADMAP & SCALING
+(LỘ TRÌNH PHÁT TRIỂN & MỞ RỘNG)
+11.1 PRODUCT ROADMAP DIRECTION
+(ĐỊNH HƯỚNG ROADMAP)
+
+Roadmap dùng để:
+
+- build đúng thứ
+- tránh feature overload
+- scale đúng lúc
+NOTE
+
+App kiểu này rất dễ:
+
+muốn build mọi thứ ngay 😭
+NHƯNG
+MVP focus cực kỳ quan trọng 😭
+11.2 MVP PHILOSOPHY
+(TRIẾT LÝ MVP)
+
+MVP không cần:
+
+100 feature 😭
+MVP CHỈ CẦN
+1 core experience thật tốt 😭
+11.3 PHASE 1 — CORE LEARNING MVP
+(GIAI ĐOẠN 1 — MVP HỌC TẬP)
+PRIORITY
+- auth
+- lesson
+- progress
+- AI explain
+- coding practice
+MAIN GOAL
+user học + code được 😭
+FEATURES
+- login/register
+- language
+- chapter
+- lesson
+- lesson step
+- continue learning
+- AI quick action
+- practice basic
+NOTE
+
+Đây là:
+
+core foundation 😭
+11.4 PHASE 2 — RETENTION SYSTEM
+(GIAI ĐOẠN 2 — GIỮ CHÂN USER)
+PRIORITY
+- XP
+- streak
+- quest
+- ranking
+- notification
+MAIN GOAL
+daily habit 😭
+FEATURES
+- XP bar
+- level
+- daily quest
+- reward popup
+- streak animation
+- ranking
+NOTE
+
+Phase này giúp:
+
+user quay lại mỗi ngày 😭
+11.5 PHASE 3 — SOCIAL SYSTEM
+(GIAI ĐOẠN 3 — HỆ THỐNG CỘNG ĐỒNG)
+PRIORITY
+- feed
+- comment
+- follow
+- creator
+- save post
+MAIN GOAL
+social retention 😭
+FEATURES
+- For You
+- Following
+- Trending
+- code snippet
+- creator profile
+NOTE
+
+Community giúp app:
+
+có cảm giác sống 😭
+11.6 PHASE 4 — ADVANCED AI
+(GIAI ĐOẠN 4 — AI NÂNG CAO)
+PRIORITY
+- AI recommendation
+- AI mentor
+- AI roadmap
+- AI interview
+MAIN GOAL
+personalized learning 😭
+NOTE
+
+Không nên build:
+
+AI quá phức tạp quá sớm 😭
+11.7 PHASE 5 — CAREER SYSTEM
+(GIAI ĐOẠN 5 — HỆ THỐNG NGHỀ NGHIỆP)
+PRIORITY
+- portfolio
+- roadmap
+- interview
+- certificate
+MAIN GOAL
+real career growth 😭
+FEATURES
+- skill profile
+- interview question
+- coding roadmap
+11.8 PHASE 6 — CREATOR ECOSYSTEM
+(GIAI ĐOẠN 6 — HỆ SINH THÁI CREATOR)
+PRIORITY
+- creator lesson
+- creator challenge
+- creator analytics
+- creator monetization
+MAIN GOAL
+community-powered content 😭
+NOTE
+
+Content là:
+
+thứ khó scale nhất 😭
+11.9 PHASE 7 — REALTIME FEATURES
+(GIAI ĐOẠN 7 — REALTIME)
+FUTURE FEATURES
+- realtime battle
+- pair coding
+- multiplayer coding
+NOTE
+
+Không nên build quá sớm:
+
+realtime rất phức tạp 😭
+11.10 EARLY STAGE ARCHITECTURE
+(KIẾN TRÚC GIAI ĐOẠN ĐẦU)
+
+Giai đoạn đầu:
+
+Modular Monolith 😭
+PURPOSE
+develop nhanh hơn 😭
+11.11 FUTURE SCALING DIRECTION
+(ĐỊNH HƯỚNG SCALE TƯƠNG LAI)
+
+Sau này có thể tách:
+
+- AI service
+- sandbox service
+- notification service
+PURPOSE
+high scalability 😭
+11.12 DATABASE SCALING
+(MỞ RỘNG DATABASE)
+
+Giai đoạn đầu:
+
+1 PostgreSQL 😭
+FUTURE
+- read replica
+- partition
+- analytics DB
+PURPOSE
+handle growth 😭
+11.13 SANDBOX SCALING
+(MỞ RỘNG SANDBOX)
+
+Giai đoạn đầu:
+
+1 sandbox worker 😭
+FUTURE
+multiple worker
+distributed queue
+PURPOSE
+high concurrent execution 😭
+11.14 AI SCALING
+(MỞ RỘNG AI)
+
+AI cost sẽ tăng rất nhanh 😭
+
+NÊN CẦN
+- caching
+- token limit
+- rate limit
+- optimization
+PURPOSE
+sustainable AI 😭
+11.15 TEAM SCALING
+(MỞ RỘNG TEAM)
+
+Giai đoạn đầu:
+
+1-3 dev 😭
+FUTURE
+- frontend dev
+- backend dev
+- AI engineer
+- designer
+PURPOSE
+team specialization 😭
+11.16 CONTENT SCALING
+(MỞ RỘNG CONTENT)
+
+Content là:
+
+hardest part 😭
+VÌ
+content > technology
+NÊN CẦN
+- creator system
+- AI assistance
+- review workflow
+PURPOSE
+quality learning 😭
+11.17 USER GROWTH STRATEGY
+(CHIẾN LƯỢC TĂNG USER)
+
+User growth đến từ:
+
+- retention
+- social sharing
+- creator content
+- AI experience
+PURPOSE
+organic growth 😭
+11.18 MONETIZATION ROADMAP
+(LỘ TRÌNH KIẾM TIỀN)
+
+Giai đoạn đầu:
+
+focus growth 😭
+FUTURE
+- premium
+- AI subscription
+- creator monetization
+- mentor system
+PURPOSE
+sustainable ecosystem 😭
+11.19 FEATURE PRIORITY RULE
+(QUY TẮC ƯU TIÊN FEATURE)
+
+Khi thêm feature mới:
+
+phải hỏi 😭
+FEATURE NÀY CÓ:
+- improve learning?
+- improve retention?
+- improve UX?
+NẾU KHÔNG
+không nên build 😭
+11.20 PRODUCT RISKS
+(RỦI RO SẢN PHẨM)
+
+App kiểu này dễ gặp:
+
+- feature overload
+- AI cost
+- weak content
+- scaling issue
+NÊN ƯU TIÊN
+- simplicity
+- UX
+- content quality
+- stability
+11.21 SUCCESS METRICS
+(CHỈ SỐ THÀNH CÔNG)
+
+Track:
+
+- retention
+- DAU
+- lesson completion
+- AI usage
+- solve rate
+PURPOSE
+product direction 😭
+11.22 MVP SUCCESS CONDITION
+(ĐIỀU KIỆN MVP THÀNH CÔNG)
+
+MVP thành công khi:
+
+user quay lại học mỗi ngày 😭
+KHÔNG PHẢI
+có thật nhiều feature 😭
+11.23 LONG-TERM PRODUCT VISION
+(TẦM NHÌN DÀI HẠN)
+
+Mục tiêu cuối cùng:
+
+daily coding ecosystem 😭
+BAO GỒM
+- learning
+- AI
+- coding
+- community
+- creator
+- career
+11.24 ROADMAP RISK
+(RỦI RO ROADMAP)
+
+Sai lầm phổ biến:
+
+build quá nhiều quá sớm 😭
+NÊN
+build từng lớp 😭
+11.25 FINAL SCALING PHILOSOPHY
+(TRIẾT LÝ SCALE CUỐI)
+
+Scale đúng không phải:
+
+microservice thật sớm 😭
+MÀ LÀ
+đúng timing 😭

@@ -1,22 +1,22 @@
 /* (C)2026 */
 package com.example.identity_servive.configuration;
 
-import com.example.identity_servive.dto.request.IntrospectRequest;
-import com.example.identity_servive.service.AuthenticationService;
+import com.example.identity_servive.dto.request.AuthRequest.IntrospectRequest;
+import com.example.identity_servive.service.auth.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 import java.text.ParseException;
 import java.util.Objects;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.stereotype.Component;
 
-@Component // Đánh dấu đây là một Bean để Spring Security có thể sử dụng cho quá trình xác thực
+@Configuration // Đánh dấu đây là một Bean để Spring Security có thể sử dụng cho quá trình xác thực
 public class CustomJwtDecoder implements JwtDecoder {
 
     @Value("${jwt.signerKey}") // Lấy giá trị khóa bí mật từ file cấu hình application.yaml/properties
@@ -30,6 +30,9 @@ public class CustomJwtDecoder implements JwtDecoder {
     public Jwt decode(String token) throws JwtException {
 
         try {
+            if (token == null || token.isBlank()) {
+                throw new JwtException("Token missing");
+            }
             // 1. Gọi đến AuthenticationService để kiểm tra Token (Introspection)
             // Bước này giúp kiểm tra xem token đã bị Logout hoặc hết hạn chưa
             var response =

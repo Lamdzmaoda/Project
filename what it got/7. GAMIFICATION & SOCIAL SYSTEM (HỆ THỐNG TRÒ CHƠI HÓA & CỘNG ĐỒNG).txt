@@ -1,0 +1,370 @@
+7. HỆ THỐNG QUẢN TRỊ & BẢO MẬT (ADMIN & SECURITY SYSTEM)
+7.1 ADMIN SYSTEM DIRECTION
+
+Admin system không chỉ là:
+
+màn hình quản lý 😭
+MÀ LÀ
+control center của toàn hệ thống
+ADMIN SYSTEM QUẢN LÝ
+- user
+- lesson
+- AI
+- moderation
+- event
+- analytics
+- security
+7.2 ROLE SYSTEM
+
+Role system:
+
+USER
+MODERATOR
+ADMIN
+SUPER_ADMIN
+7.3 USER ROLE
+
+Có thể:
+
+- học
+- code
+- dùng AI
+- đăng bài
+- comment
+7.4 MODERATOR ROLE
+
+Có thể:
+
+- review report
+- mute user
+- delete post
+- delete comment
+PURPOSE
+giữ community sạch 😭
+7.5 ADMIN ROLE
+
+Có thể:
+
+- quản lý lesson
+- quản lý language
+- quản lý event
+- analytics
+- quản lý challenge
+7.6 SUPER_ADMIN ROLE
+
+SUPER_ADMIN có thể:
+
+- quản lý admin
+- quản lý moderator
+- quản lý role
+- quản lý permission
+- AI config
+- server monitor
+- security monitor
+7.7 PERMISSION SYSTEM
+KHÔNG NÊN
+if(role == ADMIN)
+
+ở mọi nơi 😭
+
+NÊN
+role + permission system
+VÍ DỤ PERMISSION
+DELETE_POST
+BAN_USER
+MANAGE_ROLE
+MANAGE_AI
+VIEW_ANALYTICS
+7.8 ROLE MODEL
+public class Role {
+
+    public String id;
+
+    public String name;
+
+    public List<String> permissions;
+}
+7.9 PERMISSION MODEL
+public class Permission {
+
+    public String id;
+
+    public String code;
+
+    public String description;
+}
+PURPOSE
+permission granular hơn role
+7.10 ADMIN PANEL STRUCTURE
+Admin
+│
+├── User Management
+├── Moderator Management
+├── Lesson Management
+├── AI Management
+├── Event Management
+├── Analytics
+├── Report Center
+└── Server Monitor
+7.11 USER MANAGEMENT
+
+Admin có thể:
+
+- search user
+- ban user
+- mute user
+- edit role
+- view activity
+SEARCH SYSTEM
+
+Nên search theo:
+
+- id
+- username
+- email
+7.12 MODERATOR MANAGEMENT
+
+SUPER_ADMIN có thể:
+
+- thêm moderator
+- remove moderator
+- view moderator activity
+7.13 REPORT SYSTEM
+Cực quan trọng 😭
+USER REPORT
+
+User có thể report:
+
+- post
+- comment
+- user
+REPORT FLOW
+User report
+↓
+Moderator review
+↓
+Action
+7.14 REPORT MODEL
+public class Report {
+
+    public String id;
+
+    public String targetId;
+
+    public String targetType;
+
+    public String reason;
+
+    public String createdBy;
+
+    public String status;
+}
+STATUS
+PENDING
+REVIEWED
+RESOLVED
+7.15 MUTE SYSTEM
+
+Mute dùng cho:
+
+toxic user 😭
+MUTE KHÁC BAN
+MUTE
+không được comment/post
+BAN
+không vào app được
+7.16 SECURITY DIRECTION
+
+Security cực quan trọng vì app có:
+
+- AI
+- auth
+- sandbox
+- social
+- realtime
+7.17 JWT SYSTEM
+Access Token
+
+Dùng authenticate request.
+
+Refresh Token
+
+Dùng tạo access token mới.
+
+FLOW
+Login
+↓
+Access Token
+↓
+Expired
+↓
+Refresh Token
+↓
+New Access Token
+7.18 TOKEN ROTATION
+
+Sau mỗi refresh:
+
+refresh token mới
+PURPOSE
+tăng security 😭
+7.19 USER SESSION SYSTEM
+Purpose
+logout all device
+USER SESSION MODEL
+public class UserSession {
+
+    public String id;
+
+    public String userId;
+
+    public String refreshToken;
+
+    public String device;
+
+    public String ip;
+
+    public String createdAt;
+}
+7.20 RATE LIMIT SYSTEM
+Cực quan trọng 😭
+Ví dụ
+10 AI request / phút
+PURPOSE
+- chống spam
+- chống abuse
+- giảm AI cost
+7.21 AI SECURITY
+
+Không cho AI:
+
+- execute shell
+- expose prompt
+- expose backend
+- access database
+7.22 SANDBOX SECURITY
+
+Code user cực nguy hiểm 😭
+
+SANDBOX PHẢI
+- isolate container
+- disable network
+- RAM limit
+- CPU limit
+- timeout
+7.23 PASSWORD SECURITY
+KHÔNG LƯU
+password raw 😭
+NÊN
+hash password
+Ví dụ
+bcrypt
+argon2
+7.24 SQL INJECTION PROTECTION
+
+KHÔNG:
+
+SELECT * FROM users WHERE email = ' " + email
+NÊN
+prepared statement
+ORM
+7.25 XSS PROTECTION
+
+Nếu có web/admin panel:
+
+sanitize HTML 😭
+7.26 FILE UPLOAD SECURITY
+
+User upload image cần:
+
+- size limit
+- file type check
+- virus scan
+7.27 API SECURITY
+
+API cần:
+
+- auth middleware
+- permission middleware
+- rate limit
+- request validation
+7.28 REQUEST VALIDATION
+
+Ví dụ:
+
+- email format
+- username length
+- code size
+PURPOSE
+tránh rác 😭
+7.29 ADMIN LOG SYSTEM
+Cực quan trọng 😭
+Log:
+- ai ban ai
+- ai xóa post
+- ai đổi role
+- ai edit lesson
+PURPOSE
+audit trail
+7.30 AI MODERATION
+
+AI có thể hỗ trợ:
+
+- detect toxic comment
+- detect spam
+- detect unsafe content
+NHƯNG
+AI không nên auto ban 😭
+PHẢI CÓ
+human review
+7.31 BACKUP SYSTEM
+
+Production thật cần:
+
+- database backup
+- image backup
+- log backup
+7.32 SERVER MONITOR
+
+SUPER_ADMIN nên xem:
+
+- CPU
+- RAM
+- AI cost
+- sandbox usage
+- active user
+7.33 ANALYTICS SECURITY
+
+Analytics cần track:
+
+- DAU
+- MAU
+- retention
+- AI usage
+- lesson complete
+NHƯNG
+không lộ dữ liệu nhạy cảm 😭
+7.34 CDN & IMAGE SECURITY
+
+Image nên:
+
+- dùng CDN
+- compress
+- cache
+PURPOSE
+performance 😭
+7.35 FUTURE SECURITY
+
+Sau này có thể thêm:
+
+- 2FA
+- device verification
+- suspicious login detection
+- anti bot
+7.36 ĐIỀU QUAN TRỌNG NHẤT
+
+Security mạnh không phải vì:
+
+nhiều middleware
+MÀ VÌ
+mọi layer đều có protection 😭

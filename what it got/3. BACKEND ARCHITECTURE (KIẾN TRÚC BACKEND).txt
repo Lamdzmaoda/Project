@@ -1,0 +1,429 @@
+3. BACKEND ARCHITECTURE
+(KIẾN TRÚC BACKEND)
+3.1 BACKEND DIRECTION
+(ĐỊNH HƯỚNG BACKEND)
+
+Backend được xây dựng theo hướng:
+
+production-ready 😭
+MỤC TIÊU
+- scalable
+- maintainable
+- secure
+- modular
+NOTE
+
+App kiểu này sẽ có:
+
+- AI request
+- realtime
+- sandbox
+- social
+- analytics
+NÊN BACKEND:
+không thể viết kiểu đơn giản 😭
+3.2 BACKEND TECH STACK
+(CÔNG NGHỆ BACKEND)
+Main Stack
+Spring Boot
+(Java Backend Framework)
+DATABASE
+PostgreSQL
+CACHE
+Redis
+SANDBOX
+Docker
+STORAGE
+Cloudinary / AWS S3
+PURPOSE
+production ecosystem 😭
+3.3 BACKEND ARCHITECTURE STYLE
+(KIỂU KIẾN TRÚC BACKEND)
+
+Giai đoạn đầu:
+
+Modular Monolith
+NGHĨA LÀ
+1 backend project
+NHƯNG
+tách module rõ ràng 😭
+FUTURE
+
+Sau này có thể:
+
+service separation
+PURPOSE
+scale đúng thời điểm 😭
+3.4 PROJECT STRUCTURE
+(CẤU TRÚC BACKEND)
+backend/
+│
+├── auth/
+├── user/
+├── learning/
+├── practice/
+├── ai/
+├── community/
+├── gamification/
+├── analytics/
+├── notification/
+├── admin/
+├── sandbox/
+├── security/
+├── socket/
+├── common/
+└── config/
+NOTE
+
+Structure này:
+
+feature-based backend 😭
+3.5 LAYERED ARCHITECTURE
+(KIẾN TRÚC PHÂN TẦNG)
+
+Mỗi module nên gồm:
+
+controller
+service
+repository
+entity
+dto
+mapper
+FLOW
+Controller
+↓
+Service
+↓
+Repository
+↓
+Database
+PURPOSE
+clean backend 😭
+3.6 CONTROLLER LAYER
+(TẦNG CONTROLLER)
+
+Responsibility:
+
+- receive request
+- validate request
+- return response
+KHÔNG NÊN
+viết business logic trong controller 😭
+EXAMPLE
+@RestController
+@RequestMapping(\"/api/lesson\")
+public class LessonController {
+}
+3.7 SERVICE LAYER
+(TẦNG SERVICE)
+
+Service chịu trách nhiệm:
+
+business logic 😭
+EXAMPLE
+- complete lesson
+- calculate XP
+- update streak
+- AI validation
+PURPOSE
+centralized logic 😭
+3.8 REPOSITORY LAYER
+(TẦNG REPOSITORY)
+
+Repository dùng để:
+
+truy cập database 😭
+EXAMPLE
+public interface UserRepository
+PURPOSE
+database abstraction 😭
+3.9 DTO SYSTEM
+(HỆ THỐNG DTO)
+
+DTO dùng để:
+
+- request
+- response
+- tránh expose entity
+EXAMPLE
+LoginRequest
+LessonResponse
+AIAnswerResponse
+PURPOSE
+safe API structure 😭
+3.10 ENTITY SYSTEM
+(HỆ THỐNG ENTITY)
+
+Entity là:
+
+database model 😭
+EXAMPLE
+User
+Lesson
+Submission
+Post
+Comment
+NOTE
+
+Entity phải:
+
+production-oriented 😭
+3.11 API STRUCTURE
+(CẤU TRÚC API)
+/api/auth/
+/api/user/
+/api/lesson/
+/api/practice/
+/api/community/
+/api/admin/
+PURPOSE
+consistent API 😭
+3.12 AUTH MODULE
+(MODULE XÁC THỰC)
+
+Responsibility:
+
+- login
+- register
+- refresh token
+- logout
+- session
+AUTH FLOW
+Login
+↓
+JWT Access Token
+↓
+Refresh Token
+↓
+Authenticated API
+3.13 JWT SYSTEM
+(HỆ THỐNG JWT)
+
+Sử dụng:
+
+Access Token
++
+Refresh Token
+PURPOSE
+secure authentication 😭
+3.14 ROLE SYSTEM
+(HỆ THỐNG ROLE)
+USER
+MODERATOR
+ADMIN
+SUPER_ADMIN
+PURPOSE
+permission hierarchy 😭
+3.15 PERMISSION SYSTEM
+(HỆ THỐNG QUYỀN)
+
+Role:
+
+nhóm quyền 😭
+Permission:
+quyền cụ thể 😭
+EXAMPLE
+DELETE_POST
+BAN_USER
+MANAGE_ROLE
+PURPOSE
+flexible authorization 😭
+3.16 LEARNING MODULE
+(MODULE HỌC TẬP)
+
+Responsibility:
+
+- language
+- chapter
+- lesson
+- lesson step
+- progress
+MAIN FLOW
+Language
+↓
+Chapter
+↓
+Lesson
+↓
+Step
+3.17 PROGRESS SYSTEM
+(HỆ THỐNG TIẾN TRÌNH)
+
+Backend cần lưu:
+
+lastLanguageId
+lastChapterId
+lastLessonId
+lastStepId
+PURPOSE
+continue learning 😭
+3.18 PRACTICE MODULE
+(MODULE LUYỆN CODE)
+
+Responsibility:
+
+- run code
+- testcase
+- judge
+- submission
+FLOW
+Submit Code
+↓
+Queue
+↓
+Sandbox
+↓
+Judge
+↓
+Save Result
+PURPOSE
+real coding practice 😭
+3.19 AI MODULE
+(MODULE AI)
+
+Responsibility:
+
+- AI explain
+- AI debug
+- AI recommendation
+- AI simplify
+AI FLOW
+User Question
+↓
+Prompt Builder
+↓
+Gemini API
+↓
+Response Validation
+↓
+Return Answer
+PURPOSE
+context-aware AI 😭
+3.20 AI PROMPT BUILDER
+(HỆ THỐNG BUILD PROMPT)
+
+Prompt cần inject:
+
+- language
+- lesson
+- step
+- user level
+- AI mode
+PURPOSE
+AI hiểu context 😭
+3.21 COMMUNITY MODULE
+(MODULE CỘNG ĐỒNG)
+
+Features:
+
+- post
+- comment
+- follow
+- save post
+- trending
+PURPOSE
+social retention 😭
+3.22 GAMIFICATION MODULE
+(MODULE GAMIFICATION)
+
+Features:
+
+- XP
+- streak
+- ranking
+- quest
+- badge
+PURPOSE
+motivation 😭
+3.23 NOTIFICATION MODULE
+(MODULE THÔNG BÁO)
+
+Notification types:
+
+- streak reminder
+- quest reminder
+- comment reply
+- level up
+DELIVERY
+Firebase Cloud Messaging
+PURPOSE
+engagement 😭
+3.24 ANALYTICS MODULE
+(MODULE PHÂN TÍCH)
+
+Track:
+
+- retention
+- AI usage
+- lesson completion
+- daily active user
+PURPOSE
+product improvement 😭
+3.25 ADMIN MODULE
+(MODULE QUẢN TRỊ)
+
+SUPER_ADMIN có thể:
+
+- manage user
+- manage role
+- manage moderator
+- analytics
+- AI monitor
+- server monitor
+PURPOSE
+production administration 😭
+3.26 CACHE SYSTEM
+(HỆ THỐNG CACHE)
+
+Redis dùng cho:
+
+- leaderboard
+- session
+- recommendation
+- hot lesson
+PURPOSE
+performance 😭
+3.27 QUEUE SYSTEM
+(HỆ THỐNG HÀNG ĐỢI)
+
+Queue dùng cho:
+
+- AI request
+- sandbox
+- notification
+- analytics
+PURPOSE
+async processing 😭
+3.28 SOCKET SYSTEM
+(HỆ THỐNG REALTIME)
+
+Dùng cho:
+
+- realtime notification
+- online status
+- realtime ranking
+PURPOSE
+live experience 😭
+3.29 BACKEND SECURITY
+(BẢO MẬT BACKEND)
+
+Backend cần:
+
+- JWT validation
+- rate limit
+- permission check
+- request validation
+- sandbox isolation
+PURPOSE
+production security 😭
+3.30 FINAL BACKEND PHILOSOPHY
+(TRIẾT LÝ BACKEND CUỐI)
+
+Backend mạnh không phải vì:
+
+nhiều service 😭
+MÀ VÌ
+- ổn định
+- dễ maintain
+- scale được
+- support product tốt

@@ -1,0 +1,45 @@
+@startuml
+!define RECTANGLE class
+
+actor "Người\nDùng" as USER
+actor "Quản\nTrị" as ADMIN
+actor "Hệ\nThống" as SYS
+
+rectangle Auth {
+  (Đăng ký) as A1
+  (Đăng nhập) as A2
+  (OAuth2) as A3
+  (Quản lý\nRole/Permission) as A4
+}
+
+rectangle "Học tập" {
+  (CRUD Nội dung\nkhóa học) as B1
+  (Ghi danh) as B2
+  (Học LEARN) as B3
+  (Luyện tập\nPRACTICE) as B4
+  (Theo dõi\n& Reset tiến độ) as B5
+}
+
+rectangle "AI & System" {
+  (Chat AI\nTutor) as C1
+  (Chạy code\nJudge0) as C2
+}
+
+USER --> A1
+USER --> A2
+USER --> A3
+USER --> B2
+USER --> B3
+USER --> B4
+USER --> B5
+USER --> C1
+USER --> C2
+
+ADMIN --> A4
+ADMIN --> B1
+
+SYS --> B3
+SYS --> B5
+SYS --> C2
+
+@enduml

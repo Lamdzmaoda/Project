@@ -1,9 +1,9 @@
 package com.example.identity_servive.controller;
 
-import com.example.identity_servive.dto.request.ApiResponse;
-import com.example.identity_servive.dto.request.ChatRequest;
-import com.example.identity_servive.dto.response.ChatResponse;
-import com.example.identity_servive.service.ChatService;
+import com.example.identity_servive.dto.response.ApiResponse;
+import com.example.identity_servive.dto.request.ai.ChatRequest;
+import com.example.identity_servive.dto.response.ai.ChatResponse;
+import com.example.identity_servive.service.ai.ChatService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

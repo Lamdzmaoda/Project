@@ -1,0 +1,16 @@
+{
+  "step": 5,
+  "name": "Create Reply (Comment con)",
+  "method": "POST",
+  "url": "http://localhost:8080/api/community/comments",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "body": {
+    "postId": "{POST_ID}",
+    "content": "Thanks for the feedback!",
+    "parentId": "{COMMENT_ID}"
+  },
+  "note": "Thay {POST_ID} từ bước 1, {COMMENT_ID} từ bước 4."
+}

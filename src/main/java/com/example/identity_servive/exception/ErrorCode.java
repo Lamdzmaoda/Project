@@ -41,14 +41,17 @@ public enum ErrorCode {
     PARSE_DATA_INVALID(1011, "parse data invalid : ", HttpStatus.BAD_REQUEST),
     DATA_INTEGRITY_VIOLATION(1012, "data integrity violation : ", HttpStatus.BAD_REQUEST),
     STEP_LOCKED(1015, "step locked", HttpStatus.BAD_REQUEST),
-    LESSON_INCOMPLETE(1014, "LESSON NOT YET COMPLETED", HttpStatus.BAD_REQUEST),
+    LESSON_INCOMPLETE(1021, "LESSON NOT YET COMPLETED", HttpStatus.BAD_REQUEST),
     INVALID_ANSWER(1013, "INVALID ANSWER", HttpStatus.BAD_REQUEST),
-
+    LESSON_LOCKED(1014, "LESSON LOCKED", HttpStatus.BAD_REQUEST),
     CHAPTER_LOCKED(1017,"chapter locked", HttpStatus.BAD_REQUEST),
     COURSE_UNDER_CONSTRUCTION(1018,"course under construction", HttpStatus.BAD_REQUEST),
 
-    DELETE_FAILED(1019,"delete failed", HttpStatus.BAD_REQUEST);
-
+    DELETE_FAILED(1019,"delete failed", HttpStatus.BAD_REQUEST),
+    NULL_POINTER(1020, "null pointer exception", HttpStatus.BAD_REQUEST),
+    CREATE_FAIL(1022, "create fail", HttpStatus.BAD_REQUEST),
+    ALREADY_EXISTED(1023, "already existed", HttpStatus.BAD_REQUEST),
+    INVALID_REQUEST(1024, "invalid request", HttpStatus.BAD_REQUEST);
 
   // Mã số lỗi định danh (giúp Frontend dễ dàng bắt lỗi bằng code thay vì so sánh chuỗi)
   private int code = 2000;

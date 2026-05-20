@@ -1,9 +1,9 @@
 /* (C)2026 */
 package com.example.identity_servive.mapper;
 
-import com.example.identity_servive.dto.request.PermissionRequest;
-import com.example.identity_servive.dto.response.PermissionResponse;
-import com.example.identity_servive.entity.Permission;
+import com.example.identity_servive.dto.request.AuthRequest.PermissionRequest;
+import com.example.identity_servive.dto.response.authResponse.PermissionResponse;
+import com.example.identity_servive.entity.auth.Permission;
 import org.mapstruct.Mapper;
 
 /**

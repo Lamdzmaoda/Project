@@ -1,0 +1,278 @@
+2. FRONTEND ARCHITECTURE
+(KIẾN TRÚC FRONTEND)
+2.1 FRONTEND DIRECTION
+(ĐỊNH HƯỚNG FRONTEND)
+
+Ứng dụng được xây dựng theo hướng:
+
+mobile-first 😭
+NGHĨA LÀ
+
+Frontend phải ưu tiên:
+
+- thao tác nhanh
+- ít friction
+- loading mượt
+- UX đơn giản
+- học liên tục dễ dàng
+NOTE
+
+Frontend của app học code:
+
+UX cực kỳ quan trọng 😭
+
+vì user sẽ dùng:
+
+mỗi ngày
+2.2 TECH STACK
+(CÔNG NGHỆ FRONTEND)
+Main Stack
+Android Native
+Kotlin
+Jetpack
+MAIN LIBRARIES
+- Navigation Component
+- ViewModel
+- LiveData / StateFlow
+- Room
+- Retrofit
+- OkHttp
+- Glide / Coil
+- Paging 3
+- Hilt
+NOTE
+
+Kotlin được chọn vì:
+
+- official Android language
+- modern
+- coroutine support tốt
+- scalable
+2.3 FRONTEND ARCHITECTURE PATTERN
+(MÔ HÌNH KIẾN TRÚC FRONTEND)
+
+Ứng dụng sử dụng:
+
+MVVM Architecture
+(Model - View - ViewModel)
+FLOW
+UI
+↓
+ViewModel
+↓
+UseCase
+↓
+Repository
+↓
+Remote API / Local Database
+PURPOSE
+- clean architecture
+- dễ maintain
+- dễ test
+- dễ scale
+2.4 PROJECT STRUCTURE
+(CẤU TRÚC DỰ ÁN)
+app/
+│
+├── ui/
+├── data/
+├── domain/
+├── repository/
+├── network/
+├── local/
+├── model/
+├── adapter/
+├── navigation/
+├── socket/
+├── worker/
+├── di/
+├── common/
+└── utils/
+NOTE
+
+Structure này:
+
+production-oriented 😭
+2.5 FEATURE-BASED UI STRUCTURE
+(CẤU TRÚC UI THEO TÍNH NĂNG)
+ui/
+│
+├── admin/
+├── auth/
+├── community/
+├── gamification/
+├── home/
+├── learning/
+├── main/
+├── practice/
+├── profile/
+└── shared/
+PURPOSE
+modular frontend 😭
+2.6 MAIN ACTIVITY STRUCTURE
+(CẤU TRÚC MAIN ACTIVITY)
+
+MainActivity chỉ nên chứa:
+
+- fragmentContainer
+- bottom navigation
+- navigation handling
+- openFragment()
+KHÔNG NÊN
+nhét business logic vào MainActivity 😭
+2.7 FRAGMENT ARCHITECTURE
+(KIẾN TRÚC FRAGMENT)
+
+Mỗi feature:
+
+1 Fragment chính 😭
+EXAMPLE
+HomeFragment
+LessonFragment
+PracticeFragment
+CommunityFragment
+ProfileFragment
+AdminFragment
+PURPOSE
+clear separation 😭
+2.8 VIEWMODEL SYSTEM
+(HỆ THỐNG VIEWMODEL)
+
+ViewModel chịu trách nhiệm:
+
+- quản lý state
+- xử lý event
+- gọi usecase
+- xử lý loading
+KHÔNG NÊN
+call API trực tiếp trong Fragment 😭
+EXAMPLE
+class LessonViewModel(
+
+    private val repository: LessonRepository
+
+) : ViewModel()
+2.9 UI STATE MANAGEMENT
+(QUẢN LÝ UI STATE)
+
+Mỗi screen nên có:
+
+UiState 😭
+EXAMPLE
+data class LessonUiState(
+
+    val isLoading: Boolean = false,
+
+    val lesson: Lesson? = null,
+
+    val error: String? = null
+)
+PURPOSE
+predictable UI 😭
+2.10 DOMAIN LAYER
+(TẦNG DOMAIN)
+domain/
+PURPOSE
+business logic 😭
+CONTAINS
+- usecase
+- validation
+- business rules
+EXAMPLE
+GetLessonUseCase
+CompleteLessonUseCase
+AskAIUseCase
+2.11 DATA LAYER
+(TẦNG DỮ LIỆU)
+data/
+RESPONSIBILITY
+- API handling
+- DTO mapping
+- cache handling
+- local storage
+2.12 REPOSITORY PATTERN
+(MÔ HÌNH REPOSITORY)
+
+Repository dùng để:
+
+ẩn logic dữ liệu 😭
+FLOW
+ViewModel
+↓
+Repository
+↓
+Remote / Local
+EXAMPLE
+interface LessonRepository {
+
+    suspend fun getLesson(
+        lessonId: String
+    ): Lesson
+}
+2.13 NAVIGATION SYSTEM
+(HỆ THỐNG ĐIỀU HƯỚNG)
+
+Sử dụng:
+
+Jetpack Navigation
+MAIN FLOW
+Home
+↓
+Language
+↓
+Chapter
+↓
+Lesson
+↓
+Practice
+NOTE
+
+Navigation phải:
+
+đơn giản 😭
+2.14 BOTTOM NAVIGATION
+(THANH ĐIỀU HƯỚNG DƯỚI)
+Home
+Practice
+Community
+Progress
+Profile
+PURPOSE
+daily usability 😭
+2.15 HOME SCREEN UX
+(TRẢI NGHIỆM HOME)
+
+Home Screen nên có:
+
+- Continue Learning
+- Daily Quest
+- XP Bar
+- Streak
+- Recommendation
+- Ranking Preview
+PURPOSE
+daily habit 😭
+2.16 CONTINUE LEARNING SYSTEM
+(HỆ THỐNG HỌC TIẾP)
+Cực kỳ quan trọng 😭
+UX
+Continue lesson?
+Step 5 / 8
+
+[ Continue ]
+[ Restart ]
+MODEL
+data class ContinueLearning(
+
+    val lessonId: String,
+
+    val lessonTitle: String,
+
+    val lastStepId: String,
+
+    val currentStep: Int,
+
+    val totalStep: Int
+)
+PURPOSE
+giảm friction 😭

@@ -1,0 +1,10 @@
+{
+  "step": 20,
+  "name": "Admin Delete Post",
+  "method": "DELETE",
+  "url": "http://localhost:8080/admin/community/posts/{POST_ID}",
+  "headers": {
+    "Authorization": "Bearer YOUR_ADMIN_TOKEN"
+  },
+  "note": "Dùng token ADMIN. Xóa bài viết bất kỳ."
+}

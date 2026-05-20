@@ -1,0 +1,10 @@
+{
+  "step": 15,
+  "name": "Check Saved",
+  "method": "GET",
+  "url": "http://localhost:8080/api/community/posts/{POST_ID}/saved",
+  "headers": {
+    "Authorization": "Bearer YOUR_TOKEN"
+  },
+  "note": "Kết quả phải là true nếu đã save ở bước 14."
+}
