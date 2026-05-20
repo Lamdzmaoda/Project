@@ -72,9 +72,8 @@ jwt:
 
   # Thß╗¥i gian tß╗æi ─æa ─æß╗â c├│ thß╗â d├╣ng Refresh Token (360.000 gi├óy = 100 giß╗¥)
   refreshable-duration: 360000
-
   outbound:
     identity:
-      client-id: ${GOOGLE_CLIENT_ID}
-      client-secret: ${GOOGLE_CLIENT_SECRET}
-      redirect-uri: "http://localhost:3000/authenticate"
+          client-id: ${GOOGLE_CLIENT_ID}
+          client-secret: ${GOOGLE_CLIENT_SECRET}
+          redirect-uri: "http://localhost:3000/authenticate"
