@@ -1,15 +1,15 @@
-server:
-  port: 8080 # Ứng dụng chạy trên cổng 8080
+﻿server:
+  port: 8080 # ß╗¿ng dß╗Ñng chß║íy tr├¬n cß╗òng 8080
   servlet:
-    context-path: /identity # Đường dẫn gốc của API (VD: http://localhost:8080/identity/users)
+    context-path: /identity # ─É╞░ß╗¥ng dß║½n gß╗æc cß╗ºa API (VD: http://localhost:8080/identity/users)
 
 spring:
   datasource:
-    # URL kết nối đến MySQL. Port 3636 là cổng đã được map từ Docker ra máy thật.
-    # ${DBMS_CONNECTION:...} giúp linh hoạt thay đổi URL khi chạy trên server thật.
+    # URL kß║┐t nß╗æi ─æß║┐n MySQL. Port 3636 l├á cß╗òng ─æ├ú ─æ╞░ß╗úc map tß╗½ Docker ra m├íy thß║¡t.
+    # ${DBMS_CONNECTION:...} gi├║p linh hoß║ít thay ─æß╗òi URL khi chß║íy tr├¬n server thß║¡t.
     url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3636/identity-servive}
 
-    # Tài khoản và mật khẩu kết nối Database
+    # T├ái khoß║ún v├á mß║¡t khß║⌐u kß║┐t nß╗æi Database
     username: ${DBMS_USER:root}
     password: ${DBMS_PASSWORD:lamdzbodoi}
 
@@ -33,14 +33,14 @@ spring:
 
   jpa:
     hibernate:
-      # 'update': Hibernate sẽ tự động so sánh Entity và DB để thêm/sửa cột mà không xóa dữ liệu cũ
+      # 'update': Hibernate sß║╜ tß╗▒ ─æß╗Öng so s├ính Entity v├á DB ─æß╗â th├¬m/sß╗¡a cß╗Öt m├á kh├┤ng x├│a dß╗» liß╗çu c┼⌐
       ddl-auto: update
 
-    # 'show-sql: true': In các câu lệnh SQL mà Hibernate thực thi ra màn hình console để tiện debug
+    # 'show-sql: true': In c├íc c├óu lß╗çnh SQL m├á Hibernate thß╗▒c thi ra m├án h├¼nh console ─æß╗â tiß╗çn debug
     show-sql: true
     properties:
       hibernate:
-        # Khai báo phương ngôn SQL sử dụng cho MySQL
+        # Khai b├ío ph╞░╞íng ng├┤n SQL sß╗¡ dß╗Ñng cho MySQL
         dialect: org.hibernate.dialect.MySQLDialect
 
   spring:
@@ -64,13 +64,13 @@ springdoc:
     enabled: true
 
 jwt:
-  # Khóa bí mật (HS512) dùng để ký tên lên Token. Phải giữ kín khóa này!
+  # Kh├│a b├¡ mß║¡t (HS512) d├╣ng ─æß╗â k├╜ t├¬n l├¬n Token. Phß║úi giß╗» k├¡n kh├│a n├áy!
   signerKey: "a065bd796281e2a4388ebc7f7a3c41bba935512d5e51526e898235a6ad5b4142"
 
-  # Thời gian sống của Access Token (3600 giây = 1 giờ)
+  # Thß╗¥i gian sß╗æng cß╗ºa Access Token (3600 gi├óy = 1 giß╗¥)
   valid-duration: 3600
 
-  # Thời gian tối đa để có thể dùng Refresh Token (360.000 giây = 100 giờ)
+  # Thß╗¥i gian tß╗æi ─æa ─æß╗â c├│ thß╗â d├╣ng Refresh Token (360.000 gi├óy = 100 giß╗¥)
   refreshable-duration: 360000
 
   outbound:
