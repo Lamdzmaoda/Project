@@ -18,6 +18,7 @@ import java.util.List;
 @Builder // Hỗ trợ khởi tạo đối tượng theo pattern Builder
 @FieldDefaults(level = AccessLevel.PRIVATE) // Tự động đặt tất cả các field là 'private'
 public class UserCreationRequest {
+    String displayName;
     @Size(min = 4, message = "USER_INVALID")
     String username;
 
@@ -26,5 +27,4 @@ public class UserCreationRequest {
 
     String email;
 
-    List<Role> roles;
 }
