@@ -1,0 +1,78 @@
+@startuml
+!theme plain
+title State Machine Diagram - Trạng thái các Object
+
+' ====== User Status ======
+state "User Status" as USER_STATE {
+  [*] --> REGISTERED : Đăng ký tài khoản
+  REGISTERED --> ACTIVE : Xác thực email
+  ACTIVE --> OFFLINE : Không hoạt động > 30 ngày
+  OFFLINE --> ACTIVE : Đăng nhập lại
+  ACTIVE --> BANNED : Vi phạm / Admin khóa
+  BANNED --> ACTIVE : Admin mở khóa
+  REGISTERED --> BANNED : Vi phạm ngay từ đầu
+  BANNED --> [*] : Xóa tài khoản
+  ACTIVE --> [*] : Xóa tài khoản
+}
+
+' ====== Content Status (Language/Chapter/Lesson/Step/Problem) ======
+state "Content Status" as CONTENT_STATE {
+  [*] --> ACTIVE : Tạo mới
+  ACTIVE --> HIDDEN : Soft-delete (ẩn)
+  ACTIVE --> DELETED : Purge (xóa vĩnh viễn)
+  HIDDEN --> ACTIVE : Khôi phục
+  HIDDEN --> DELETED : Purge
+  DELETED --> [*] : Garbage collected
+}
+
+' ====== Enrollment Status ======
+state "Enrollment Status" as ENROLL_STATE {
+  [*] --> ENROLLED : Ghi danh khóa học
+  ENROLLED --> IN_PROGRESS : Bắt đầu học bài đầu
+  IN_PROGRESS --> COMPLETED : Hoàn thành 100%
+  COMPLETED --> IN_PROGRESS : Có nội dung mới
+  ENROLLED --> DROPPED : Hủy ghi danh
+  IN_PROGRESS --> DROPPED : Hủy ghi danh
+  DROPPED --> ENROLLED : Ghi danh lại
+  COMPLETED --> [*] : Xóa dữ liệu
+}
+
+' ====== UserChapterProgress ======
+state "UserChapterProgress" as CHAP_PROG {
+  [*] --> LOCKED : Khởi tạo
+  LOCKED --> UNLOCKED : Hoàn thành chương trước
+  UNLOCKED --> IN_PROGRESS : Bắt đầu học
+  IN_PROGRESS --> COMPLETED : Hoàn thành 100%
+  COMPLETED --> [*] : Reset
+}
+
+' ====== Submission Status ======
+state "Submission Status" as SUBMIT_STATE {
+  [*] --> SUBMITTED : Nộp code
+  SUBMITTED --> EVALUATING : Judge0 đang chạy
+  EVALUATING --> PASSED : Kết quả đúng
+  EVALUATING --> FAILED : Kết quả sai / Lỗi
+  FAILED --> SUBMITTED : Nộp lại
+}
+
+' ====== Token Status ======
+state "JWT Token" as TOKEN_STATE {
+  [*] --> ACTIVE : Cấp token
+  ACTIVE --> EXPIRED : Hết hạn (1h)
+  ACTIVE --> REVOKED : Logout / Refresh
+  EXPIRED --> [*]
+  REVOKED --> [*]
+}
+
+' ====== AI Chat Session ======
+state "AI Chat" as CHAT_STATE {
+  [*] --> IDLE : Sẵn sàng
+  IDLE --> PROCESSING : User gửi câu hỏi
+  PROCESSING --> WAITING_AI : Đợi Gemini phản hồi
+  WAITING_AI --> RESPONDED : Nhận phản hồi
+  RESPONDED --> IDLE : Chờ câu hỏi tiếp
+  PROCESSING --> ERROR : Lỗi AI service
+  ERROR --> IDLE : Thử lại
+}
+
+@enduml

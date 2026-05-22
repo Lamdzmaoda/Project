@@ -1,0 +1,317 @@
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+
+' ============ ENUMS ============
+enum enums.RoleType {
+  CREATOR
+  ADMIN
+  MODERATOR
+  USER
+}
+
+enum enums.Type {
+  CODE
+  TEXT
+  QUIZ
+  PRACTICE
+}
+
+enum enums.LessonType {
+  LEARN
+  PRACTICE
+}
+
+enum enums.Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum enums.Status {
+  ACTIVE
+  OFFLINE
+  ERROR
+  SUCCESS
+}
+
+enum enums.ContentStatus {
+  ACTIVE
+  HIDDEN
+  DELETED
+}
+
+enum enums.IsLocked {
+  TRUE_LOCKED
+  FALSE_LOCKED
+}
+
+enum enums.IsCompleted {
+  TRUE
+  FALSE
+}
+
+' ============ AUTH ENTITIES ============
+class entity.auth.User {
+  + id: String (UUID)
+  + username: String
+  + password: String
+  + email: String
+  + displayName: String
+  + avatarUrl: String
+  + bio: String
+  + coin: int
+  + streak: int
+  + longestStreak: int
+  + totalXp: Long
+  + verified: boolean
+  + status: Status
+  + lastActivityDate: LocalDate
+  + birthDate: LocalDate
+  + createdAt: LocalDateTime
+  + updatedAt: LocalDateTime
+  + getLevel(): int
+}
+
+class entity.auth.Role {
+  + name: String
+  + description: String
+}
+
+class entity.auth.Permission {
+  + name: String
+  + description: String
+}
+
+class entity.auth.InvalidatedToken {
+  + id: String (JTI)
+  + expiryTime: Date
+}
+
+' ============ COMMUNITY ENTITIES ============
+class entity.community.Post {
+  + id: String (UUID)
+  + content: String
+  + imageUrl: String
+  + codeSnippet: String
+  + likeCount: int
+  + commentCount: int
+  + createdAt: LocalDateTime
+  + updatedAt: LocalDateTime
+}
+
+class entity.community.Comment {
+  + id: String (UUID)
+  + content: String
+  + createdAt: LocalDateTime
+}
+
+class entity.community.PostLike {
+  + id: String (UUID)
+  + createdAt: LocalDateTime
+}
+
+class entity.community.Follow {
+  + id: String (UUID)
+  + createdAt: LocalDateTime
+}
+
+class entity.community.SavedPost {
+  + id: String (UUID)
+  + savedAt: LocalDateTime
+}
+
+' ============ LEARNING ENTITIES ============
+class entity.learning.Language {
+  + name: String
+  + description: String
+  + icon: String
+  + durationDays: LocalDateTime
+  + totalXp: Long
+  + slug: String
+  + status: ContentStatus
+  + createAt: LocalDateTime
+  + updateAt: LocalDateTime
+}
+
+class entity.learning.Chapter {
+  + id: String (UUID)
+  + title: String
+  + orderIndex: int
+  + description: String
+  + slug: String
+  + totalXp: Long
+  + status: ContentStatus
+  + createAt: LocalDateTime
+  + updateAt: LocalDateTime
+}
+
+class entity.learning.Lesson {
+  + id: String (UUID)
+  + title: String
+  + description: String
+  + slug: String
+  + thumbnailUrl: String
+  + orderIndex: int
+  + xp: long
+  + lessonType: LessonType
+  + status: ContentStatus
+  + createAt: LocalDateTime
+  + updateAt: LocalDateTime
+}
+
+class entity.learning.Step {
+  + id: String (UUID)
+  + orderIndex: int
+  + title: String
+  + type: Type
+  + status: ContentStatus
+  + data: Map<String,Object>
+  + createAt: LocalDateTime
+  + updateAt: LocalDateTime
+}
+
+class entity.learning.Problem {
+  + id: String (UUID)
+  + title: String
+  + slug: String
+  + description: String
+  + difficulty: Difficulty
+  + hint: String
+  + methodName: String
+  + orderIndex: int
+  + solutionCode: String
+  + expectedOutput: String
+  + status: ContentStatus
+  + createAt: LocalDateTime
+  + updateAt: LocalDateTime
+}
+
+class entity.learning.ProblemCondition {
+  + id: String (UUID)
+  + expectedCode: String
+  + hint: String
+  + orderIndex: int
+}
+
+' ============ PROGRESS ENTITIES ============
+class entity.progress.Enrollment {
+  + id: String (UUID)
+  + currentXp: long
+  + status: Status
+  + progressPercentage: double
+  + enrolledAt: LocalDateTime
+  + completedAt: LocalDateTime
+  + createdAt: LocalDateTime
+  + updatedAt: LocalDateTime
+}
+
+class entity.progress.Submission {
+  + id: String (UUID)
+  + code: String
+  + output: String
+  + passed: boolean
+  + createdAt: LocalDateTime
+}
+
+class entity.progress.UserChapterProgress {
+  + id: String (UUID)
+  + progressPercentage: double
+  + lockedStatus: IsLocked
+  + completedStatus: IsCompleted
+  + createdAt: LocalDateTime
+  + updatedAt: LocalDateTime
+}
+
+class entity.progress.UserLessonProgress {
+  + id: String (UUID)
+  + lockedStatus: IsLocked
+  + completedStatus: IsCompleted
+  + createdAt: LocalDateTime
+  + updatedAt: LocalDateTime
+}
+
+' ============ AI & SYSTEM ENTITIES ============
+class entity.AI.OpenAI {
+  + id: String (UUID)
+  + userMessage: String
+  + aiExplanation: String
+  + hints: List<String>
+  + suggestedCode: String
+  + motivationMessage: String
+  + createAt: LocalDateTime
+}
+
+class entity.System.Code {
+  + id: String (UUID)
+  + language: String
+  + status: Status
+  + errorType: String
+  + line: Integer
+  + columnIndex: Integer
+  + errorLineCode: String
+  + pointer: String
+  + messageVn: String
+  + input: String
+  + output: String
+}
+
+' ============ RELATIONSHIPS ============
+
+' Auth relationships
+entity.auth.User "1" *--> "roles *" entity.auth.Role : @ManyToMany
+entity.auth.Role "1" *--> "permissions *" entity.auth.Permission : @ManyToMany
+
+' Post relationships
+entity.auth.User "1" --> "posts *" entity.community.Post : creates
+entity.community.Post "1" --> "comments *" entity.community.Comment : has
+entity.community.Comment "1" --> "replies *" entity.community.Comment : parent
+entity.auth.User "1" --> "likes *" entity.community.PostLike
+entity.community.Post "1" --> "likes *" entity.community.PostLike
+entity.auth.User "1" --> "following *" entity.community.Follow : follower
+entity.auth.User "1" --> "followers *" entity.community.Follow : followee
+entity.auth.User "1" --> "savedPosts *" entity.community.SavedPost
+entity.community.Post "1" --> "savedBy *" entity.community.SavedPost
+
+' Learning hierarchy
+entity.learning.Language "1" --> "chapters *" entity.learning.Chapter
+entity.learning.Chapter "1" --> "lessons *" entity.learning.Lesson
+entity.learning.Lesson "1" --> "steps *" entity.learning.Step
+entity.learning.Lesson "1" --> "problems *" entity.learning.Problem
+entity.learning.Problem "1" --> "conditions *" entity.learning.ProblemCondition
+entity.learning.Problem "1" --> "language" entity.learning.Language
+
+' Progress relationships
+entity.auth.User "1" --> "enrollments *" entity.progress.Enrollment
+entity.learning.Language "1" --> "enrollments *" entity.progress.Enrollment
+entity.auth.User "1" --> "submissions *" entity.progress.Submission
+entity.learning.Lesson "1" --> "submissions *" entity.progress.Submission
+entity.learning.Problem "1" --> "submissions *" entity.progress.Problem
+entity.auth.User "1" --> "chapterProgress *" entity.progress.UserChapterProgress
+entity.learning.Chapter "1" --> "chapterProgress *" entity.progress.UserChapterProgress
+entity.auth.User "1" --> "lessonProgress *" entity.progress.UserLessonProgress
+entity.learning.Lesson "1" --> "lessonProgress *" entity.progress.UserLessonProgress
+
+' AI relationships
+entity.auth.User "1" --> "chats *" entity.AI.OpenAI
+entity.learning.Step "1" --> "chats *" entity.AI.OpenAI
+
+' Enum usages (dashed)
+entity.auth.User ..> enums.Status
+entity.learning.Language ..> enums.ContentStatus
+entity.learning.Chapter ..> enums.ContentStatus
+entity.learning.Lesson ..> enums.LessonType
+entity.learning.Lesson ..> enums.ContentStatus
+entity.learning.Step ..> enums.Type
+entity.learning.Step ..> enums.ContentStatus
+entity.learning.Problem ..> enums.Difficulty
+entity.learning.Problem ..> enums.ContentStatus
+entity.progress.Enrollment ..> enums.Status
+entity.progress.UserChapterProgress ..> enums.IsLocked
+entity.progress.UserChapterProgress ..> enums.IsCompleted
+entity.progress.UserLessonProgress ..> enums.IsLocked
+entity.progress.UserLessonProgress ..> enums.IsCompleted
+entity.System.Code ..> enums.Status
+
+@enduml

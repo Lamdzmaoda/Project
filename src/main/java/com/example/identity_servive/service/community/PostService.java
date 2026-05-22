@@ -8,6 +8,7 @@ import com.example.identity_servive.exception.AppException;
 import com.example.identity_servive.exception.ErrorCode;
 import com.example.identity_servive.mapper.PostMapper;
 import com.example.identity_servive.repository.auth.UserRepository;
+import com.example.identity_servive.repository.community.FollowRepository;
 import com.example.identity_servive.repository.community.PostLikeRepository;
 import com.example.identity_servive.repository.community.PostRepository;
 import com.example.identity_servive.repository.community.SavedPostRepository;
@@ -20,6 +21,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,6 +34,7 @@ public class PostService {
     PostMapper postMapper;
     PostLikeRepository postLikeRepository;
     SavedPostRepository savedPostRepository;
+    FollowRepository followRepository;
     UserRepository userRepository;
 
     public PostResponse createPost(PostRequest request, String userId) {
@@ -45,7 +50,16 @@ public class PostService {
         return postRepository.findAllByOrderByCreatedAtDesc(pageable)
                 .map(post -> buildPostResponse(post, currentUserId));
     }
-
+    public Page<PostResponse> getFollowingFeed(Pageable pageable, String currentUserId) {
+        var follows = followRepository.findByFollowerId(currentUserId);
+        if(follows.isEmpty()) {
+            return Page.empty(pageable);
+        }
+        List<String> followerIds = follows.stream().map(follow -> follow.getFollowee().getId())
+                .toList();
+        return postRepository.findByUserIdInOrderByCreatedAtDesc(followerIds, pageable)
+                .map(post -> buildPostResponse(post, currentUserId));
+    }
     public Page<PostResponse> getUserPosts(String userId, Pageable pageable, String currentUserId) {
         return postRepository.findByUserIdOrderByCreatedAtDesc(userId, pageable)
                 .map(post -> buildPostResponse(post, currentUserId));

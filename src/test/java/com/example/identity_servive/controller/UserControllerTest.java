@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.example.identity_servive.dto.request.AuthRequest.UserCreationRequest;
 import com.example.identity_servive.dto.response.authResponse.UserResponse;
+import com.example.identity_servive.service.auth.AuthenticationService;
 import com.example.identity_servive.service.auth.UserService;
 import java.time.LocalDate;
 
@@ -32,6 +33,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
+    @MockitoBean
+    private AuthenticationService authenticationService;
   @Autowired private MockMvc mockMvc;
   @MockitoBean private UserService userService;
   private UserCreationRequest request;
@@ -83,7 +86,7 @@ public class UserControllerTest {
   @Test
   void CreateUser_usernameInvalid_success() throws Exception {
     // GIVEN
-    request.setUsername("lamdz");
+    request.setUsername("lam");
     ObjectMapper mapper = new ObjectMapper();
     mapper.registerModule(new JavaTimeModule());
     String content = mapper.writeValueAsString(request);
@@ -98,7 +101,7 @@ public class UserControllerTest {
         .andExpect(jsonPath("code").value(1002))
         .andExpect(
             MockMvcResultMatchers.jsonPath("message")
-                .value("username must be at least 8 characters"));
+                .value("username must be at least 4 characters"));
 
     // THEN
   }

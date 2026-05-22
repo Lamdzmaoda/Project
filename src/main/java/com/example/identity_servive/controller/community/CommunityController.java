@@ -4,15 +4,20 @@ import com.example.identity_servive.dto.request.community.CommentRequest;
 import com.example.identity_servive.dto.request.community.PostRequest;
 import com.example.identity_servive.dto.response.ApiResponse;
 import com.example.identity_servive.dto.response.community.*;
+import com.example.identity_servive.service.cloudinary.CloudinaryService;
 import com.example.identity_servive.service.community.*;
 import com.example.identity_servive.service.learning.LearningProgressService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.content.Media;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.List;
 
@@ -29,6 +34,7 @@ public class CommunityController {
     FollowService followService;
     SavedPostService savedPostService;
     LearningProgressService learningProgressService;
+    CloudinaryService cloudinaryService;
 
     private String getCurrentUserId() {
         return learningProgressService.getCurrentUser().getId();
@@ -119,6 +125,12 @@ public class CommunityController {
                 .result(postLikeService.isLiked(postId, getCurrentUserId()))
                 .build();
     }
+    @GetMapping("/feed/following")
+    ApiResponse<Page<PostResponse>> getFollowingFeed(Pageable pageable) {
+        return ApiResponse.<Page<PostResponse>>builder()
+                .result(postService.getFollowingFeed(pageable, getCurrentUserId()))
+                .build();
+    }
 
     // ──────────────────────────────────────────────
     // FOLLOWS
@@ -200,6 +212,13 @@ public class CommunityController {
     ApiResponse<Boolean> isSaved(@PathVariable String postId) {
         return ApiResponse.<Boolean>builder()
                 .result(savedPostService.isSaved(postId, getCurrentUserId()))
+                .build();
+    }
+    @PostMapping(value = "upload-image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ApiResponse<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        String url = cloudinaryService.uploadFile(file, "community/posts");
+        return ApiResponse.<String>builder()
+                .result(url)
                 .build();
     }
 }

@@ -1,0 +1,37 @@
+@startuml
+skinparam dpi 120
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+skinparam useCaseFontSize 11
+skinparam actorFontSize 12
+
+left to right direction
+
+actor "Người học" as USER
+actor "Người tạo ND" as CREATOR
+actor "Hệ thống" as SYS
+
+rectangle "AI Tutor & Luyện code" {
+  (Chat với AI) as A1
+  (Xem lịch sử chat) as A2
+  (Chạy code sandbox) as P1
+  (Xem danh sách bài tập) as P2
+  (Nộp bài giải) as P3
+  (Xem kết quả chấm) as P4
+  (Xem lịch sử nộp) as P5
+  (Quản lý bài tập) as P6
+  (Quản lý test case) as P7
+
+  USER --> A1
+  USER --> A2
+  USER --> P1
+  USER --> P2
+  USER --> P3
+  USER --> P4
+  USER --> P5
+  CREATOR --> P6
+  CREATOR --> P7
+  SYS --> P4
+}
+
+@enduml

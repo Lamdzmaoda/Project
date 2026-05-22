@@ -1,0 +1,54 @@
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+title Triển khai Hệ thống Identity Service
+
+node "Client Devices" {
+  [Web Browser] as BROWSER
+  [Android Device] as ANDROID
+}
+
+node "Docker Host - Application Server" {
+  node "Docker Container: identity-service" as APP {
+    [Spring Boot App :8080] as SPRING
+    file "application.yaml" as CONFIG
+    file "Dockerfile" as DOCKER
+  }
+  node "Docker Container: judge0" as JUDGE0 {
+    [Ruby on Rails App] as JUDGE_RAILS
+    node "judge0-db" as JUDGE_DB {
+      database "PostgreSQL" as PGSQL
+    }
+  }
+}
+
+node "Database Server" {
+  node "MySQL :3636" as MYSQL_NODE {
+    database "identity_db" as MYSQL_DB
+    database "flyway_migrations" as MIGRATIONS
+  }
+}
+
+node "Cloud Services" {
+  cloud "Google OAuth2" as GOOGLE
+  cloud "Gemini AI API" as GEMINI
+  cloud "Qodana Code Quality" as QODANA
+}
+
+' Connections
+BROWSER --> SPRING : HTTP (localhost:3000)
+ANDROID --> SPRING : HTTP (REST API)
+SPRING --> MYSQL_DB : JDBC (port 3636)
+SPRING --> JUDGE_RAILS : REST API (code execution)
+SPRING --> GOOGLE : OAuth2
+SPRING --> GEMINI : Spring AI
+JUDGE_RAILS --> PGSQL : JDBC
+
+' Artifacts
+artifact "identity-service.jar" as JAR
+artifact "Dockerfile" as DOCKERFILE
+
+JAR --> SPRING : deployed as
+DOCKERFILE --> APP : builds
+
+@enduml

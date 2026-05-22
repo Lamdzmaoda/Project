@@ -1,0 +1,90 @@
+@startuml
+!theme plain
+skinparam classAttributeIconSize 0
+skinparam objectBorderColor #006400
+skinparam objectBackgroundColor #F0FFF0
+
+object "user: User" as user {
+  id = "u-001"
+  username = "john_doe"
+  email = "john@example.com"
+  displayName = "John Doe"
+  totalXp = 2500
+  level = 3
+  coin = 150
+  streak = 5
+  verified = true
+  status = ACTIVE
+}
+
+object "role: Role" as role {
+  name = "USER"
+  description = "Regular learner"
+}
+
+object "python: Language" as lang {
+  name = "Python"
+  description = "Learn Python programming"
+  slug = "python"
+  totalXp = 5000
+  status = ACTIVE
+}
+
+object "chapter1: Chapter" as chapter {
+  title = "Python Basics"
+  orderIndex = 1
+  totalXp = 1000
+  status = ACTIVE
+}
+
+object "lesson1: Lesson" as lesson {
+  title = "Variables & Data Types"
+  orderIndex = 1
+  xp = 200
+  lessonType = LEARN
+  status = ACTIVE
+}
+
+object "step1: Step" as step {
+  title = "What is a Variable?"
+  orderIndex = 1
+  type = TEXT
+}
+
+object "enrollment: Enrollment" as enroll {
+  currentXp = 450
+  progressPercentage = 45.0
+  status = ACTIVE
+}
+
+object "chapterProg: UserChapterProgress" as chProg {
+  progressPercentage = 100.0
+  lockedStatus = FALSE_LOCKED
+  completedStatus = TRUE
+}
+
+object "lessonProg: UserLessonProgress" as lsProg {
+  lockedStatus = FALSE_LOCKED
+  completedStatus = TRUE
+}
+
+object "post1: Post" as post {
+  content = "Just finished Python Basics!"
+  likeCount = 12
+  commentCount = 3
+}
+
+' Connections
+user --> role : has role
+user --> enroll : enrolled in
+enroll --> lang : learning
+lang --> chapter : contains
+chapter --> lesson : contains
+lesson --> step : contains
+chapter --> chProg : progress for
+lesson --> lsProg : progress for
+user --> chProg : tracks
+user --> lsProg : tracks
+user --> post : created
+
+@enduml

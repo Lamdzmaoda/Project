@@ -1,0 +1,90 @@
+@startuml
+!theme plain
+title Xác Thực - Luồng Đăng nhập & Truy cập API
+
+actor "Người dùng" as USER
+participant "Client\n(Web/Mobile)" as CLIENT
+participant "AuthenticationController" as CTRL
+participant "AuthenticationService" as SVC
+participant "UserRepository" as REPO
+participant "JwtDecoder" as JWT
+participant "SecurityContext" as SEC
+database "MySQL" as DB
+
+== Đăng nhập (Login) ==
+USER -> CLIENT: Nhập username + password
+CLIENT -> CTRL: POST /auth/token\n(username, password)
+CTRL -> SVC: authenticate(request)
+SVC -> REPO: findByUsername(username)
+REPO -> DB: SELECT * FROM users
+DB --> REPO: User entity
+REPO --> SVC: Optional<User>
+
+alt User không tồn tại
+  SVC --> CTRL: throw AppException\n(ErrorCode.USER_NOT_EXISTED)
+  CTRL --> CLIENT: 401 Invalid credentials
+  CLIENT --> USER: Hiển thị lỗi
+else User tồn tại
+  SVC -> SVC: BCrypt.verify(password, hash)
+  
+  alt Sai mật khẩu
+    SVC --> CTRL: throw AppException\n(ErrorCode.UNAUTHENTICATED)
+    CTRL --> CLIENT: 401 Invalid credentials
+  else Đúng mật khẩu
+    SVC -> SVC: Tạo JWT token\n(claims: username, roles, scopes)
+    SVC --> CTRL: AuthenticationResponse\n(accessToken, refreshToken, expiry)
+    CTRL --> CLIENT: 200 OK + Token
+    CLIENT --> USER: Đăng nhập thành công
+  end
+end
+
+== Truy cập API có xác thực ==
+USER -> CLIENT: Thao tác (vd: tạo bài viết)
+CLIENT -> CLIENT: Gắn JWT vào header\nAuthorization: Bearer <token>
+CLIENT -> CTRL: POST /api/community/posts\n+ JWT header
+
+alt Token không gửi
+  CTRL --> CLIENT: 401 Unauthorized
+else Token có gửi
+  CTRL -> SEC: SecurityContextHolder filter
+  SEC -> JWT: decode(token)
+  
+  alt Token hết hạn
+    JWT --> SEC: throw JWTException
+    SEC --> CTRL: 401 Token expired
+    CTRL --> CLIENT: 401 + message
+    CLIENT -> CTRL: POST /auth/refresh (refreshToken)
+    CTRL -> SVC: refresh(refreshToken)
+    SVC -> SVC: Validate refresh token
+    SVC --> CTRL: New AuthenticationResponse
+    CTRL --> CLIENT: 200 + new token
+    CLIENT -> CTRL: Retry request với token mới
+  else Token hợp lệ
+    JWT --> SEC: Authentication object
+    SEC -> SVC: introspect(token)
+    SVC -> SVC: Kiểm tra trong\nInvalidatedToken table
+    
+    alt Token bị thu hồi (đã logout)
+      SVC --> CTRL: throw AppException
+      CTRL --> CLIENT: 401 Token revoked
+    else Token còn hiệu lực
+      CTRL -> SVC: Xử lý request
+      SVC -> SVC: Business logic
+      SVC --> CTRL: Response DTO
+      CTRL --> CLIENT: 200 OK + Data
+      CLIENT --> USER: Hiển thị kết quả
+    end
+  end
+end
+
+== Đăng xuất (Logout) ==
+USER -> CLIENT: Nhấn Đăng xuất
+CLIENT -> CTRL: POST /auth/logout + JWT
+CTRL -> SVC: logout(token)
+SVC -> SVC: Lấy JTI từ token
+SVC -> SVC: Lưu JTI vào\nInvalidatedToken table
+SVC --> CTRL: Success
+CTRL --> CLIENT: 200 OK
+CLIENT --> USER: Đã đăng xuất
+
+@enduml

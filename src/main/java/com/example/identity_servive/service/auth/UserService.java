@@ -22,11 +22,13 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service // Đánh dấu là tầng Service, nơi xử lý logic nghiệp vụ
@@ -39,6 +41,7 @@ public class UserService {
     UserMapper userMapper;
     RoleRepository roleRepository;
     PasswordEncoder passwordEncoder;
+    UserSecurity userSecurity;
 
     /**
      * Nghiệp vụ: Tạo người dùng mới
@@ -48,7 +51,7 @@ public class UserService {
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
         else if (userRepository.existsByEmail(request.getEmail()))
-            throw new AppException(ErrorCode.USER_EXISTED);
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
         // 2. Chuyển đổi dữ liệu từ Request DTO sang Entity User
         User user = userMapper.toUser(request);
 
@@ -91,7 +94,7 @@ public class UserService {
     /**
      * Nghiệp vụ: Cập nhật thông tin người dùng
      */
-    @PreAuthorize("hasRole('ADMIN') or returnObject.username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or @userSecurity.isOwner(#userId)")
     public UserResponse updateUser(UserUpdateRequest request, String userId) {
         // 1. Tìm user hiện tại, nếu không có ném lỗi
         User user = userRepository.findById(userId)
@@ -154,4 +157,12 @@ public class UserService {
     public void deleteUserById(String userId) {
         userRepository.deleteById(userId);
     }
+
+    public String updateAvatar(String avatarUrl){
+        User user = getCurrentUser();
+        user.setAvatarUrl(avatarUrl);
+        userRepository.save(user);
+        return avatarUrl;
+    }
+
 }

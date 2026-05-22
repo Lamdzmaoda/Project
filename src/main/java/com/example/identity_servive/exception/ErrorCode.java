@@ -51,8 +51,9 @@ public enum ErrorCode {
     NULL_POINTER(1020, "null pointer exception", HttpStatus.BAD_REQUEST),
     CREATE_FAIL(1022, "create fail", HttpStatus.BAD_REQUEST),
     ALREADY_EXISTED(1023, "already existed", HttpStatus.BAD_REQUEST),
-    INVALID_REQUEST(1024, "invalid request", HttpStatus.BAD_REQUEST);
-
+    INVALID_REQUEST(1024, "invalid request", HttpStatus.BAD_REQUEST),
+    EMAIL_EXISTED(1025, "email exists", HttpStatus.BAD_REQUEST),
+    UPLOAD_FAILED(1026, "upload failed", HttpStatus.BAD_REQUEST);
   // Mã số lỗi định danh (giúp Frontend dễ dàng bắt lỗi bằng code thay vì so sánh chuỗi)
   private int code = 2000;
 

@@ -1,0 +1,62 @@
+@startuml
+skinparam dpi 120
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 9
+skinparam packageFontSize 11
+skinparam packageBorderThickness 1
+skinparam package {
+  BackgroundColor #F5F5F8
+  BorderColor #444444
+}
+skinparam rectangle {
+  BackgroundColor #E8EAF6
+  BorderColor #333366
+  FontSize 8
+}
+
+scale max 1200x850
+left to right direction
+
+rectangle "APPCODETEST" as APP #FFFFFF {
+  rectangle "Authentication\n& Người dùng" as AUTH {
+    (Đăng ký / Đăng nhập)
+    (JWT / Refresh Token)
+    (Hồ sơ cá nhân)
+    (Quản lý user & quyền)
+  }
+
+  rectangle "Hệ thống\nhọc tập" as LEARN {
+    (Language / Chapter / Lesson)
+    (Step: THEORY - QUIZ - FILL - CODE)
+    (Ghi danh & Tiến độ)
+    (AI Chat trong bài)
+  }
+
+  rectangle "Luyện code\n& Chấm bài" as PRACTICE {
+    (Code Runner - Docker)
+    (Bài tập & Test case)
+    (Nộp bài - Judge0)
+    (Runtime / Memory)
+  }
+
+  rectangle "Cộng đồng\nhọc tập" as COMM {
+    (Bài viết / Bình luận)
+    (Thích / Lưu / Theo dõi)
+    (Feed / Trending)
+    (Báo cáo & Duyệt)
+  }
+
+  rectangle "Gamification" as GAME {
+    (XP / Coin / Level)
+    (Huy hiệu / Xếp hạng)
+    (Streak / Daily Quest)
+  }
+
+  rectangle "Nâng cao" as ADV {
+    (Tìm kiếm / Tag)
+    (Gói đăng ký)
+    (Thông báo / Sự kiện)
+  }
+}
+
+@enduml

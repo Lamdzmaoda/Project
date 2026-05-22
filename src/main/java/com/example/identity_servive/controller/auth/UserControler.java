@@ -6,6 +6,7 @@ import com.example.identity_servive.dto.request.AuthRequest.UserCreationRequest;
 import com.example.identity_servive.dto.request.AuthRequest.UserUpdateRequest;
 import com.example.identity_servive.dto.response.authResponse.UserResponse;
 import com.example.identity_servive.service.auth.UserService;
+import com.example.identity_servive.service.cloudinary.CloudinaryService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AccessLevel;
@@ -13,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Controller quản lý thông tin người dùng.
@@ -28,7 +31,7 @@ public class UserControler {
 
     @Autowired // Tiêm lớp UserService để xử lý logic nghiệp vụ
     UserService userService;
-
+    CloudinaryService cloudinaryService;
     /**
      * API Tạo người dùng mới (Đăng ký)
      * URL: POST /users
@@ -97,7 +100,12 @@ public class UserControler {
         // Nhận dữ liệu cần sửa và ID người dùng để thực hiện cập nhật
         return userService.updateUser(request, userId);
     }
-
+    @PostMapping(value = "/upload-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ApiResponse<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        String url = cloudinaryService.uploadFile(file, "avatars");
+        userService.updateAvatar(url);
+        return ApiResponse.<String>builder().result(url).build();
+    }
     /**
      * API Xóa người dùng khỏi hệ thống
      * URL: DELETE /users/{userId}

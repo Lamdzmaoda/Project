@@ -1,0 +1,79 @@
+@startuml
+!theme plain
+skinparam componentStyle rectangle
+
+title Hệ thống Identity Service - Biểu đồ Component
+
+package "Clients" {
+  [Web Client (React)] as WEB
+  [Android App (Kotlin)] as MOBILE
+  [Postman/API Client] as API_CLIENT
+}
+
+package "Identity Service (Spring Boot)" as IDENTITY {
+  [Authentication Controller] as AUTH_CTRL
+  [User Controller] as USER_CTRL
+  [Role/Permission Controller] as ROLE_CTRL
+  [Community Controller] as COMM_CTRL
+  [Course Controller] as COURSE_CTRL
+  [Learning Controller] as LEARN_CTRL
+  [Chat Controller] as CHAT_CTRL
+
+  [Authentication Service] as AUTH_SVC
+  [User Service] as USER_SVC
+  [Community Service] as COMM_SVC
+  [Course Service] as COURSE_SVC
+  [Learning Service] as LEARN_SVC
+  [AI Chat Service] as AI_SVC
+  [Judge0 Service] as JUDGE_SVC
+
+  [Spring Security / JWT] as SECURITY
+  [Spring Data JPA] as JPA
+  [Spring AI / Gemini] as SPRING_AI
+  [Spring Cloud OpenFeign] as FEIGN
+
+  AUTH_CTRL --> AUTH_SVC
+  USER_CTRL --> USER_SVC
+  ROLE_CTRL --> AUTH_SVC
+  COMM_CTRL --> COMM_SVC
+  COURSE_CTRL --> COURSE_SVC
+  LEARN_CTRL --> LEARN_SVC
+  CHAT_CTRL --> AI_SVC
+
+  AUTH_SVC --> SECURITY
+  AUTH_SVC --> JPA
+  USER_SVC --> JPA
+  COMM_SVC --> JPA
+  COURSE_SVC --> JPA
+  LEARN_SVC --> JPA
+  AI_SVC --> SPRING_AI
+  JUDGE_SVC --> JPA
+}
+
+package "External Systems" {
+  [MySQL Database] as MYSQL
+  [Google OAuth2 API] as GOOGLE
+  [Judge0 Code Runner] as JUDGE0
+  [Gemini AI API] as GEMINI
+}
+
+' Connections
+WEB --> AUTH_CTRL : REST/JSON
+MOBILE --> AUTH_CTRL : REST/JSON
+API_CLIENT --> AUTH_CTRL : REST/JSON
+WEB --> COMM_CTRL
+MOBILE --> COMM_CTRL
+WEB --> COURSE_CTRL
+MOBILE --> COURSE_CTRL
+WEB --> LEARN_CTRL
+MOBILE --> LEARN_CTRL
+WEB --> CHAT_CTRL
+MOBILE --> CHAT_CTRL
+
+JPA --> MYSQL : JDBC
+AUTH_SVC --> GOOGLE : OAuth2 (Feign)
+JUDGE_SVC --> JUDGE0 : REST API
+SPRING_AI --> GEMINI : AI API
+SECURITY --> GOOGLE : OAuth2 Resource Server
+
+@enduml

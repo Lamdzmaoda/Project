@@ -1,0 +1,33 @@
+@startuml
+skinparam dpi 120
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+skinparam useCaseFontSize 11
+skinparam actorFontSize 12
+
+left to right direction
+
+actor "Người học" as USER
+actor "Quản trị viên" as ADMIN
+
+rectangle "Authentication & Người dùng" {
+  (Đăng ký) as UC1
+  (Đăng nhập) as UC2
+  (Đăng xuất) as UC3
+  (Refresh Token) as UC4
+  (Xem hồ sơ) as UC5
+  (Cập nhật hồ sơ) as UC6
+  (Quản lý người dùng) as UC7
+  (Quản lý quyền) as UC8
+
+  USER --> UC1
+  USER --> UC2
+  USER --> UC3
+  USER --> UC4
+  USER --> UC5
+  USER --> UC6
+  ADMIN --> UC7
+  ADMIN --> UC8
+}
+
+@enduml

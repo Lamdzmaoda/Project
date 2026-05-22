@@ -1,0 +1,65 @@
+@startuml
+!theme plain
+title Luồng Xác Thực - Đăng nhập & Gọi API
+
+start
+:Người dùng mở ứng dụng;
+:Chọn "Đăng nhập";
+
+repeat
+  :Nhập username & password;
+  :Gửi request POST /auth/token;
+  :Server nhận request;
+
+  fork
+    :Kiểm tra username có tồn tại?;
+    if (Không tìm thấy) then (lỗi)
+      :Trả về lỗi\n"Invalid credentials";
+      note right: ErrorCode 1003
+    endif
+  fork again
+    :Kiểm tra password\n(bcrypt verify)?;
+    if (Sai mật khẩu) then (lỗi)
+      :Trả về lỗi\n"Invalid credentials";
+    endif
+  end fork
+
+  if (Có lỗi xác thực?) then (Có)
+    :Hiển thị thông báo lỗi;
+  else (Không)
+    :Tạo JWT access token (1h);
+    :Tạo refresh token (100h);
+    :Trả về AuthenticationResponse;
+    :Người dùng lưu JWT\nvào localStorage/SharedPref;
+  endif
+repeat while (Xác thực thất bại\nvà muốn thử lại?) is (Có)
+->Không;
+
+:Người dùng gọi API\nyêu cầu xác thực;
+:Gửi JWT trong header\nAuthorization: Bearer <token>;
+
+:CustomJwtDecoder\ngiải mã & xác thực JWT;
+
+if (Token hợp lệ?) then (Có)
+  :Kiểm tra token\ncó trong blacklist?;
+  if (Đã bị thu hồi?) then (Có)
+    :Trả về 401 Unauthorized\n"Token revoked";
+    stop
+  else (Chưa)
+    :Cho phép truy cập resource;
+  endif
+else (Không hợp lệ)
+  :Gọi POST /auth/refresh\nvới refresh token;
+  if (Refresh token hợp lệ?) then (Có)
+    :Cấp JWT mới;
+    :Thử lại request ban đầu;
+  else (Không)
+    :Yêu cầu đăng nhập lại;
+    stop
+  endif
+endif
+
+:Xử lý nghiệp vụ\n(Controller → Service → Repository);
+:Trả về kết quả cho Client;
+stop
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+!theme plain
+hide footbox
+hide lifeline
+skinparam backgroundColor #FEFEFE
+skinparam participantBorderColor #3333AA
+skinparam participantBackgroundColor #E6F0FF
+skinparam actorBorderColor #3333AA
+
+title Communication Diagram - Tạo bài viết cộng đồng
+
+actor "Người dùng" as User
+participant ":CommunityController" as CTRL
+participant ":PostService" as SVC
+participant ":PostRepository" as REPO
+participant ":UserRepository" as UREPO
+database ":MySQL" as DB
+
+' === Liên kết cấu trúc giữa các object ===
+User -left-> CTRL : HTTP
+CTRL -right-> SVC : calls
+SVC -down-> REPO : uses
+SVC -up-> UREPO : uses
+REPO -right-> DB : JDBC
+
+' === Thông điệp theo số thứ tự ===
+User -left-> CTRL : "1: POST /api/community/posts\n  (content, imageUrl, codeSnippet)"
+
+CTRL -right-> SVC : "2: createPost(request,\n  currentUserId)"
+
+SVC -up-> UREPO : "3: findById(userId)"
+
+UREPO --> SVC : "4: return User entity"
+
+SVC -down-> REPO : "5: save(post)"
+
+REPO -right-> DB : "6: INSERT INTO posts"
+
+DB --> REPO : "7: generated ID"
+
+REPO --> SVC : "8: return Post entity"
+
+SVC --> CTRL : "9: return PostResponse"
+
+CTRL --> User : "10: 201 Created\n  + PostResponse JSON"
+
+@enduml

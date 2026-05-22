@@ -1,0 +1,51 @@
+@startuml
+skinparam dpi 120
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+skinparam useCaseFontSize 11
+skinparam actorFontSize 12
+
+left to right direction
+
+actor "Người học" as USER
+actor "Kiểm duyệt" as MOD
+
+rectangle "Cộng đồng" {
+  (Tạo bài viết) as C1
+  (Bình luận) as C2
+  (Thích bài viết) as C3
+  (Lưu bài viết) as C4
+  (Theo dõi người dùng) as C5
+  (Xem feed) as C6
+  (Báo cáo vi phạm) as C7
+  (Duyệt nội dung) as C8
+
+  USER --> C1
+  USER --> C2
+  USER --> C3
+  USER --> C4
+  USER --> C5
+  USER --> C6
+  USER --> C7
+  MOD --> C8
+}
+
+rectangle "Gamification" {
+  (Nhận XP) as G1
+  (Nhận Coin) as G2
+  (Lên level) as G3
+  (Nhận huy hiệu) as G4
+  (Xem bảng xếp hạng) as G5
+  (Điểm danh hàng ngày) as G6
+  (Làm nhiệm vụ) as G7
+
+  USER --> G1
+  USER --> G2
+  USER --> G3
+  USER --> G4
+  USER --> G5
+  USER --> G6
+  USER --> G7
+}
+
+@enduml

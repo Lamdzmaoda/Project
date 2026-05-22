@@ -1,0 +1,64 @@
+@startuml
+skinparam dpi 110
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 9
+skinparam packageFontSize 11
+skinparam packageBorderThickness 1
+skinparam package {
+  BackgroundColor #F5F5F8
+  BorderColor #444444
+}
+skinparam rectangle {
+  BackgroundColor #E8EAF6
+  BorderColor #333366
+  FontColor #333333
+  FontSize 9
+}
+skinparam node {
+  BackgroundColor #F5F5F5
+  BorderColor #666666
+  FontSize 8
+}
+
+scale max 1200x850
+left to right direction
+
+rectangle "APPCODETEST\nHệ thống học lập trình" as APP #FFFFFF {
+  rectangle "Authentication\n& Người dùng" as AUTH {
+    (Đăng ký / Đăng nhập)
+    (JWT Token)
+    (Hồ sơ cá nhân)
+    (Quản lý user & quyền)
+  }
+
+  rectangle "Hệ thống\nhọc tập" as LEARN {
+    (Language / Chapter / Lesson / Step)
+    (THEORY - QUIZ - FILL - CODE)
+    (Ghi danh & Tiến độ)
+    (AI Chat trong bài học)
+  }
+
+  rectangle "Luyện code\n& Chấm bài" as PRACTICE {
+    (Code Runner - Docker sandbox)
+    (Bài tập & Test case)
+    (Nộp bài - Judge0)
+    (Runtime / Memory tracking)
+  }
+
+  rectangle "Cộng đồng\nhọc tập" as COMM {
+    (Bài viết / Bình luận)
+    (Thích / Lưu / Theo dõi)
+    (Feed & Trending)
+    (Báo cáo & Duyệt nội dung)
+  }
+
+  rectangle "Gamification\n& Nâng cao" as GAME {
+    (XP / Coin / Level)
+    (Huy hiệu / Bảng xếp hạng)
+    (Streak / Daily Quest)
+    (Tìm kiếm / Gói đăng ký)
+    (Thông báo / Sự kiện)
+  }
+}
+
+@enduml

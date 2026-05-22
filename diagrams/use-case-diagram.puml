@@ -1,0 +1,85 @@
+@startuml
+!theme plain
+left to right direction
+skinparam usecaseBorderColor #0000AA
+skinparam usecaseBackgroundColor #E6F0FF
+skinparam actorBorderColor #0000AA
+
+title Hệ thống Identity Service - Use Case Diagram
+
+actor "Người dùng\n(User)" as USER
+actor "Quản trị viên\n(Admin)" as ADMIN
+actor "Google OAuth" as GOOGLE
+actor "Gemini AI" as AI
+actor "Judge0" as JUDGE0
+
+rectangle "Xác thực & Người dùng" as AUTH {
+  usecase "UC1: Đăng ký tài khoản" as UC1
+  usecase "UC2: Đăng nhập" as UC2
+  usecase "UC3: Đăng nhập bằng Google" as UC3
+  usecase "UC4: Xem thông tin cá nhân" as UC4
+  usecase "UC5: Cập nhật hồ sơ" as UC5
+  usecase "UC6: Đăng xuất" as UC6
+  usecase "UC7: Quản lý người dùng" as UC7
+  usecase "UC8: Quản lý Role & Permission" as UC8
+}
+
+rectangle "Khóa học & Học tập" as LEARN {
+  usecase "UC9: Xem danh sách ngôn ngữ" as UC9
+  usecase "UC10: Ghi danh khóa học" as UC10
+  usecase "UC11: Học bài học (Steps)" as UC11
+  usecase "UC12: Làm bài tập code" as UC12
+  usecase "UC13: Xem tiến độ học tập" as UC13
+  usecase "UC14: Quản lý nội dung khóa học" as UC14
+}
+
+rectangle "Cộng đồng" as COMM {
+  usecase "UC15: Tạo bài viết" as UC15
+  usecase "UC16: Bình luận" as UC16
+  usecase "UC17: Thích bài viết" as UC17
+  usecase "UC18: Theo dõi người dùng" as UC18
+  usecase "UC19: Lưu bài viết" as UC19
+}
+
+rectangle "AI & Code" as AI_CODE {
+  usecase "UC20: Chat với AI Tutor" as UC20
+  usecase "UC21: Chạy code Python" as UC21
+}
+
+' Actor to Use Case
+USER --> UC1
+USER --> UC2
+USER --> UC3
+USER --> UC4
+USER --> UC5
+USER --> UC6
+USER --> UC9
+USER --> UC10
+USER --> UC11
+USER --> UC12
+USER --> UC13
+USER --> UC15
+USER --> UC16
+USER --> UC17
+USER --> UC18
+USER --> UC19
+USER --> UC20
+USER --> UC21
+
+ADMIN --> UC7
+ADMIN --> UC8
+ADMIN --> UC14
+ADMIN --> UC15
+ADMIN --> UC16
+
+' External actors
+GOOGLE <-- UC3 : extends
+AI <-- UC20 : extends
+JUDGE0 <-- UC21 : extends
+
+' Include relationships
+UC2 <. UC3 : includes
+UC11 <. UC20 : includes (hỗ trợ AI)
+UC12 <. UC21 : includes
+
+@enduml

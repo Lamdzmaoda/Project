@@ -1,0 +1,79 @@
+@startuml
+!theme plain
+left to right direction
+skinparam packageStyle rectangle
+
+package "com.example.identity_servive" {
+
+  package "controller" as CONTROLLER {
+    package "auth" as AUTH_CTRL
+    package "community" as COMM_CTRL
+    package "learning" as LEARN_CTRL
+  }
+
+  package "service" as SERVICE {
+    package "auth" as AUTH_SVC
+    package "community" as COMM_SVC
+    package "learning" as LEARN_SVC
+    package "ai" as AI_SVC
+    package "system" as SYS_SVC
+  }
+
+  package "repository" as REPO {
+    package "auth" as AUTH_REPO
+    package "community" as COMM_REPO
+    package "learning" as LEARN_REPO
+    package "progress" as PROG_REPO
+    package "ai" as AI_REPO
+  }
+
+  package "entity" as ENTITY {
+    package "auth" as AUTH_ENT
+    package "community" as COMM_ENT
+    package "learning" as LEARN_ENT
+    package "progress" as PROG_ENT
+    package "AI" as AI_ENT
+    package "System" as SYS_ENT
+  }
+
+  package "dto" as DTO {
+    package "request" as REQ_DTO
+    package "response" as RES_DTO
+  }
+
+  package "configuration"
+  package "exception"
+  package "enums"
+  package "mapper"
+  package "validator"
+  package "constant"
+}
+
+CONTROLLER --> SERVICE : uses
+SERVICE --> REPO : uses
+SERVICE --> DTO : maps
+REPO --> ENTITY : persists
+SERVICE --> ENTITY : reads/writes
+SERVICE --> configuration : uses
+SERVICE --> exception : throws
+SERVICE --> enums : uses
+SERVICE --> mapper : maps
+SERVICE --> validator : validates
+
+AUTH_CTRL --> AUTH_SVC
+COMM_CTRL --> COMM_SVC
+LEARN_CTRL --> LEARN_SVC
+
+AUTH_SVC --> AUTH_REPO
+COMM_SVC --> COMM_REPO
+LEARN_SVC --> LEARN_REPO
+LEARN_SVC --> PROG_REPO
+AI_SVC --> AI_REPO
+
+AUTH_REPO --> AUTH_ENT
+COMM_REPO --> COMM_ENT
+LEARN_REPO --> LEARN_ENT
+PROG_REPO --> PROG_ENT
+AI_REPO --> AI_ENT
+
+@enduml
