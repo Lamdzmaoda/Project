@@ -1,5 +1,5 @@
 ﻿server:
-  port: 8080 # ß╗¿ng dß╗Ñng chß║íy tr├¬n cß╗òng 8080
+  port: ${PORT:8080} # ß╗¿ng dß╗Ñng chß║íy tr├¬n cß╗òng 8080
   servlet:
     context-path: /identity # ─É╞░ß╗¥ng dß║½n gß╗æc cß╗ºa API (VD: http://localhost:8080/identity/users)
 
@@ -8,8 +8,6 @@ spring:
     # URL kß║┐t nß╗æi ─æß║┐n MySQL. Port 3636 l├á cß╗òng ─æ├ú ─æ╞░ß╗úc map tß╗½ Docker ra m├íy thß║¡t.
     # ${DBMS_CONNECTION:...} gi├║p linh hoß║ít thay ─æß╗òi URL khi chß║íy tr├¬n server thß║¡t.
     url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3636/identity-servive}
-
-    # T├ái khoß║ún v├á mß║¡t khß║⌐u kß║┐t nß╗æi Database
     username: ${DBMS_USER:root}
     password: ${DBMS_PASSWORD:lamdzbodoi}
 
