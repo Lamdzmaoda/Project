@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F172A">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- HEADER -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="STEP EDITOR"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- TITLE -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textColor="#94A3B8"/>
+
+        <EditText
+            android:id="@+id/edtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            android:background="#FFFFFF"
+            android:padding="12dp"
+            android:textColor="#000000"/>
+
+        <!-- TYPE -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type"
+            android:textColor="#94A3B8"
+            android:layout_marginTop="20dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="6dp"
+            android:background="#FFFFFF"/>
+
+        <!-- CONTENT -->
+
+        <LinearLayout
+            android:id="@+id/layoutContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Content"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/edtContent"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:layout_marginTop="6dp"
+                android:background="#FFFFFF"
+                android:gravity="top"
+                android:padding="12dp"
+                android:textColor="#000000"/>
+        </LinearLayout>
+
+        <!-- QUIZ -->
+
+        <LinearLayout
+            android:id="@+id/layoutQuiz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Question"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/edtQuestion"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="6dp"
+                android:background="#FFFFFF"
+                android:gravity="top"
+                android:padding="12dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Options"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/layoutOptions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:id="@+id/btnAddOption"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="+ Add Option"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#334155"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Correct Value"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/edtCorrectValue"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="6dp"
+                android:background="#FFFFFF"
+                android:padding="12dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Explanation"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/edtExplanation"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="6dp"
+                android:background="#FFFFFF"
+                android:gravity="top"
+                android:padding="12dp"
+                android:textColor="#000000"/>
+        </LinearLayout>
+
+        <!-- CODE -->
+
+        <LinearLayout
+            android:id="@+id/layoutCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Template"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/edtTemplate"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="6dp"
+                android:background="#FFFFFF"
+                android:gravity="top"
+                android:padding="12dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Answers"
+                android:textColor="#94A3B8"
+                android:layout_marginTop="20dp"/>
+
+            <LinearLayout
+                android:id="@+id/layoutAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"/>
+
+            <Button
+                android:id="@+id/btnAddAnswer"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:text="+ Add Answer"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#334155"
+                android:layout_marginTop="10dp"/>
+        </LinearLayout>
+
+        <!-- SAVE -->
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="SAVE STEP"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#6366F1"/>
+
+    </LinearLayout>
+
+</ScrollView>

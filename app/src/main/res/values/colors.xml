@@ -1,0 +1,15 @@
+<resources>
+
+    <color name="black">#000000</color>
+
+    <color name="white">#FFFFFF</color>
+
+    <color name="dark_bg">#060F1F</color>
+
+    <color name="dark_surface">#0B162B</color>
+
+    <color name="blue_primary">#2563EB</color>
+
+    <color name="gray_text">#94A3B8</color>
+
+</resources>

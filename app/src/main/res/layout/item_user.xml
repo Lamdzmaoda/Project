@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:orientation="horizontal"
+
+    android:layout_marginBottom="16dp"
+
+    android:padding="18dp"
+
+    android:background="@drawable/bg_card_secondary">
+
+    <!-- AVATAR -->
+
+    <TextView
+        android:id="@+id/txtAvatar"
+
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+
+        android:gravity="center"
+
+        android:text="A"
+
+        android:textColor="#FFFFFF"
+
+        android:textSize="24sp"
+
+        android:textStyle="bold"
+
+        android:background="@drawable/bg_avatar"/>
+
+    <!-- INFO -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_weight="1"
+
+        android:orientation="vertical"
+
+        android:layout_marginStart="14dp">
+
+        <!-- NAME -->
+
+        <TextView
+            android:id="@+id/txtName"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="admin"
+
+            android:textColor="#FFFFFF"
+
+            android:textStyle="bold"
+
+            android:textSize="18sp"/>
+
+        <!-- ROLE -->
+
+        <TextView
+            android:id="@+id/txtRole"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="ADMIN"
+
+            android:textColor="#3B82F6"
+
+            android:textStyle="bold"
+
+            android:textSize="11sp"
+
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+
+            android:layout_marginTop="5dp"
+
+            android:background="@drawable/bg_role"/>
+
+        <!-- EMAIL -->
+
+        <TextView
+            android:id="@+id/txtEmail"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="admin@gmail.com"
+
+            android:textColor="#CBD5E1"
+
+            android:textSize="13sp"
+
+            android:maxLines="1"
+
+            android:ellipsize="end"
+
+            android:layout_marginTop="7dp"/>
+
+        <!-- DATE -->
+
+        <TextView
+            android:id="@+id/txtDate"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Ngày tạo: 24/05/2026"
+
+            android:textColor="#94A3B8"
+
+            android:textSize="12sp"
+
+            android:layout_marginTop="7dp"/>
+    </LinearLayout>
+
+    <!-- ACTION -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+
+        android:gravity="center"
+
+        android:layout_marginStart="10dp">
+
+        <!-- EDIT -->
+
+        <TextView
+            android:id="@+id/btnEdit"
+
+            android:layout_width="110dp"
+            android:layout_height="44dp"
+
+            android:text="✏ CHỈNH SỬA"
+
+            android:textColor="#3B82F6"
+
+            android:textStyle="bold"
+
+            android:textSize="12sp"
+
+            android:gravity="center"
+
+            android:background="@drawable/bg_button_outline"/>
+
+        <!-- DELETE -->
+
+        <TextView
+            android:id="@+id/btnDelete"
+
+            android:layout_width="110dp"
+            android:layout_height="44dp"
+
+            android:text="🗑 XÓA"
+
+            android:textColor="#3B82F6"
+
+            android:textStyle="bold"
+
+            android:textSize="12sp"
+
+            android:gravity="center"
+
+            android:layout_marginTop="10dp"
+
+            android:background="@drawable/bg_delete_button"/>
+    </LinearLayout>
+
+</LinearLayout>

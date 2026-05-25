@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginBottom="18dp"
+
+    android:background="@drawable/bg_card_primary"
+
+    android:orientation="horizontal"
+
+    android:padding="18dp"
+
+    android:gravity="center_vertical">
+
+    <!-- ====================================== -->
+    <!-- LEFT ICON -->
+    <!-- ====================================== -->
+
+    <LinearLayout
+        android:layout_width="62dp"
+        android:layout_height="62dp"
+
+        android:background="@drawable/bg_lesson_progress"
+
+        android:gravity="center"
+
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/txtLessonIcon"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="📘"
+
+            android:textSize="26sp"/>
+    </LinearLayout>
+
+    <!-- ====================================== -->
+    <!-- CENTER -->
+    <!-- ====================================== -->
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_weight="1"
+
+        android:layout_marginStart="16dp"
+
+        android:orientation="vertical">
+
+        <!-- LESSON -->
+
+        <TextView
+            android:id="@+id/txtTitle"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="Biến là gì?"
+
+            android:textColor="@android:color/white"
+
+            android:textStyle="bold"
+
+            android:textSize="21sp"/>
+
+        <!-- SUB -->
+
+        <TextView
+            android:id="@+id/txtSubtitle"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="5dp"
+
+            android:text="5 phút • Beginner"
+
+            android:textColor="#94A3B8"
+
+            android:textSize="13sp"/>
+
+        <!-- STATUS -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="10dp"
+
+            android:background="@drawable/bg_button_primary"
+
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="6dp">
+
+            <TextView
+                android:id="@+id/txtStatus"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="BÀI HỌC"
+
+                android:textColor="@android:color/white"
+
+                android:textStyle="bold"
+
+                android:textSize="11sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ====================================== -->
+    <!-- RIGHT -->
+    <!-- ====================================== -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:orientation="vertical"
+
+        android:gravity="center_horizontal">
+
+        <!-- XP -->
+
+        <TextView
+            android:id="@+id/txtXp"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="+50 XP"
+
+            android:textColor="#FACC15"
+
+            android:textStyle="bold"
+
+            android:textSize="14sp"/>
+
+        <!-- START BUTTON -->
+
+        <LinearLayout
+            android:id="@+id/btnStart"
+
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+
+            android:layout_marginTop="10dp"
+
+            android:gravity="center"
+
+            android:background="@drawable/bg_lesson_progress"
+
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="▶"
+
+                android:textColor="@android:color/white"
+
+                android:textStyle="bold"
+
+                android:textSize="18sp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

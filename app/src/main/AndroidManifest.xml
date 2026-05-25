@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- INTERNET -->
+
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
+
+    <!-- READ IMAGE ANDROID 13+ -->
+
+    <uses-permission
+        android:name="android.permission.READ_MEDIA_IMAGES"/>
+
+    <!-- READ IMAGE ANDROID 12- -->
+
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Democode3"
+        android:usesCleartextTraffic="true">
+
+        <!-- LOGIN -->
+
+        <activity
+            android:name=".features.auth.ui.activity.LoginActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Democode3">
+
+            <intent-filter>
+
+                <action
+                    android:name=
+                        "android.intent.action.MAIN" />
+
+                <category
+                    android:name=
+                        "android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+
+        </activity>
+
+        <!-- REGISTER -->
+
+        <activity
+            android:name=".features.auth.ui.activity.RegisterActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <!-- MAIN -->
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <!-- ADMIN -->
+
+        <activity
+            android:name=".features.admin.ui.activity.AdminActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.UserManagerActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.CourseEditorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.ChapterEditorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.LessonEditorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.StepEditorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <!-- LESSON DETAIL -->
+
+        <activity
+            android:name=
+                ".features.learning.ui.activity.LessonDetailActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".features.admin.ui.activity.StepListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.ProblemEditorActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.admin.ui.activity.ProblemListActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Democode3" />
+
+        <activity
+            android:name=".features.community.ui.activity.PostDetailActivity"
+            android:exported="false"/>
+
+        <activity
+            android:name=".features.profile.ui.activity.SearchUserActivity"
+            android:exported="false"/>
+
+    </application>
+
+</manifest>

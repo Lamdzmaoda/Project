@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+
+    android:background="@color/dark_bg">
+
+    <!-- ====================================== -->
+    <!-- TOP BAR -->
+    <!-- ====================================== -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+
+        android:orientation="horizontal"
+
+        android:gravity="center_vertical"
+
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp">
+
+        <TextView
+            android:id="@+id/btnClose"
+
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+
+            android:text="✕"
+
+            android:textColor="@android:color/white"
+
+            android:textSize="22sp"
+
+            android:gravity="center"/>
+
+        <!-- PROGRESS -->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="8dp"
+
+            android:layout_weight="1"
+
+            android:layout_marginHorizontal="18dp"
+
+            android:background="#1E293B">
+
+            <View
+                android:id="@+id/progressView"
+
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:background="#2563EB"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtStepProgress"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="1 / 5"
+
+            android:textColor="#3B82F6"
+
+            android:textStyle="bold"
+
+            android:textSize="16sp"/>
+    </LinearLayout>
+
+    <!-- ====================================== -->
+    <!-- CONTENT -->
+    <!-- ====================================== -->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+
+            android:padding="24dp">
+
+            <!-- CONTENT -->
+
+            <TextView
+                android:id="@+id/txtContent"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:textColor="@android:color/white"
+
+                android:textSize="24sp"
+
+                android:lineSpacingExtra="8dp"/>
+
+            <!-- QUIZ -->
+
+            <LinearLayout
+                android:id="@+id/layoutQuiz"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+
+                android:visibility="gone"
+
+                android:layout_marginTop="28dp">
+
+                <Button
+                    android:id="@+id/btnAnswerA"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+
+                    android:textColor="@android:color/white"
+
+                    android:textSize="18sp"
+
+                    android:textAllCaps="false"
+
+                    android:backgroundTint="#182447"
+
+                    android:layout_marginBottom="16dp"/>
+
+                <Button
+                    android:id="@+id/btnAnswerB"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="72dp"
+
+                    android:textColor="@android:color/white"
+
+                    android:textSize="18sp"
+
+                    android:textAllCaps="false"
+
+                    android:backgroundTint="#182447"/>
+            </LinearLayout>
+
+            <!-- CODE -->
+
+            <LinearLayout
+                android:id="@+id/layoutCode"
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+
+                android:visibility="gone"
+
+                android:layout_marginTop="28dp">
+
+                <TextView
+                    android:id="@+id/txtCodeQuestion"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:textColor="@android:color/white"
+
+                    android:textSize="22sp"
+
+                    android:layout_marginBottom="20dp"/>
+
+                <!-- EDITOR -->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:orientation="vertical"
+
+                    android:background="@drawable/bg_card_primary">
+
+                    <!-- FILE -->
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+
+                        android:background="#1E293B"
+
+                        android:gravity="center_vertical"
+
+                        android:paddingHorizontal="18dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="🐍"
+
+                            android:textSize="18sp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="main.py"
+
+                            android:textColor="@android:color/white"
+
+                            android:textStyle="bold"
+
+                            android:textSize="16sp"
+
+                            android:layout_marginStart="10dp"/>
+                    </LinearLayout>
+
+                    <!-- CODE -->
+
+                    <LinearLayout
+                        android:id="@+id/layoutCodeSlots"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+
+                        android:orientation="vertical"
+
+                        android:padding="20dp"
+
+                        android:background="#0F172A"/>
+                </LinearLayout>
+
+                <!-- WORDS -->
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:scrollbars="none"
+
+                    android:layout_marginTop="18dp">
+
+                    <LinearLayout
+                        android:id="@+id/layoutCodeWords"
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:orientation="horizontal"/>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- ====================================== -->
+    <!-- NORMAL FOOTER -->
+    <!-- ====================================== -->
+
+    <LinearLayout
+        android:id="@+id/layoutNormalFooter"
+
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+
+        android:gravity="center"
+
+        android:paddingHorizontal="24dp">
+
+        <Button
+            android:id="@+id/btnNext"
+
+            android:layout_width="match_parent"
+            android:layout_height="58dp"
+
+            android:text="TIẾP TỤC"
+
+            android:textColor="@android:color/white"
+
+            android:textStyle="bold"
+
+            android:textSize="17sp"
+
+            android:backgroundTint="#2563EB"/>
+    </LinearLayout>
+
+    <!-- ====================================== -->
+    <!-- CODE FOOTER -->
+    <!-- ====================================== -->
+
+    <LinearLayout
+        android:id="@+id/layoutCodeFooter"
+
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+
+        android:orientation="horizontal"
+
+        android:gravity="center_vertical"
+
+        android:paddingHorizontal="18dp"
+
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/btnResetCode"
+
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+
+            android:text="↻"
+
+            android:textColor="@android:color/white"
+
+            android:textSize="20sp"
+
+            android:backgroundTint="#1E293B"/>
+
+        <Button
+            android:id="@+id/btnClearCode"
+
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+
+            android:layout_marginStart="12dp"
+
+            android:text="⌫"
+
+            android:textColor="@android:color/white"
+
+            android:textSize="18sp"
+
+            android:backgroundTint="#1E293B"/>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnCheckCode"
+
+            android:layout_width="170dp"
+            android:layout_height="56dp"
+
+            android:text="KIỂM TRA"
+
+            android:textColor="@android:color/white"
+
+            android:textStyle="bold"
+
+            android:textSize="16sp"
+
+            android:backgroundTint="#2563EB"/>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:orientation="horizontal"
+
+    android:paddingStart="18dp"
+    android:paddingEnd="18dp"
+
+    android:layout_marginBottom="16dp">
+
+    <!-- TIMELINE -->
+
+    <LinearLayout
+        android:layout_width="24dp"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+
+        android:gravity="top|center_horizontal">
+
+        <!-- DOT -->
+
+        <View
+            android:id="@+id/viewDot"
+
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+
+            android:layout_marginTop="24dp"
+
+            android:background="@drawable/bg_button_primary"/>
+
+        <!-- LINE -->
+
+        <View
+            android:id="@+id/viewLine"
+
+            android:layout_width="2dp"
+            android:layout_height="100dp"
+
+            android:background="#1E3A8A"/>
+    </LinearLayout>
+
+    <!-- CARD -->
+
+    <LinearLayout
+        android:id="@+id/layoutCard"
+
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+
+        android:layout_weight="1"
+
+        android:orientation="horizontal"
+
+        android:gravity="center_vertical"
+
+        android:padding="18dp"
+
+        android:background="@drawable/bg_card_primary">
+
+        <!-- ICON -->
+
+        <LinearLayout
+            android:id="@+id/layoutIcon"
+
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+
+            android:gravity="center"
+
+            android:background="@drawable/bg_lesson_progress">
+
+            <TextView
+                android:id="@+id/txtLessonIcon"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="▶"
+
+                android:textColor="@android:color/white"
+
+                android:textStyle="bold"
+
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <!-- CONTENT -->
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:layout_weight="1"
+
+            android:layout_marginStart="16dp"
+
+            android:orientation="vertical">
+
+            <!-- TITLE -->
+
+            <TextView
+                android:id="@+id/txtTitle"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Biến là gì?"
+
+                android:textColor="@android:color/white"
+
+                android:textStyle="bold"
+
+                android:textSize="17sp"
+
+                android:maxLines="2"/>
+
+            <!-- STATUS -->
+
+            <TextView
+                android:id="@+id/txtStatus"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="Đang học"
+
+                android:textColor="#3B82F6"
+
+                android:textStyle="bold"
+
+                android:textSize="12sp"
+
+                android:layout_marginTop="6dp"/>
+
+            <!-- SUB -->
+
+            <TextView
+                android:id="@+id/txtSubtitle"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="6 phút"
+
+                android:textColor="#94A3B8"
+
+                android:textSize="12sp"
+
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
+
+        <!-- RIGHT -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:orientation="vertical"
+
+            android:gravity="center_horizontal|center_vertical">
+
+            <!-- XP -->
+
+            <TextView
+                android:id="@+id/txtXp"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="+50 XP"
+
+                android:textColor="#FACC15"
+
+                android:textStyle="bold"
+
+                android:textSize="12sp"/>
+
+            <!-- BUTTON -->
+
+            <TextView
+                android:id="@+id/btnStart"
+
+                android:layout_width="78dp"
+                android:layout_height="34dp"
+
+                android:layout_marginTop="10dp"
+
+                android:gravity="center"
+
+                android:text="Tiếp tục"
+
+                android:textColor="@android:color/white"
+
+                android:textStyle="bold"
+
+                android:textSize="12sp"
+
+                android:background="@drawable/bg_button_primary"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
