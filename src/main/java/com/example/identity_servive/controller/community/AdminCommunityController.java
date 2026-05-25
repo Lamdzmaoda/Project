@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.controller.community;
 
 import com.example.identity_servive.dto.response.ApiResponse;
@@ -17,20 +18,20 @@ import org.springframework.web.bind.annotation.*;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AdminCommunityController {
 
-    PostRepository postRepository;
-    CommentRepository commentRepository;
+  PostRepository postRepository;
+  CommentRepository commentRepository;
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/posts/{postId}")
-    ApiResponse<Void> adminDeletePost(@PathVariable String postId) {
-        postRepository.deleteById(postId);
-        return ApiResponse.<Void>builder().build();
-    }
+  @PreAuthorize("hasRole('ADMIN')")
+  @DeleteMapping("/posts/{postId}")
+  ApiResponse<Void> adminDeletePost(@PathVariable String postId) {
+    postRepository.deleteById(postId);
+    return ApiResponse.<Void>builder().build();
+  }
 
-    @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/comments/{commentId}")
-    ApiResponse<Void> adminDeleteComment(@PathVariable String commentId) {
-        commentRepository.deleteById(commentId);
-        return ApiResponse.<Void>builder().build();
-    }
+  @PreAuthorize("hasRole('ADMIN')")
+  @DeleteMapping("/comments/{commentId}")
+  ApiResponse<Void> adminDeleteComment(@PathVariable String commentId) {
+    commentRepository.deleteById(commentId);
+    return ApiResponse.<Void>builder().build();
+  }
 }

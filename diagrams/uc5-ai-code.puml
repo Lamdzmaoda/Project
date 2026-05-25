@@ -1,0 +1,31 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #C0392B
+skinparam usecaseBackgroundColor #FADBD8
+skinparam actorBorderColor #C0392B
+
+left to right direction
+title 🤖 AI Tutor & Chạy code
+
+actor "Người dùng" as USER
+actor "Gemini AI" as AI
+actor "Judge0" as JUDGE0
+
+rectangle "Hệ thống" {
+  (Hỏi bài AI Tutor) as A1
+  (Xem lịch sử chat) as A2
+  (Chạy thử code Python) as A3
+}
+
+USER --> A1
+USER --> A2
+USER --> A3
+
+AI <-- A1
+JUDGE0 <-- A3
+
+@enduml

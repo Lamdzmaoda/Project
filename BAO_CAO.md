@@ -197,5 +197,119 @@ identity-service/
 
 ---
 
+## 3. CHUẨN HÓA
+
+### 3.1 Chuẩn hóa 1NF
+
+Một bảng được gọi là ở dạng 1NF nếu miền giá trị của một thuộc tính chỉ chứa giá trị nguyên tố đơn (không phân chia được) và giá trị của mỗi thuộc tính cũng là một giá trị đơn lấy từ miền giá trị của nó. Để bảng đạt chuẩn hóa dạng 1NF:
+- Các thuộc tính của bảng phải là nguyên tố không phải là thuộc tính đa trị
+- Giá trị của các thuộc tính trên bảng phải là đơn trị - không chứa nhóm lặp
+- Không có một thuộc tính nào có giá trị có thể tính toán được từ một thuộc tính khác
+- Xác định được thuộc tính khóa chính
+
+**Các vi phạm 1NF trong hệ thống:**
+
+1. **Step.data** — cột JSON chứa nhiều giá trị (`correctValue`, ...) trong một ô, vi phạm nguyên tắc đơn trị.
+2. **Post.likeCount** / **Post.commentCount** — các trường có thể tính toán được từ bảng `PostLike` và `Comment`.
+
+**Sau chuẩn hóa 1NF**, ta có các bảng dữ liệu như sau:
+
+| Tên bảng | Thuộc tính |
+|----------|-----------|
+| **users** | id, username, password, email, displayName, avatarUrl, bio, coin, longestStreak, verified, status, streak, lastActivityDate, birthDate, totalXp, createdAt, updatedAt |
+| **role** | name, description |
+| **permission** | name, description |
+| **invalidated_token** | id, expiryTime |
+| **language** | name, description, icon, durationDays, totalXp, slug, status, createAt, updateAt |
+| **chapter** | id, title, orderIndex, description, slug, totalXp, status, language_id, createAt, updateAt |
+| **lesson** | id, title, description, slug, thumbnailUrl, orderIndex, xp, lessonType, status, chapter_id, createAt, updateAt |
+| **step** | id, orderIndex, title, type, status, lesson_id, createAt, updateAt |
+| **step_data** | id, step_id, correctValue, content |
+| **problem** | id, title, slug, description, difficulty, hint, methodName, orderIndex, solutionCode, expectedOutput, language_id, lesson_id, status, createAt, updateAt |
+| **problem_condition** | id, problem_id, expectedCode, hint, orderIndex |
+| **enrollment** | id, currentXp, status, progressPercentage, enrolledAt, completedAt, user_id, language_id, createdAt, updatedAt |
+| **user_lesson_progress** | id, user_id, lesson_id, lockedStatus, completedStatus, createdAt, updatedAt |
+| **user_chapter_progress** | id, user_id, chapter_id, progressPercentage, lockedStatus, completedStatus, createdAt, updatedAt |
+| **submission** | id, user_id, lesson_id, problem_id, code, output, passed, createdAt |
+| **post** | id, user_id, content, imageUrl, codeSnippet, createdAt, updatedAt |
+| **comment** | id, post_id, user_id, parent_id, content, createdAt |
+| **post_like** | id, post_id, user_id, createdAt |
+| **saved_post** | id, user_id, post_id, savedAt |
+| **follow** | id, follower_id, followee_id, createdAt |
+| **openai** | id, user_id, step_id, userMessage, aiExplanation, suggestedCode, motivationMessage, createAt |
+| **openai_hints** | openai_id, hints |
+| **code** | id, language, status, errorType, line, columnIndex, errorLineCode, pointer, messageVn, input, output |
+| **users_roles** | user_id, role_id |
+| **roles_permissions** | role_id, permission_id |
+
+### 3.2 Chuẩn hóa 2NF
+
+- Phải thỏa mãn chuẩn 1NF
+- Phụ thuộc hàm đầy đủ vào khóa chính
+- Với các quan hệ có tính khóa đơn thì không phải xét – chỉ kiểm tra lược đồ có chứa phụ thuộc hàm bộ phận
+
+**Nhận xét:** Tất cả các bảng trong hệ thống đều sử dụng khóa chính đơn (UUID hoặc String), không có khóa ghép. Do đó không tồn tại phụ thuộc hàm bộ phận — **các bảng đã thỏa mãn chuẩn 2NF**, không cần tách thêm.
+
+---
+
+## 4. TỔNG KẾT
+
+• Sau khi chuẩn hóa 1NF và 2NF ta có những bảng sau:
+
+| Tên Bảng | Thuộc Tính |
+|----------|-----------|
+| **user** | id, username, password, email, displayName, avatarUrl, bio, coin, streak, longestStreak, verified, totalXp, birthDate, lastActivityDate, status, createdAt, updatedAt |
+| **language** | languageName, description, icon, durationDays, totalXp, slug, status, createAt, updateAt |
+| **chapter** | id, title, orderIndex, description, slug, totalXp, status, language_id, createAt, updateAt |
+| **lesson** | id, title, description, slug, thumbnailUrl, orderIndex, xp, lessonType, status, chapter_id, createAt, updateAt |
+| **step** | id, orderIndex, title, type, status, lesson_id, createAt, updateAt |
+| **step_data** | id, step_id, correctValue, content |
+| **problem** | id, title, slug, description, difficulty, hint, methodName, orderIndex, solutionCode, expectedOutput, language_id, lesson_id, status, createAt, updateAt |
+| **problem_condition** | id, problem_id, expectedCode, hint, orderIndex |
+| **enrollment** | id, currentXp, status, progressPercentage, enrolledAt, completedAt, user_id, language_id, createdAt, updatedAt |
+| **user_lesson_progress** | id, user_id, lesson_id, lockedStatus, completedStatus, createdAt, updatedAt |
+| **user_chapter_progress** | id, user_id, chapter_id, progressPercentage, lockedStatus, completedStatus, createdAt, updatedAt |
+| **submission** | id, user_id, lesson_id, problem_id, code, output, passed, createdAt |
+| **post** | id, user_id, content, imageUrl, codeSnippet, createdAt, updatedAt |
+| **comment** | id, post_id, user_id, parent_id, content, createdAt |
+| **post_like** | id, post_id, user_id, createdAt |
+| **saved_post** | id, user_id, post_id, savedAt |
+| **follow** | id, follower_id, followee_id, createdAt |
+| **openai** | id, user_id, step_id, userMessage, aiExplanation, suggestedCode, motivationMessage, createAt |
+| **openai_hints** | openai_id, hints |
+| **code** | id, language, status, errorType, line, columnIndex, errorLineCode, pointer, messageVn, input, output |
+| **role** | name, description |
+| **permission** | name, description |
+| **invalidated_token** | id, expiryTime |
+| **users_roles** | user_id, roles_name |
+| **roles_permissions** | role_name, permissions_name |
+
+---
+
+## 9. ĐẶC ĐIỂM NGƯỜI SỬ DỤNG
+
+Dựa vào khảo sát, chúng tôi nhận định đặc điểm của người sử dụng hệ thống AppCodeTest gồm có:
+
+- **Quản trị viên (Admin):**
+  Sử dụng toàn bộ các chức năng của hệ thống như quản lý người dùng, quản lý khóa học/ngôn ngữ lập trình, quản lý bài tập (problems), kiểm duyệt bài viết cộng đồng, quản lý vai trò và phân quyền, xem thống kê người dùng và doanh thu từ gói thuê bao.
+
+- **Người học (Học viên):**
+  Thực hiện đăng ký tài khoản, chọn ngôn ngữ lập trình để học, xem lý thuyết và làm bài tập (quiz, điền code, lập trình), trò chuyện với AI Tutor để được hỗ trợ, tham gia cộng đồng (đăng bài, bình luận), theo dõi tiến độ học tập, tích lũy XP/coin, nhận huy hiệu (badge) và leo bảng xếp hạng.
+
+---
+
+## 10. YÊU CẦU HỆ THỐNG
+
+| Thành phần | Mô tả |
+|------------|-------|
+| Ngôn ngữ lập trình | Back-end: Java 21, Spring Boot 4.0.3, Maven |
+| Cơ sở dữ liệu | MySQL 8.0 (production), H2 in-memory (test) |
+| Hệ điều hành | Cross-platform (Docker Alpine Linux, Windows, macOS, Linux) |
+| RAM | Tối thiểu 2GB |
+| CPU | Intel Core i3 hoặc tương đương trở lên |
+| Container | Docker, Docker Compose (Judge0) |
+
+---
+
 *Người hỗ trợ: OpenCode AI*
 *File documentation: PROJECT_ANALYSIS.md*

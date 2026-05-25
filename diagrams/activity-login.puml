@@ -1,0 +1,28 @@
+@startuml
+!theme plain
+title Activity Dang nhap
+
+start
+:He thong hien thi man hinh dang nhap;
+:Nguoi dung nhap ten tai khoan
+va mat khau;
+:He thong kiem tra thong tin
+dang nhap;
+
+if (Thong tin hop le?) then (Co)
+  :Tao JWT token;
+  :Chuyen den man hinh chinh;
+  :Thuc hien chuc nang theo quyen;
+  stop
+else (Khong)
+  :Hien thi thong bao loi;
+  if (So lan nhap sai > 3?) then (Co)
+    :Khoa tai khoan tam thoi;
+    stop
+  else (Khong)
+    :Yeu cau nhap lai;
+    detach
+  endif
+endif
+
+@enduml

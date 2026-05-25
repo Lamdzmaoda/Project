@@ -30,7 +30,8 @@ public class Code {
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
   String id;
-  String language;     // Ngôn ngữ dùng (python, java, c++)
+
+  String language; // Ngôn ngữ dùng (python, java, c++)
   Status status;
   String errorType;
   Integer line;
@@ -40,5 +41,4 @@ public class Code {
   String messageVn;
   String input;
   String output;
-
 }

@@ -2,7 +2,6 @@
 package com.example.identity_servive.dto.response.authResponse;
 
 import java.util.Set;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

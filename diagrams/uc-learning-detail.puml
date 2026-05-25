@@ -7,32 +7,28 @@ skinparam actorFontSize 12
 
 left to right direction
 
-actor "Người học" as USER
-actor "Người tạo ND" as CREATOR
+actor "Người dùng" as USER
 actor "Hệ thống" as SYS
 
-rectangle "Hệ thống học tập" {
-  (Quản lý ngôn ngữ) as L1
-  (Quản lý chương) as L2
-  (Quản lý bài học) as L3
-  (Quản lý bước học) as L4
-  (Ghi danh khóa học) as L5
-  (Học lý thuyết) as L6
-  (Làm quiz) as L7
-  (Điền code) as L8
-  (Xem tiến độ) as L9
-  (Tự động unlock) as L10
+rectangle "Học tập & Tiến độ" {
+  (Ghi danh khóa học) as L1
+  (Xem cây học tập) as L2
+  (Nộp bài LEARN) as L3
+  (Nộp bài code PRACTICE) as L4
+  (Hoàn tất bài PRACTICE) as L5
+  (Xem tiến độ học tập) as L6
+  (Reset tiến độ) as L7
+  (Tự động unlock chương mới) as L8
 
+  USER --> L1
+  USER --> L2
+  USER --> L3
+  USER --> L4
   USER --> L5
   USER --> L6
   USER --> L7
-  USER --> L8
-  USER --> L9
-  CREATOR --> L1
-  CREATOR --> L2
-  CREATOR --> L3
-  CREATOR --> L4
-  SYS --> L10
+  SYS --> L8
+  L4 <. L5 : includes
 }
 
 @enduml

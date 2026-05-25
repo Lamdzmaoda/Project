@@ -1,0 +1,28 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #27AE60
+skinparam usecaseBackgroundColor #D5F5E3
+skinparam actorBorderColor #27AE60
+
+left to right direction
+title 👤 Quản lý hồ sơ cá nhân
+
+actor "Người dùng" as USER
+
+rectangle "Hệ thống" {
+  (Xem thông tin) as P1
+  (Cập nhật thông tin) as P2
+  (Đổi mật khẩu) as P3
+  (Upload ảnh đại diện) as P4
+}
+
+USER --> P1
+USER --> P2
+USER --> P3
+USER --> P4
+
+@enduml

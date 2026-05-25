@@ -7,18 +7,22 @@ skinparam actorFontSize 12
 
 left to right direction
 
-actor "Người học" as USER
+actor "Người dùng" as USER
 actor "Quản trị viên" as ADMIN
+actor "Google OAuth" as GOOGLE
 
-rectangle "Authentication & Người dùng" {
-  (Đăng ký) as UC1
+rectangle "Xác thực & Người dùng" {
+  (Đăng ký tài khoản) as UC1
   (Đăng nhập) as UC2
-  (Đăng xuất) as UC3
+  (Đăng nhập bằng Google) as UC3
   (Refresh Token) as UC4
-  (Xem hồ sơ) as UC5
-  (Cập nhật hồ sơ) as UC6
-  (Quản lý người dùng) as UC7
-  (Quản lý quyền) as UC8
+  (Đăng xuất) as UC5
+  (Xem thông tin cá nhân) as UC6
+  (Cập nhật hồ sơ) as UC7
+  (Upload avatar) as UC8
+  (Quản lý người dùng) as UC9
+  (Quản lý Role) as UC10
+  (Quản lý Permission) as UC11
 
   USER --> UC1
   USER --> UC2
@@ -26,8 +30,12 @@ rectangle "Authentication & Người dùng" {
   USER --> UC4
   USER --> UC5
   USER --> UC6
-  ADMIN --> UC7
-  ADMIN --> UC8
+  USER --> UC7
+  USER --> UC8
+  ADMIN --> UC9
+  ADMIN --> UC10
+  ADMIN --> UC11
+  GOOGLE <-- UC3
 }
 
 @enduml

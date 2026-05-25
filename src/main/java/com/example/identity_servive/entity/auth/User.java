@@ -1,16 +1,12 @@
 /* (C)2026 */
 package com.example.identity_servive.entity.auth;
 
-
 import com.example.identity_servive.enums.Status;
-import com.example.identity_servive.exception.ErrorCode;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
@@ -40,41 +36,32 @@ public class User {
   String id;
 
   // Tên đăng nhập (Username)
-  @Column(
-      name = "username",
-      unique = true
-  )
+  @Column(name = "username", unique = true)
   String username;
 
   // Mật khẩu (Lưu ý: Trong thực tế, trường này PHẢI lưu mật khẩu đã băm/hash) ;
   String password;
-  @Email
-  @NonNull
-  String email;
+  @Email @NonNull String email;
 
   String displayName;
 
-    String avatarUrl;        // Ảnh đại diện
+  String avatarUrl; // Ảnh đại diện
 
-    String bio;              // Tiểu sử
+  String bio; // Tiểu sử
 
-    int coin = 0;           // Tiền trong game
+  int coin = 0; // Tiền trong game
 
-    int longestStreak = 0;  // Streak cao nhất
+  int longestStreak = 0; // Streak cao nhất
 
-    boolean verified = false;  // Đã xác minh email
+  boolean verified = false; // Đã xác minh email
 
-    @Builder.Default
-    Status status = Status.ACTIVE;  // ACTIVE / BANNED / DISABLED
+  @Builder.Default Status status = Status.ACTIVE; // ACTIVE / BANNED / DISABLED
 
-    @CreationTimestamp
-    LocalDateTime createdAt;
-    @UpdateTimestamp
-    LocalDateTime updatedAt;
+  @CreationTimestamp LocalDateTime createdAt;
+  @UpdateTimestamp LocalDateTime updatedAt;
   static final int XP_PER_LEVEL = 1000;
 
-  @Builder.Default
-  int streak = 0;
+  @Builder.Default int streak = 0;
 
   LocalDate lastActivityDate;
 
@@ -86,7 +73,7 @@ public class User {
   Long totalXp = 0L;
 
   @ManyToMany Set<Role> roles;
-  
+
   @Transient
   public int getLevel() {
     if (totalXp == null) return 1;

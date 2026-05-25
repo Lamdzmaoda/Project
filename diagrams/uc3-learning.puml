@@ -1,0 +1,35 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #8E44AD
+skinparam usecaseBackgroundColor #E8DAEF
+skinparam actorBorderColor #8E44AD
+
+left to right direction
+title 📚 Học tập
+
+actor "Người dùng" as USER
+
+rectangle "Hệ thống" {
+  (Ghi danh môn học) as L1
+  (Xem cây bài học) as L2
+  (Học lý thuyết) as L3
+  (Luyện tập code) as L4
+  (Xem tiến độ) as L5
+  (Học lại từ đầu) as L6
+}
+
+USER --> L1
+USER --> L2
+USER --> L3
+USER --> L4
+USER --> L5
+USER --> L6
+
+L4 ..> L3 : includes
+L6 ..> L5 : includes
+
+@enduml

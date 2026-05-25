@@ -4,8 +4,6 @@ package com.example.identity_servive.dto.request.AuthRequest;
 import com.example.identity_servive.validator.DobConstraint;
 import java.time.LocalDate;
 import java.util.List;
-
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,11 +20,11 @@ public class UserUpdateRequest {
   // Tên mới
   String displayName;
 
-    String avatarUrl;        // Ảnh đại diện
+  String avatarUrl; // Ảnh đại diện
 
-    String bio;
+  String bio;
 
-    // Ngày sinh cần cập nhật
+  // Ngày sinh cần cập nhật
   @DobConstraint(min = 10, message = "INVALID_DOB")
   LocalDate birthDate;
 

@@ -24,8 +24,7 @@ import lombok.experimental.FieldDefaults;
 public class ApiResponse<T> {
 
   // Mã code tùy chỉnh (ví dụ: 1000 là thành công, 1001 là lỗi validate, v.v.)
-    @Builder.Default
-  int code = 2000;
+  @Builder.Default int code = 2000;
 
   // Thông điệp giải thích về kết quả trả về
   String message;

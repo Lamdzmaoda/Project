@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.response.learningResponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -12,12 +13,10 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class VerifyResponse {
-    boolean isCorrect;
-    long earnedXp;
-    String message;
-    Object correctAnswer; // Đáp án đúng từ DB
-    Object userOutput;    // Output thực tế (nếu là Code thì là kết quả chạy code)
-    com.example.identity_servive.enums.Type type;
-
-
+  boolean isCorrect;
+  long earnedXp;
+  String message;
+  Object correctAnswer; // Đáp án đúng từ DB
+  Object userOutput; // Output thực tế (nếu là Code thì là kết quả chạy code)
+  com.example.identity_servive.enums.Type type;
 }

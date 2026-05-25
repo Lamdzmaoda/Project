@@ -1,10 +1,10 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.response.learningResponse;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -14,8 +14,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LessonBatchResponse {
-    Long totalXpGained;
-    double progressPercentage;
-    boolean isNewlyCompleted;
-    List<VerifyResponse> verifyResponses;
+  Long totalXpGained;
+  double progressPercentage;
+  boolean isNewlyCompleted;
+  List<VerifyResponse> verifyResponses;
 }

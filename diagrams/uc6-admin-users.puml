@@ -1,0 +1,33 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #1B4F72
+skinparam usecaseBackgroundColor #D4E6F1
+skinparam actorBorderColor #1B4F72
+
+left to right direction
+title 🔐 Quản lý người dùng & phân quyền
+
+actor "Quản trị viên" as ADMIN
+
+rectangle "Hệ thống" {
+  (Xem danh sách người dùng) as U1
+  (Xem chi tiết người dùng) as U2
+  (Xoá người dùng) as U3
+  (Tạo / xoá vai trò) as U4
+  (Gán quyền cho vai trò) as U5
+}
+
+ADMIN --> U1
+ADMIN --> U2
+ADMIN --> U3
+ADMIN --> U4
+ADMIN --> U5
+
+U2 ..> U1 : includes
+U5 ..> U4 : includes
+
+@enduml

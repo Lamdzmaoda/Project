@@ -7,31 +7,26 @@ skinparam actorFontSize 12
 
 left to right direction
 
-actor "Người học" as USER
-actor "Người tạo ND" as CREATOR
-actor "Hệ thống" as SYS
+actor "Người dùng" as USER
+actor "Gemini AI" as AI
+actor "Judge0" as JUDGE0
 
-rectangle "AI Tutor & Luyện code" {
-  (Chat với AI) as A1
-  (Xem lịch sử chat) as A2
-  (Chạy code sandbox) as P1
-  (Xem danh sách bài tập) as P2
-  (Nộp bài giải) as P3
-  (Xem kết quả chấm) as P4
-  (Xem lịch sử nộp) as P5
-  (Quản lý bài tập) as P6
-  (Quản lý test case) as P7
+rectangle "AI Tutor & Chat" {
+  (Chat với AI Tutor) as A1
+  (Lấy lịch sử chat) as A2
 
   USER --> A1
   USER --> A2
+  AI <-- A1
+}
+
+rectangle "Chạy code Python" {
+  (Chạy code qua Judge0) as P1
+  (Parse lỗi code) as P2
+
   USER --> P1
-  USER --> P2
-  USER --> P3
-  USER --> P4
-  USER --> P5
-  CREATOR --> P6
-  CREATOR --> P7
-  SYS --> P4
+  JUDGE0 <-- P1
+  P1 <. P2 : includes
 }
 
 @enduml

@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.response.community;
 
 import lombok.*;
@@ -10,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserResponse {
-    String id;
-    String username;
-    String avatar;
+  String id;
+  String username;
+  String avatar;
 }

@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.ai;
 
 import lombok.*;
@@ -10,5 +11,5 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PythonRequest {
-    private String code;
+  private String code;
 }

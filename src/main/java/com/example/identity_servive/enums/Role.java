@@ -2,8 +2,8 @@
 package com.example.identity_servive.enums;
 
 public enum Role {
-    CREATOR,
+  CREATOR,
   ADMIN,
-    MODERATOR,
+  MODERATOR,
   USER
 }

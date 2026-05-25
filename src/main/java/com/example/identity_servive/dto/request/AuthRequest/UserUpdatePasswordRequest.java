@@ -1,17 +1,14 @@
 /* (C)2026 */
 package com.example.identity_servive.dto.request.AuthRequest;
 
-import com.example.identity_servive.validator.DobConstraint;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.List;
-
 /**
- * Class đại diện cho yêu cầu cập nhật thông tin người dùng. Chứa các trường dữ liệu mà người dùng
- * được phép thay đổi.
+ * Class đại diện cho yêu cầu đổi mật khẩu của người dùng. Người dùng phải gửi mật khẩu cũ
+ * (oldPassword) để xác thực và mật khẩu mới (newPassword) để cập nhật.
  */
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @NoArgsConstructor // Tạo constructor không tham số (Bắt buộc cho Jackson/Spring)
@@ -19,7 +16,14 @@ import java.util.List;
 @Builder // Hỗ trợ khởi tạo đối tượng theo pattern Builder
 @FieldDefaults(level = AccessLevel.PRIVATE) // Tự động đặt tất cả các field là 'private'
 public class UserUpdatePasswordRequest {
-  // Tên mới
-    @Size(min = 8, message = "PASSWORD_INVALID")
-  String password;
+
+  // Mật khẩu hiện tại — dùng để xác thực trước khi cho phép đổi
+  @NotBlank(message = "PASSWORD_INVALID")
+  String oldPassword;
+
+  // Mật khẩu mới — sẽ được mã hóa trước khi lưu vào DB
+  @NotBlank(message = "PASSWORD_INVALID")
+  @Size(min = 8, message = "PASSWORD_INVALID")
+  @Size(max = 20, message = "PASSWORD_TOO_LONG")
+  String newPassword;
 }

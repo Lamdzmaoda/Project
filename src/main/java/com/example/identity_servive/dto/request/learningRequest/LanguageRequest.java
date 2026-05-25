@@ -1,12 +1,10 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.learningRequest;
-
-
-import com.example.identity_servive.enums.Status;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -15,10 +13,10 @@ import java.util.List;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LanguageRequest {
-    String name;
-    String description;
-    String icon;
-    String slug;           // Đường dẫn URL (VD: java -> java-slug)
-    LocalDateTime durationDays;
-    List<String> chapters;
+  String name;
+  String description;
+  String icon;
+  String slug; // Đường dẫn URL (VD: java -> java-slug)
+  LocalDateTime durationDays;
+  List<String> chapters;
 }

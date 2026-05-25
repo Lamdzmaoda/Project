@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.mapper;
 
 import com.example.identity_servive.dto.request.community.PostRequest;
@@ -9,11 +10,11 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
-    Post toPost(PostRequest request);
+  Post toPost(PostRequest request);
 
-    @Mapping(target = "likeCount", ignore = true)
-    @Mapping(target = "commentCount", ignore = true)
-    @Mapping(target = "likedByMe", ignore = true)
-    @Mapping(target = "savedByMe", ignore = true)
-    PostResponse toPostResponse(Post post);
+  @Mapping(target = "likeCount", ignore = true)
+  @Mapping(target = "commentCount", ignore = true)
+  @Mapping(target = "likedByMe", ignore = true)
+  @Mapping(target = "savedByMe", ignore = true)
+  PostResponse toPostResponse(Post post);
 }

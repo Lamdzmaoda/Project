@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.learningRequest;
 
 import com.example.identity_servive.enums.*;
@@ -11,11 +12,11 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class StepRequest {
-    String lessonId;
-    String title;
-    Type type;
-    int orderIndex;
-    String slug;
-    String thumbnailUrl;
-    Object data;
+  String lessonId;
+  String title;
+  Type type;
+  int orderIndex;
+  String slug;
+  String thumbnailUrl;
+  Object data;
 }

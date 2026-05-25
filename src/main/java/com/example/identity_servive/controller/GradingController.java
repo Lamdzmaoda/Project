@@ -1,16 +1,17 @@
+/* (C)2026 */
 package com.example.identity_servive.controller;
 //
 //
-//import com.example.identity_servive.dto.request.GradedRequest;
-//import com.example.identity_servive.dto.response.GradedResponse;
-//import com.example.identity_servive.service.GradedService;
-//import jakarta.validation.Valid;
-//import lombok.RequiredArgsConstructor;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.*;
+// import com.example.identity_servive.dto.request.GradedRequest;
+// import com.example.identity_servive.dto.response.GradedResponse;
+// import com.example.identity_servive.service.GradedService;
+// import jakarta.validation.Valid;
+// import lombok.RequiredArgsConstructor;
+// import lombok.extern.slf4j.Slf4j;
+// import org.springframework.http.ResponseEntity;
+// import org.springframework.web.bind.annotation.*;
 //
-///**
+/// **
 // * Controller xử lý chấm bài tự động sử dụng AI
 // *
 // * API endpoints:
@@ -18,12 +19,12 @@ package com.example.identity_servive.controller;
 // * - POST /api/v1/grading/grade-code → Chấm bài code
 // * - POST /api/v1/grading/grade-mcq → Chấm bài trắc nghiệm
 // */
-//@RestController
-//@RequestMapping("/api/v1/grading")
-//@RequiredArgsConstructor
-//@CrossOrigin("*")
-//@Slf4j
-//public class GradingController {
+// @RestController
+// @RequestMapping("/api/v1/grading")
+// @RequiredArgsConstructor
+// @CrossOrigin("*")
+// @Slf4j
+// public class GradingController {
 //
 //    private final GradingService gradingService;
 //
@@ -119,4 +120,4 @@ package com.example.identity_servive.controller;
 //    public ResponseEntity<String> healthCheck() {
 //        return ResponseEntity.ok("Grading service is running!");
 //    }
-//}
+// }

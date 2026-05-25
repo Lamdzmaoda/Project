@@ -1,10 +1,10 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.learningRequest;
 
 import com.example.identity_servive.enums.Difficulty;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -13,16 +13,16 @@ import java.util.List;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProblemRequest {
-    String lessonId;
-    String title;
-    String description;
-    String content;
-    String slug;
-    int orderIndex;
-    String expectedOutput;
-    Difficulty difficulty;
-    String methodName;
-    String solutionCode;
-    String hint;
-    List<ProblemConditionRequest> conditions;
+  String lessonId;
+  String title;
+  String description;
+  String content;
+  String slug;
+  int orderIndex;
+  String expectedOutput;
+  Difficulty difficulty;
+  String methodName;
+  String solutionCode;
+  String hint;
+  List<ProblemConditionRequest> conditions;
 }

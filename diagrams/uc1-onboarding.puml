@@ -1,0 +1,34 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #2E86C1
+skinparam usecaseBackgroundColor #D6EAF8
+skinparam actorBorderColor #2E86C1
+
+left to right direction
+title 📝 Đăng ký & Đăng nhập
+
+actor "Người dùng" as USER
+actor "Google" as GOOGLE
+
+rectangle "Hệ thống" {
+  (Đăng ký tài khoản) as UC1
+  (Đăng nhập) as UC2
+  (Đăng nhập bằng Google) as UC3
+  (Làm mới token) as UC4
+  (Đăng xuất) as UC5
+}
+
+USER --> UC1
+USER --> UC2
+USER --> UC3
+USER --> UC4
+USER --> UC5
+
+UC3 .|> UC2 : extends
+GOOGLE <-- UC3
+
+@enduml

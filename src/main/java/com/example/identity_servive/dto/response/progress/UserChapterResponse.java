@@ -1,11 +1,11 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.response.progress;
 
 import com.example.identity_servive.enums.IsCompleted;
 import com.example.identity_servive.enums.IsLocked;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -14,13 +14,13 @@ import java.util.List;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserChapterResponse {
-    String id;
-    String title;
-    int orderIndex;
-    String description;
-    long totalXp;
-    String slug;
-    IsLocked lockedStatus;
-    IsCompleted completedStatus;
-    List<UserLessonResponse> lessons;
+  String id;
+  String title;
+  int orderIndex;
+  String description;
+  long totalXp;
+  String slug;
+  IsLocked lockedStatus;
+  IsCompleted completedStatus;
+  List<UserLessonResponse> lessons;
 }

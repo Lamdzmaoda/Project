@@ -14,7 +14,7 @@ import lombok.Setter;
 public class AppException extends RuntimeException {
 
   // Chứa thông tin chi tiết về lỗi (Mã lỗi, Thông điệp, HTTP Status)
-  private  ErrorCode errorCode ;
+  private ErrorCode errorCode;
   private String detailMessage;
 
   /**
@@ -29,11 +29,9 @@ public class AppException extends RuntimeException {
     this.detailMessage = null;
   }
 
-    public AppException(ErrorCode errorCode, String detailMessage) {
-      super(errorCode.getMessage());
-        this.errorCode = errorCode;
-        this.detailMessage = detailMessage;
-    }
-
+  public AppException(ErrorCode errorCode, String detailMessage) {
+    super(errorCode.getMessage());
+    this.errorCode = errorCode;
+    this.detailMessage = detailMessage;
+  }
 }
-

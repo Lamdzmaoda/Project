@@ -1,0 +1,35 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #7D6608
+skinparam usecaseBackgroundColor #FCF3CF
+skinparam actorBorderColor #7D6608
+
+left to right direction
+title 📖 Quản lý nội dung khóa học
+
+actor "Quản trị viên" as ADMIN
+
+rectangle "Hệ thống" {
+  (Quản lý ngôn ngữ) as K1
+  (Quản lý chương) as K2
+  (Quản lý bài học) as K3
+  (Quản lý bước học) as K4
+  (Quản lý bài tập code) as K5
+  (Dọn dẹp nội dung) as K6
+}
+
+ADMIN --> K1
+ADMIN --> K2
+ADMIN --> K3
+ADMIN --> K4
+ADMIN --> K5
+ADMIN --> K6
+
+K2 ..> K1 : includes
+K3 ..> K2 : includes
+
+@enduml

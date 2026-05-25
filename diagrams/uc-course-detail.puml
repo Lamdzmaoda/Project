@@ -1,0 +1,29 @@
+@startuml
+skinparam dpi 120
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontSize 11
+skinparam useCaseFontSize 11
+skinparam actorFontSize 12
+
+left to right direction
+
+actor "Quản trị viên" as ADMIN
+actor "Hệ thống" as SYS
+
+rectangle "Quản lý nội dung khóa học" {
+  (Quản lý Language) as C1
+  (Quản lý Chapter) as C2
+  (Quản lý Lesson) as C3
+  (Quản lý Step) as C4
+  (Quản lý Problem) as C5
+  (Purge - xoá vĩnh viễn) as C6
+
+  ADMIN --> C1
+  ADMIN --> C2
+  ADMIN --> C3
+  ADMIN --> C4
+  ADMIN --> C5
+  ADMIN --> C6
+}
+
+@enduml

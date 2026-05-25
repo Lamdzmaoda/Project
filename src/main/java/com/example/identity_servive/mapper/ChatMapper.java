@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.mapper;
 
 import com.example.identity_servive.dto.request.ai.ChatRequest;
@@ -7,6 +8,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface ChatMapper {
-    OpenAI toChat(ChatRequest chatRequest);
-    ChatResponse toChatResponse(OpenAI openAI);
+  OpenAI toChat(ChatRequest chatRequest);
+
+  ChatResponse toChatResponse(OpenAI openAI);
 }

@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.learningRequest;
 
 import lombok.*;
@@ -9,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ProblemConditionRequest {
-    String expectedCode;
-    String hint;
-    int orderIndex;
+  String expectedCode;
+  String hint;
+  int orderIndex;
 }

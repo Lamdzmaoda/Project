@@ -30,11 +30,7 @@ class UserControllerIntegrationTest {
   @BeforeEach
   void initData() {
     dob = LocalDate.of(2005, 10, 6);
-    request =
-        UserCreationRequest.builder()
-            .username("lamdzbodoi")
-            .password("lamdzbodoi")
-            .build();
+    request = UserCreationRequest.builder().username("lamdzbodoi").password("lamdzbodoi").build();
 
     userResponse =
         UserResponse.builder()

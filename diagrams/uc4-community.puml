@@ -1,0 +1,33 @@
+@startuml
+skinparam dpi 150
+skinparam backgroundColor #FEFEFE
+skinparam defaultFontSize 13
+skinparam usecaseFontSize 13
+skinparam actorFontSize 14
+skinparam usecaseBorderColor #E67E22
+skinparam usecaseBackgroundColor #FDEBD0
+skinparam actorBorderColor #E67E22
+
+left to right direction
+title 💬 Cộng đồng
+
+actor "Người dùng" as USER
+actor "Quản trị viên" as ADMIN
+
+rectangle "Hệ thống" {
+  (Đăng bài viết) as C1
+  (Bình luận) as C2
+  (Thả tim bài viết) as C3
+  (Theo dõi bạn học) as C4
+  (Lưu bài viết) as C5
+  (Xoá nội dung) as C6
+}
+
+USER --> C1
+USER --> C2
+USER --> C3
+USER --> C4
+USER --> C5
+ADMIN --> C6
+
+@enduml

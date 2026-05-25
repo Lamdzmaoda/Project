@@ -4,7 +4,6 @@ package com.example.identity_servive.dto.response.authResponse;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
-
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -38,17 +37,17 @@ public class UserResponse {
 
   // Ngày sinh
   LocalDate birthDate;
-    int xp;             // Điểm XP hiện tại
+  int xp; // Điểm XP hiện tại
 
-    int coin;           // Tiền trong game
+  int coin; // Tiền trong game
 
-    int level;          // Cấp độ
+  int level; // Cấp độ
 
-    int longestStreak = 0;  // Streak cao nhất
+  int longestStreak = 0; // Streak cao nhất
 
-    LocalDateTime lastStudyDate; // Ngày học cuối
+  LocalDateTime lastStudyDate; // Ngày học cuối
 
-    boolean verified = false;  // Đã xác minh email
+  boolean verified = false; // Đã xác minh email
   int streak;
 
   Set<RoleRespone> roles;

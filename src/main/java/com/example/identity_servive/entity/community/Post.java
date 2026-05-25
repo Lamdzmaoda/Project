@@ -1,13 +1,13 @@
+/* (C)2026 */
 package com.example.identity_servive.entity.community;
 
 import com.example.identity_servive.entity.auth.User;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -17,31 +17,29 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE) // Lombok: Mặc định mọi trường là 'private'
 @Entity
 public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  String id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;                    // Người tạo bài
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  User user; // Người tạo bài
 
-    @Column(columnDefinition = "LONGTEXT")
-    String content;               // Nội dung bài viết
+  String title;
 
-    String imageUrl;             // Ảnh đính kèm
+  @Column(columnDefinition = "LONGTEXT")
+  String content; // Nội dung bài viết
 
-    @Column(columnDefinition = "LONGTEXT")
-    String codeSnippet;          // Code snippet (nếu có)
+  String imageUrl; // Ảnh đính kèm
 
-    @Builder.Default
-    int likeCount = 0;           // Số lượt like
+  @Column(columnDefinition = "LONGTEXT")
+  String codeSnippet; // Code snippet (nếu có)
 
-    @Builder.Default
-    int commentCount = 0;         // Số lượt bình luận
+  @Builder.Default int likeCount = 0; // Số lượt like
 
-    @CreationTimestamp
-    LocalDateTime createdAt;
+  @Builder.Default int commentCount = 0; // Số lượt bình luận
 
-    @UpdateTimestamp
-    LocalDateTime updatedAt;
+  @CreationTimestamp LocalDateTime createdAt;
+
+  @UpdateTimestamp LocalDateTime updatedAt;
 }

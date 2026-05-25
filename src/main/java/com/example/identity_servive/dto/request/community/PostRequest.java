@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.community;
 
 import lombok.*;
@@ -9,7 +10,8 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostRequest {
-    String content;
-    String imageUrl;
-    String codeSnippet;
+  String title;
+  String content;
+  String imageUrl;
+  String codeSnippet;
 }

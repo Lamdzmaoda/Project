@@ -7,7 +7,7 @@ spring:
   datasource:
     # URL kß║┐t nß╗æi ─æß║┐n MySQL. Port 3636 l├á cß╗òng ─æ├ú ─æ╞░ß╗úc map tß╗½ Docker ra m├íy thß║¡t.
     # ${DBMS_CONNECTION:...} gi├║p linh hoß║ít thay ─æß╗òi URL khi chß║íy tr├¬n server thß║¡t.
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3636/identity-servive}
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/identity-servive}
     username: ${DBMS_USER:root}
     password: ${DBMS_PASSWORD:lamdzbodoi}
 

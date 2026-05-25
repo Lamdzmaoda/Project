@@ -11,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,182 +24,189 @@ import tools.jackson.databind.exc.InvalidFormatException;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    private static final String MIN_ATTRIBUTE = "min";
+  private static final String MIN_ATTRIBUTE = "min";
+  private static final String MAX_ATTRIBUTE = "max";
 
-    /**
-     * 1. Bắt tất cả các lỗi thuộc loại RuntimeException (Lỗi hệ thống/Lỗi không xác định).
-     */
-    @ExceptionHandler(value = RuntimeException.class)
-    ResponseEntity<ApiResponse> handleException(RuntimeException ex) {
-        ApiResponse response = new ApiResponse();
+  /**
+   * 1. Bắt tất cả các lỗi thuộc loại RuntimeException (Lỗi hệ thống/Lỗi không xác định).
+   */
+  @ExceptionHandler(value = RuntimeException.class)
+  ResponseEntity<ApiResponse> handleException(RuntimeException ex) {
+    ApiResponse response = new ApiResponse();
 
-        // In lỗi ra log để lập trình viên kiểm tra
-        log.error("Runtime Exception: ", ex);
+    // In lỗi ra log để lập trình viên kiểm tra
+    log.error("Runtime Exception: ", ex);
 
-        // Kiểm tra message để xác định loại lỗi
-        String message = ex.getMessage();
-        if (message != null && message.matches("(?i).*(JWT|token|Unauthorized).*"))  {
-            // Lỗi liên quan đến authentication/JWT - trả về 401
-            response.setCode(ErrorCode.UNAUTHENTICATED.getCode());
-            response.setMessage(ErrorCode.UNAUTHENTICATED.getMessage());
-            return ResponseEntity.status(ErrorCode.UNAUTHENTICATED.getStatusCode()).body(response);
-        }
-
-        // Lỗi khác - trả về 500
-        response.setCode(ErrorCode.UNAUTHORIZED_EXISTED.getCode());
-        response.setMessage(ErrorCode.UNAUTHORIZED_EXISTED.getMessage());
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    // Kiểm tra message để xác định loại lỗi
+    String message = ex.getMessage();
+    if (message != null && message.matches("(?i).*(JWT|token|Unauthorized).*")) {
+      // Lỗi liên quan đến authentication/JWT - trả về 401
+      response.setCode(ErrorCode.UNAUTHENTICATED.getCode());
+      response.setMessage(ErrorCode.UNAUTHENTICATED.getMessage());
+      return ResponseEntity.status(ErrorCode.UNAUTHENTICATED.getStatusCode()).body(response);
     }
 
-    /**
-     * 2. Bắt lỗi AppException - Các ngoại lệ nghiệp vụ do mình chủ động ném ra trong code (Service).
-     */
-    @ExceptionHandler(value = AppException.class)
-    ResponseEntity<ApiResponse> handlingAppException(AppException ex) {
-        // Lấy đối tượng ErrorCode từ trong exception được ném ra
-        ErrorCode errorCode = ex.getErrorCode();
-        ApiResponse response = new ApiResponse();
+    // Lỗi khác - trả về 500
+    response.setCode(ErrorCode.UNAUTHORIZED_EXISTED.getCode());
+    response.setMessage(ErrorCode.UNAUTHORIZED_EXISTED.getMessage());
 
-        // Gán mã code và tin nhắn tương ứng từ Enum ErrorCode vào phản hồi
-        response.setCode(errorCode.getCode());
-        // Logic quan trọng: Nếu có logs chi tiết từ Piston, ưu tiên hiển thị nó
-        // Nếu không có, hiển thị thông báo mặc định của ErrorCode
-        String finalMessage = (ex.getDetailMessage() != null && !ex.getDetailMessage().isEmpty())
-                ? ex.getDetailMessage()
-                : errorCode.getMessage();
-        response.setMessage(finalMessage);
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+  }
 
-        // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
-        return ResponseEntity.status(errorCode.getStatusCode()).body(response);
-    }
-    @ExceptionHandler(value = HttpMessageNotReadableException.class)
-    ResponseEntity<ApiResponse<Void>> handlingHttpMessageNotReadable(HttpMessageNotReadableException ex) {
-        ApiResponse<Void> response = new ApiResponse();
-        // Lấy đối tượng ErrorCode từ trong exception được ném ra
-        ErrorCode errorCode = ErrorCode.PARSE_DATA_INVALID;
+  /**
+   * 2. Bắt lỗi AppException - Các ngoại lệ nghiệp vụ do mình chủ động ném ra trong code (Service).
+   */
+  @ExceptionHandler(value = AppException.class)
+  ResponseEntity<ApiResponse> handlingAppException(AppException ex) {
+    // Lấy đối tượng ErrorCode từ trong exception được ném ra
+    ErrorCode errorCode = ex.getErrorCode();
+    ApiResponse response = new ApiResponse();
 
-        String message = errorCode.getMessage();
-        if (ex.getCause() instanceof InvalidFormatException invalidEx) {
-            // Ví dụ: Lâm gửi "SAI_ENUM" vào trường IsLocked
-            String targetType = invalidEx.getTargetType().getSimpleName();
-            String value = invalidEx.getValue().toString();
-            message += String.format("The value '%s' does not match the data type '%s'.", value, targetType);
-        }
+    // Gán mã code và tin nhắn tương ứng từ Enum ErrorCode vào phản hồi
+    response.setCode(errorCode.getCode());
+    // Logic quan trọng: Nếu có logs chi tiết từ Piston, ưu tiên hiển thị nó
+    // Nếu không có, hiển thị thông báo mặc định của ErrorCode
+    String finalMessage =
+        (ex.getDetailMessage() != null && !ex.getDetailMessage().isEmpty())
+            ? ex.getDetailMessage()
+            : errorCode.getMessage();
+    response.setMessage(finalMessage);
 
-        // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(
-                        ApiResponse.<Void>builder()
-                                .code(errorCode.getCode())
-                                .message(message)
-                                .build()
-                );
-    }
+    // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
+    return ResponseEntity.status(errorCode.getStatusCode()).body(response);
+  }
 
-    /**
-     * 3. Bắt lỗi AccessDeniedException - Xảy ra khi User truy cập vào API mà không có đủ quyền hạn.
-     */
-    @ExceptionHandler(value = AccessDeniedException.class)
-    ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException ex) {
-        ErrorCode errorCode = ErrorCode.UNAUTHORIZED; // Lỗi 403 Forbidden
+  @ExceptionHandler(value = HttpMessageNotReadableException.class)
+  ResponseEntity<ApiResponse<Void>> handlingHttpMessageNotReadable(
+      HttpMessageNotReadableException ex) {
+    ApiResponse<Void> response = new ApiResponse();
+    // Lấy đối tượng ErrorCode từ trong exception được ném ra
+    ErrorCode errorCode = ErrorCode.PARSE_DATA_INVALID;
 
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(
-                        ApiResponse.builder()
-                                .code(errorCode.getCode())
-                                .message(errorCode.getMessage())
-                                .build());
+    String message = errorCode.getMessage();
+    if (ex.getCause() instanceof InvalidFormatException invalidEx) {
+      // Ví dụ: Lâm gửi "SAI_ENUM" vào trường IsLocked
+      String targetType = invalidEx.getTargetType().getSimpleName();
+      String value = invalidEx.getValue().toString();
+      message +=
+          String.format("The value '%s' does not match the data type '%s'.", value, targetType);
     }
 
-    /**
-     * 4. Bắt lỗi AuthenticationException - Xảy ra khi không có token hoặc token sai
-     */
-    @ExceptionHandler(value = org.springframework.security.core.AuthenticationException.class)
-    ResponseEntity<ApiResponse> handlingAuthenticationException(
-            org.springframework.security.core.AuthenticationException ex) {
-        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED; // Lỗi 401 Unauthorized
+    // Trả về kèm HTTP Status (VD: 400 Bad Request, 404 Not Found)
+    return ResponseEntity.status(errorCode.getStatusCode())
+        .body(ApiResponse.<Void>builder().code(errorCode.getCode()).message(message).build());
+  }
 
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(
-                        ApiResponse.builder()
-                                .code(errorCode.getCode())
-                                .message(errorCode.getMessage())
-                                .build());
-    }
-//    @ExceptionHandler(value = org.springframework.security.authentication.AuthenticationServiceException.class)
-//    ResponseEntity<ApiResponse> handlingJwtException(JwtException ex){
-//        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED; // Lỗi 401 Unauthorized
-//        return ResponseEntity.status(errorCode.getStatusCode())
-//                .body(ApiResponse.builder()
-//                        .code(errorCode.getCode())
-//                        .message(errorCode.getMessage())
-//                        .build());
-//    }
+  /**
+   * 3. Bắt lỗi AccessDeniedException - Xảy ra khi User truy cập vào API mà không có đủ quyền hạn.
+   */
+  @ExceptionHandler(value = AccessDeniedException.class)
+  ResponseEntity<ApiResponse> handlingAccessDeniedException(AccessDeniedException ex) {
+    ErrorCode errorCode = ErrorCode.UNAUTHORIZED; // Lỗi 403 Forbidden
 
-    /**
-     * 4. Bắt lỗi Validation (Dữ liệu đầu vào sai định dạng, vi phạm @Size, @Email, @Min...).
-     */
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    ResponseEntity<ApiResponse> handleException(MethodArgumentNotValidException ex) {
-        // Lấy message key từ Annotation (VD: @Size(message = "PASSWORD_INVALID"))
-        String enumkey = Objects.requireNonNull(ex.getFieldError()).getDefaultMessage();
+    return ResponseEntity.status(errorCode.getStatusCode())
+        .body(
+            ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build());
+  }
 
-        ErrorCode errorCode = ErrorCode.INVALID_KEY; // Mặc định nếu không tìm thấy key trong Enum
-        Map<String, Object> attributes = null;
+  /**
+   * 4. Bắt lỗi AuthenticationException - Xảy ra khi không có token hoặc token sai
+   */
+  @ExceptionHandler(value = org.springframework.security.core.AuthenticationException.class)
+  ResponseEntity<ApiResponse> handlingAuthenticationException(
+      org.springframework.security.core.AuthenticationException ex) {
+    ErrorCode errorCode = ErrorCode.UNAUTHENTICATED; // Lỗi 401 Unauthorized
 
-        try {
-            // Tìm Enum tương ứng với key lấy được
-            errorCode = ErrorCode.valueOf(enumkey);
+    return ResponseEntity.status(errorCode.getStatusCode())
+        .body(
+            ApiResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .build());
+  }
 
-            // Trích xuất các thuộc tính của Validation (như giá trị 'min' trong @Size)
-            var constraintViolations =
-                    ex.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
+  //    @ExceptionHandler(value =
+  // org.springframework.security.authentication.AuthenticationServiceException.class)
+  //    ResponseEntity<ApiResponse> handlingJwtException(JwtException ex){
+  //        ErrorCode errorCode = ErrorCode.UNAUTHENTICATED; // Lỗi 401 Unauthorized
+  //        return ResponseEntity.status(errorCode.getStatusCode())
+  //                .body(ApiResponse.builder()
+  //                        .code(errorCode.getCode())
+  //                        .message(errorCode.getMessage())
+  //                        .build());
+  //    }
 
-            attributes = constraintViolations.getConstraintDescriptor().getAttributes();
-            log.info("Validation attributes: {}", attributes.toString());
-        } catch (IllegalArgumentException e) {
-            // Xảy ra khi key trong Annotation không khớp với tên biến nào trong ErrorCode.java
-        }
+  /**
+   * 4. Bắt lỗi Validation (Dữ liệu đầu vào sai định dạng, vi phạm @Size, @Email, @Min...).
+   */
+  @ExceptionHandler(value = MethodArgumentNotValidException.class)
+  ResponseEntity<ApiResponse> handleException(MethodArgumentNotValidException ex) {
+    // Lấy message key từ Annotation (VD: @Size(message = "PASSWORD_INVALID"))
+    String enumkey = Objects.requireNonNull(ex.getFieldError()).getDefaultMessage();
 
-        ApiResponse response = new ApiResponse();
-        response.setCode(errorCode.getCode());
+    ErrorCode errorCode = ErrorCode.INVALID_KEY; // Mặc định nếu không tìm thấy key trong Enum
+    Map<String, Object> attributes = null;
 
-        // Nếu có thuộc tính động (VD: mật khẩu phải có {min} ký tự), thực hiện thay thế giá trị vào tin nhắn
-        response.setMessage(
-                Objects.nonNull(attributes)
-                        ? mapAttributes(errorCode.getMessage(), attributes)
-                        : errorCode.getMessage());
+    try {
+      // Tìm Enum tương ứng với key lấy được
+      errorCode = ErrorCode.valueOf(enumkey);
 
-        return ResponseEntity.badRequest().body(response);
-    }
-    @ExceptionHandler(value = DataIntegrityViolationException.class)
-    ResponseEntity<ApiResponse<Void>> handlingDataIntegrity(DataIntegrityViolationException ex) {
-        ApiResponse<Void> apiResponse = new ApiResponse<>();
-        ErrorCode errorCode = ErrorCode.DATA_INTEGRITY_VIOLATION; // Lỗi 403 Forbidden
-        String message = errorCode.getMessage();
-        String rootMSG = ex.getRootCause() != null ? ex.getRootCause().getMessage() : "";
-        if(rootMSG.contains("Duplicate entry")) {
-            message = message + "Data existed";
-        } else if (rootMSG.contains("Column") && rootMSG.contains("cannot be null")) {
-            message = message + "The data is missing required fields.";
-        }
-        apiResponse.setMessage(message);
-        return ResponseEntity.status(errorCode.getStatusCode())
-                .body(
-                        ApiResponse.<Void>builder()
-                                .code(errorCode.getCode())
-                                .message(message)
-                                .build());
+      // Trích xuất các thuộc tính của Validation (như giá trị 'min' trong @Size)
+      var constraintViolations =
+          ex.getBindingResult().getAllErrors().getFirst().unwrap(ConstraintViolation.class);
+
+      attributes = constraintViolations.getConstraintDescriptor().getAttributes();
+      log.info("Validation attributes: {}", attributes.toString());
+    } catch (IllegalArgumentException e) {
+      // Xảy ra khi key trong Annotation không khớp với tên biến nào trong ErrorCode.java
     }
 
-    /**
-     * Hàm hỗ trợ: Thay thế các placeholder trong thông báo lỗi (VD: {min}) bằng giá trị thực tế.
-     */
-    private String mapAttributes(String message, Map<String, Object> Attributes) {
-        String minValue = Attributes.get(MIN_ATTRIBUTE).toString();
+    ApiResponse response = new ApiResponse();
+    response.setCode(errorCode.getCode());
 
-        // Thay thế chuỗi "{min}" bằng giá trị số lấy từ Annotation
-        return message.replace("{" + MIN_ATTRIBUTE + "}", minValue);
+    // Nếu có thuộc tính động (VD: mật khẩu phải có {min} ký tự), thực hiện thay thế giá trị vào tin
+    // nhắn
+    response.setMessage(
+        Objects.nonNull(attributes)
+            ? mapAttributes(errorCode.getMessage(), attributes)
+            : errorCode.getMessage());
+
+    return ResponseEntity.badRequest().body(response);
+  }
+
+  @ExceptionHandler(value = DataIntegrityViolationException.class)
+  ResponseEntity<ApiResponse<Void>> handlingDataIntegrity(DataIntegrityViolationException ex) {
+    ApiResponse<Void> apiResponse = new ApiResponse<>();
+    ErrorCode errorCode = ErrorCode.DATA_INTEGRITY_VIOLATION; // Lỗi 403 Forbidden
+    String message = errorCode.getMessage();
+    String rootMSG = ex.getRootCause() != null ? ex.getRootCause().getMessage() : "";
+    if (rootMSG.contains("Duplicate entry")) {
+      message = message + "Data existed";
+    } else if (rootMSG.contains("Column") && rootMSG.contains("cannot be null")) {
+      message = message + "The data is missing required fields.";
     }
+    apiResponse.setMessage(message);
+    return ResponseEntity.status(errorCode.getStatusCode())
+        .body(ApiResponse.<Void>builder().code(errorCode.getCode()).message(message).build());
+  }
+
+  /**
+   * Hàm hỗ trợ: Thay thế các placeholder trong thông báo lỗi (VD: {min}) bằng giá trị thực tế.
+   */
+  private String mapAttributes(String message, Map<String, Object> Attributes) {
+    // Thay thế "{min}" nếu có
+    if (Attributes.containsKey(MIN_ATTRIBUTE)) {
+      message =
+          message.replace("{" + MIN_ATTRIBUTE + "}", Attributes.get(MIN_ATTRIBUTE).toString());
+    }
+    // Thay thế "{max}" nếu có
+    if (Attributes.containsKey(MAX_ATTRIBUTE)) {
+      message =
+          message.replace("{" + MAX_ATTRIBUTE + "}", Attributes.get(MAX_ATTRIBUTE).toString());
+    }
+    return message;
+  }
 }

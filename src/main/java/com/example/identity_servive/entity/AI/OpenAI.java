@@ -2,14 +2,14 @@
 package com.example.identity_servive.entity.AI;
 
 import com.example.identity_servive.entity.auth.User;
+import com.example.identity_servive.entity.learning.Problem;
 import com.example.identity_servive.entity.learning.Step;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * Class Entity đại diện cho bảng 'user' trong Database. Sử dụng JPA (Java Persistence API) để ánh
@@ -31,22 +31,32 @@ public class OpenAI {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
-    @Column(columnDefinition = "TEXT")
-    String userMessage;
-    @Column(columnDefinition = "TEXT")
-    String aiExplanation;
-    @ElementCollection
-    List<String> hints;
-    @Column(columnDefinition = "TEXT")
-    String suggestedCode;
-    String motivationMessage;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    User user;
-    @ManyToOne
-    @JoinColumn(name = "step_id")
-    Step step;
-    @CreationTimestamp
-    LocalDateTime createAt;
+  String id;
+
+  @Column(columnDefinition = "TEXT")
+  String userMessage;
+
+  @Column(columnDefinition = "TEXT")
+  String aiExplanation;
+
+  @ElementCollection List<String> hints;
+
+  @Column(columnDefinition = "TEXT")
+  String suggestedCode;
+
+  String motivationMessage;
+
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  User user;
+
+  @ManyToOne
+  @JoinColumn(name = "step_id")
+  Step step;
+
+  @ManyToOne
+  @JoinColumn(name = "problem_id")
+  Problem problem;
+
+  @CreationTimestamp LocalDateTime createAt;
 }

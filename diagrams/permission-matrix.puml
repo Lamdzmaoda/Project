@@ -1,0 +1,32 @@
+@startuml
+!theme plain
+title Ma tran phan quyen - AppCodeTest
+
+class ADMIN {
+  Quan ly Role & Permission
+  Quan ly User (CRUD)
+  Quan ly Course (CRUD + Purge)
+  Quan ly Community
+}
+
+class CREATOR {
+  CREATE_COURSE
+  UPDATE_COURSE
+  Tao Language/Chapter/Lesson
+  Cap nhat noi dung
+}
+
+class MODERATOR {
+  DELETE_COURSE
+  Xoa mem Language/Chapter/Lesson
+}
+
+class USER {
+  Xem noi dung khoa hoc
+  Ghi danh / Hoc bai
+  Chat AI / Submit code
+  Dang bai / Binh luan
+  Cap nhat thong tin ca nhan
+}
+
+@enduml

@@ -1,9 +1,7 @@
 /* (C)2026 */
 package com.example.identity_servive.exception;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -12,7 +10,6 @@ import org.springframework.http.HttpStatusCode;
  * Danh sách các mã lỗi nghiệp vụ (Business Error Codes). Giúp thống nhất các thông điệp lỗi và mã
  * số phản hồi cho Client.
  */
-
 @Getter
 public enum ErrorCode {
   // Lỗi hệ thống hoặc lỗi chưa xác định (thường dùng mã 9999)
@@ -37,29 +34,33 @@ public enum ErrorCode {
   UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
   INVALID_DOB(1008, "your age must be at least {min}", HttpStatus.BAD_REQUEST),
   ID_NOT_EXISTED(1009, "id not exists", HttpStatus.BAD_REQUEST),
-    NAME_EXISTED(1010, "name exists", HttpStatus.BAD_REQUEST),
-    PARSE_DATA_INVALID(1011, "parse data invalid : ", HttpStatus.BAD_REQUEST),
-    DATA_INTEGRITY_VIOLATION(1012, "data integrity violation : ", HttpStatus.BAD_REQUEST),
-    STEP_LOCKED(1015, "step locked", HttpStatus.BAD_REQUEST),
-    LESSON_INCOMPLETE(1021, "LESSON NOT YET COMPLETED", HttpStatus.BAD_REQUEST),
-    INVALID_ANSWER(1013, "INVALID ANSWER", HttpStatus.BAD_REQUEST),
-    LESSON_LOCKED(1014, "LESSON LOCKED", HttpStatus.BAD_REQUEST),
-    CHAPTER_LOCKED(1017,"chapter locked", HttpStatus.BAD_REQUEST),
-    COURSE_UNDER_CONSTRUCTION(1018,"course under construction", HttpStatus.BAD_REQUEST),
+  NAME_EXISTED(1010, "name exists", HttpStatus.BAD_REQUEST),
+  PARSE_DATA_INVALID(1011, "parse data invalid : ", HttpStatus.BAD_REQUEST),
+  DATA_INTEGRITY_VIOLATION(1012, "data integrity violation : ", HttpStatus.BAD_REQUEST),
+  STEP_LOCKED(1015, "step locked", HttpStatus.BAD_REQUEST),
+  LESSON_INCOMPLETE(1021, "LESSON NOT YET COMPLETED", HttpStatus.BAD_REQUEST),
+  INVALID_ANSWER(1013, "INVALID ANSWER", HttpStatus.BAD_REQUEST),
+  LESSON_LOCKED(1014, "LESSON LOCKED", HttpStatus.BAD_REQUEST),
+  CHAPTER_LOCKED(1017, "chapter locked", HttpStatus.BAD_REQUEST),
+  COURSE_UNDER_CONSTRUCTION(1018, "course under construction", HttpStatus.BAD_REQUEST),
 
-    DELETE_FAILED(1019,"delete failed", HttpStatus.BAD_REQUEST),
-    NULL_POINTER(1020, "null pointer exception", HttpStatus.BAD_REQUEST),
-    CREATE_FAIL(1022, "create fail", HttpStatus.BAD_REQUEST),
-    ALREADY_EXISTED(1023, "already existed", HttpStatus.BAD_REQUEST),
-    INVALID_REQUEST(1024, "invalid request", HttpStatus.BAD_REQUEST),
-    EMAIL_EXISTED(1025, "email exists", HttpStatus.BAD_REQUEST),
-    UPLOAD_FAILED(1026, "upload failed", HttpStatus.BAD_REQUEST);
+  DELETE_FAILED(1019, "delete failed", HttpStatus.BAD_REQUEST),
+  NULL_POINTER(1020, "null pointer exception", HttpStatus.BAD_REQUEST),
+  CREATE_FAIL(1022, "create fail", HttpStatus.BAD_REQUEST),
+  ALREADY_EXISTED(1023, "already existed", HttpStatus.BAD_REQUEST),
+  INVALID_REQUEST(1024, "invalid request", HttpStatus.BAD_REQUEST),
+  EMAIL_EXISTED(1025, "email exists", HttpStatus.BAD_REQUEST),
+  UPLOAD_FAILED(1026, "upload failed", HttpStatus.BAD_REQUEST),
+  USERNAME_TOO_LONG(1027, "username must be at most {max} characters", HttpStatus.BAD_REQUEST),
+  PASSWORD_TOO_LONG(1028, "password must be at most {max} characters", HttpStatus.BAD_REQUEST),
+  USERNAME_REQUIRED(1029, "username is required", HttpStatus.BAD_REQUEST),
+  PASSWORD_REQUIRED(1030, "password is required", HttpStatus.BAD_REQUEST),
+  EMAIL_REQUIRED(1031, "email is required", HttpStatus.BAD_REQUEST);
   // Mã số lỗi định danh (giúp Frontend dễ dàng bắt lỗi bằng code thay vì so sánh chuỗi)
   private int code = 2000;
 
   // Thông điệp giải thích lỗi bằng ngôn ngữ con người
-  @Setter
-  private String message;
+  @Setter private String message;
 
   private HttpStatusCode statusCode;
 
@@ -69,5 +70,4 @@ public enum ErrorCode {
     this.message = message;
     this.statusCode = statusCode;
   }
-
 }

@@ -1,12 +1,11 @@
 /* (C)2026 */
 package com.example.identity_servive.dto.request.AuthRequest;
 
-import com.example.identity_servive.enums.Role;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 /**
  * Class đại diện cho yêu cầu cập nhật thông tin người dùng. Chứa các trường dữ liệu mà người dùng
@@ -18,13 +17,23 @@ import java.util.List;
 @Builder // Hỗ trợ khởi tạo đối tượng theo pattern Builder
 @FieldDefaults(level = AccessLevel.PRIVATE) // Tự động đặt tất cả các field là 'private'
 public class UserCreationRequest {
-    String displayName;
-    @Size(min = 4, message = "USER_INVALID")
-    String username;
+  String displayName;
 
-    @Size(min = 8, message = "PASSWORD_INVALID")
-    String password;
+  @NotBlank(message = "USERNAME_REQUIRED")
+  @Size.List({
+    @Size(min = 4, message = "USER_INVALID"),
+    @Size(max = 20, message = "USERNAME_TOO_LONG")
+  })
+  String username;
 
-    String email;
+  @NotBlank(message = "PASSWORD_REQUIRED")
+  @Size.List({
+    @Size(min = 8, message = "PASSWORD_INVALID"),
+    @Size(max = 20, message = "PASSWORD_TOO_LONG")
+  })
+  String password;
 
+  @NotBlank(message = "")
+  @Email
+  String email;
 }

@@ -1,12 +1,12 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.response.ai;
 
 import com.example.identity_servive.dto.response.learningResponse.ProblemConditionResponse;
 import com.example.identity_servive.enums.Status;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import java.util.List;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.List;
 
 @Data // Tự động tạo Getter, Setter, toString, equals, hashCode
 @Builder // Hỗ trợ khởi tạo đối tượng nhanh theo pattern Builder (tiện cho việc viết Unit Test)
@@ -16,15 +16,15 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CodeResponse {
-    Status status;
-    String errorType;
-    Integer line;
-    Integer columnIndex;
-    String errorLineCode;
-    String pointer;
-    String messageVn;
-    String output;
-    String expected;
-    Boolean passed;
-    List<ProblemConditionResponse> conditions;
+  Status status;
+  String errorType;
+  Integer line;
+  Integer columnIndex;
+  String errorLineCode;
+  String pointer;
+  String messageVn;
+  String output;
+  String expected;
+  Boolean passed;
+  List<ProblemConditionResponse> conditions;
 }

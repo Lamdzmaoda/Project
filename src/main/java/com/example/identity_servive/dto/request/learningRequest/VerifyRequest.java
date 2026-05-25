@@ -1,3 +1,4 @@
+/* (C)2026 */
 package com.example.identity_servive.dto.request.learningRequest;
 
 import lombok.*;
@@ -10,6 +11,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor // Tạo constructor chứa tất cả các tham số
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class VerifyRequest {
-    String stepId;
-    Object answer;
+  String stepId;
+  Object answer;
 }

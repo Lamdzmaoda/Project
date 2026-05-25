@@ -1,0 +1,64 @@
+@startuml
+skinparam dpi 120
+left to right direction
+skinparam rectangle {
+  BackgroundColor #E8EAF6
+  BorderColor #333366
+}
+
+actor "Người dùng" as USER
+actor "Quản trị viên" as ADMIN
+actor "Google OAuth" as GOOGLE
+actor "Gemini AI" as AI
+actor "Judge0" as JUDGE0
+
+rectangle "Auth" {
+  (Đăng ký / Đăng nhập)
+  (Google OAuth)
+  (Quản lý hồ sơ)
+  (Quản lý Role & Permission) as ROLES
+}
+
+rectangle "Học tập" {
+  (Ghi danh khóa học)
+  (Học bài LEARN)
+  (Luyện tập PRACTICE)
+  (Xem / Reset tiến độ)
+}
+
+rectangle "Quản lý nội dung" {
+  (CRUD Language / Chapter / Lesson)
+  (CRUD Step / Problem)
+}
+
+rectangle "Cộng đồng" {
+  (Bài viết & Bình luận)
+  (Thích / Lưu / Theo dõi)
+}
+
+rectangle "AI & System" {
+  (Chat AI Tutor)
+  (Chạy code Python)
+}
+
+USER --> (Đăng ký / Đăng nhập)
+USER --> (Google OAuth)
+USER --> (Quản lý hồ sơ)
+USER --> (Ghi danh khóa học)
+USER --> (Học bài LEARN)
+USER --> (Luyện tập PRACTICE)
+USER --> (Xem / Reset tiến độ)
+USER --> (Bài viết & Bình luận)
+USER --> (Thích / Lưu / Theo dõi)
+USER --> (Chat AI Tutor)
+USER --> (Chạy code Python)
+
+ADMIN --> (Quản lý Role & Permission)
+ADMIN --> (CRUD Language / Chapter / Lesson)
+ADMIN --> (CRUD Step / Problem)
+
+GOOGLE <-- (Google OAuth)
+AI <-- (Chat AI Tutor)
+JUDGE0 <-- (Chạy code Python)
+
+@enduml

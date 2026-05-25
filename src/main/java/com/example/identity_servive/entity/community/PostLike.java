@@ -1,12 +1,12 @@
+/* (C)2026 */
 package com.example.identity_servive.entity.community;
 
 import com.example.identity_servive.entity.auth.User;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
-
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,24 +15,20 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"post_id", "user_id"})
-})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"post_id", "user_id"})})
 public class PostLike {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    String id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.UUID)
+  String id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    User user;                  // Người like
+  @ManyToOne
+  @JoinColumn(name = "user_id", nullable = false)
+  User user; // Người like
 
-    @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
-    Post post;                  // Bài được like
+  @ManyToOne
+  @JoinColumn(name = "post_id", nullable = false)
+  Post post; // Bài được like
 
-    @CreationTimestamp
-    LocalDateTime createdAt;
-
+  @CreationTimestamp LocalDateTime createdAt;
 }
