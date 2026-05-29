@@ -1,13 +1,14 @@
 package com.example.democode3.features.learning.ui.renderer;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.democode3.R;
 import com.example.democode3.features.learning.model.LessonStep;
-import com.example.democode3.features.learning.model.LessonUiState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,76 +18,39 @@ public class CodeRendererAdapter
 
     private final Context context;
 
-    private final LessonUiState uiState;
-
     private final LinearLayout layoutCode;
-
-    private final TextView txtContent;
-
-    private final TextView txtCodeQuestion;
 
     private final LinearLayout layoutCodeSlots;
 
     private final LinearLayout layoutCodeWords;
 
-    private final Button btnCheckCode;
+    private final TextView txtContent;
 
-    private final Button btnResetCode;
-
-    private final Runnable onCodeCorrect;
+    private final List<String> selectedWords =
+            new ArrayList<>();
 
     public CodeRendererAdapter(
 
             Context context,
 
-            LessonUiState uiState,
-
             LinearLayout layoutCode,
-
-            TextView txtContent,
-
-            TextView txtCodeQuestion,
 
             LinearLayout layoutCodeSlots,
 
             LinearLayout layoutCodeWords,
 
-            Button btnCheckCode,
-
-            Button btnResetCode,
-
-            Runnable onCodeCorrect
+            TextView txtContent
     ) {
 
-        this.context =
-                context;
+        this.context = context;
 
-        this.uiState =
-                uiState;
+        this.layoutCode = layoutCode;
 
-        this.layoutCode =
-                layoutCode;
+        this.layoutCodeSlots = layoutCodeSlots;
 
-        this.txtContent =
-                txtContent;
+        this.layoutCodeWords = layoutCodeWords;
 
-        this.txtCodeQuestion =
-                txtCodeQuestion;
-
-        this.layoutCodeSlots =
-                layoutCodeSlots;
-
-        this.layoutCodeWords =
-                layoutCodeWords;
-
-        this.btnCheckCode =
-                btnCheckCode;
-
-        this.btnResetCode =
-                btnResetCode;
-
-        this.onCodeCorrect =
-                onCodeCorrect;
+        this.txtContent = txtContent;
     }
 
     @Override
@@ -98,141 +62,182 @@ public class CodeRendererAdapter
                 View.VISIBLE
         );
 
-        txtContent.setVisibility(
-                View.GONE
-        );
-
-        // QUESTION
-
-        txtCodeQuestion.setText(
-
+        txtContent.setText(
                 step.data.content
         );
-
-        // RESET
 
         layoutCodeSlots.removeAllViews();
 
         layoutCodeWords.removeAllViews();
 
-        uiState.selectedCodeWords.clear();
+        selectedWords.clear();
 
         // =========================================
         // TEMPLATE
         // =========================================
 
-        final String template =
-                step.data.template == null
-                        ? ""
-                        : step.data.template;
+        String template =
+                step.data.template;
 
-        TextView txtTemplate =
+        String[] split =
+                template.split("\\[0\\]");
+
+        // =========================================
+        // LEFT
+        // =========================================
+
+        TextView left =
+                createCodeView(
+                        split[0]
+                );
+
+        layoutCodeSlots.addView(left);
+
+        // =========================================
+        // SLOT
+        // =========================================
+
+        TextView slot =
+                createSlotView();
+
+        layoutCodeSlots.addView(slot);
+
+        // =========================================
+        // RIGHT
+        // =========================================
+
+        if (split.length > 1) {
+
+            TextView right =
+                    createCodeView(
+                            split[1]
+                    );
+
+            layoutCodeSlots.addView(right);
+        }
+
+        // =========================================
+        // WORD BANK
+        // =========================================
+
+        if (step.data.answers != null) {
+
+            for (String answer : step.data.answers) {
+
+                TextView word =
+                        createWordView(answer);
+
+                word.setOnClickListener(v -> {
+
+                    slot.setText(answer);
+
+                    slot.setTextColor(
+                            Color.WHITE
+                    );
+
+                    selectedWords.clear();
+
+                    selectedWords.add(answer);
+                });
+
+                layoutCodeWords.addView(word);
+            }
+        }
+    }
+
+    // =============================================
+    // WORD
+    // =============================================
+
+    private TextView createWordView(
+            String text
+    ) {
+
+        TextView tv =
                 new TextView(context);
 
-        txtTemplate.setText(template);
+        tv.setText(text);
 
-        txtTemplate.setTextSize(22);
+        tv.setTextColor(Color.WHITE);
 
-        txtTemplate.setTextColor(
-                0xFFFFFFFF
+        tv.setTextSize(18);
+
+        tv.setPadding(
+                40,
+                24,
+                40,
+                24
         );
 
-        txtTemplate.setPadding(
+        tv.setBackgroundResource(
+                R.drawable.bg_quiz_option
+        );
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        params.rightMargin = 20;
+
+        tv.setLayoutParams(params);
+
+        return tv;
+    }
+
+    // =============================================
+    // SLOT
+    // =============================================
+
+    private TextView createSlotView() {
+
+        TextView tv =
+                new TextView(context);
+
+        tv.setText("____");
+
+        tv.setTextSize(22);
+
+        tv.setTextColor("#94A3B8".equals("")
+                ? Color.GRAY
+                : Color.GRAY);
+
+        tv.setPadding(
+                30,
                 20,
-                20,
-                20,
+                30,
                 20
         );
 
-        txtTemplate.setBackgroundColor(
-                0xFF1E293B
+        tv.setGravity(Gravity.CENTER);
+
+        tv.setBackgroundResource(
+                R.drawable.bg_quiz_option_selected
         );
 
-        layoutCodeSlots.addView(
-                txtTemplate
-        );
+        return tv;
+    }
 
-        // =========================================
-        // ANSWERS
-        // =========================================
+    // =============================================
+    // CODE
+    // =============================================
 
-        List<String> answers =
-                step.data.answers;
+    private TextView createCodeView(
+            String text
+    ) {
 
-        if (answers == null) {
+        TextView tv =
+                new TextView(context);
 
-            answers =
-                    new ArrayList<>();
-        }
+        tv.setText(text);
 
-        for (String answer : answers) {
+        tv.setTextColor(Color.WHITE);
 
-            Button btn =
-                    new Button(context);
+        tv.setTextSize(22);
 
-            btn.setText(answer);
-
-            btn.setAllCaps(false);
-
-            btn.setOnClickListener(v -> {
-
-                uiState.selectedCodeWords.clear();
-
-                uiState.selectedCodeWords
-                        .add(answer);
-
-                txtTemplate.setText(
-
-                        template.replace(
-                                "[0]",
-                                answer
-                        )
-                );
-            });
-
-            layoutCodeWords.addView(btn);
-        }
-
-        // =========================================
-        // CHECK
-        // =========================================
-
-        btnCheckCode.setOnClickListener(v -> {
-
-            boolean correct =
-                    !uiState.selectedCodeWords
-                            .isEmpty();
-
-            if (correct) {
-
-                btnCheckCode.setText(
-                        "CHÍNH XÁC 🎉"
-                );
-
-                btnCheckCode.postDelayed(() -> {
-
-                    if (onCodeCorrect != null) {
-
-                        onCodeCorrect.run();
-                    }
-
-                }, 800);
-
-            } else {
-
-                btnCheckCode.setText(
-                        "SAI RỒI 😢"
-                );
-            }
-        });
-
-        // =========================================
-        // RESET
-        // =========================================
-
-        btnResetCode.setOnClickListener(v -> {
-
-            render(step);
-        });
+        return tv;
     }
 }

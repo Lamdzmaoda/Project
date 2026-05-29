@@ -11,12 +11,14 @@
     android:paddingStart="18dp"
     android:paddingEnd="18dp"
 
-    android:layout_marginBottom="16dp">
+    android:layout_marginBottom="18dp">
 
+    <!-- ====================================== -->
     <!-- TIMELINE -->
+    <!-- ====================================== -->
 
     <LinearLayout
-        android:layout_width="24dp"
+        android:layout_width="28dp"
         android:layout_height="match_parent"
 
         android:orientation="vertical"
@@ -25,28 +27,32 @@
 
         <!-- DOT -->
 
-        <View
+        <LinearLayout
             android:id="@+id/viewDot"
 
-            android:layout_width="10dp"
-            android:layout_height="10dp"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
 
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="30dp"
 
-            android:background="@drawable/bg_button_primary"/>
+            android:background="@drawable/bg_button_primary"
+
+            android:elevation="6dp"/>
 
         <!-- LINE -->
 
         <View
             android:id="@+id/viewLine"
 
-            android:layout_width="2dp"
-            android:layout_height="100dp"
+            android:layout_width="3dp"
+            android:layout_height="120dp"
 
-            android:background="#1E3A8A"/>
+            android:background="#1D4ED8"/>
     </LinearLayout>
 
+    <!-- ====================================== -->
     <!-- CARD -->
+    <!-- ====================================== -->
 
     <LinearLayout
         android:id="@+id/layoutCard"
@@ -62,19 +68,25 @@
 
         android:padding="18dp"
 
-        android:background="@drawable/bg_card_primary">
+        android:background="@drawable/bg_card_primary"
 
+        android:elevation="8dp">
+
+        <!-- ================================= -->
         <!-- ICON -->
+        <!-- ================================= -->
 
         <LinearLayout
             android:id="@+id/layoutIcon"
 
-            android:layout_width="58dp"
-            android:layout_height="58dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
 
             android:gravity="center"
 
-            android:background="@drawable/bg_lesson_progress">
+            android:background="@drawable/bg_lesson_progress"
+
+            android:elevation="6dp">
 
             <TextView
                 android:id="@+id/txtLessonIcon"
@@ -88,10 +100,12 @@
 
                 android:textStyle="bold"
 
-                android:textSize="20sp"/>
+                android:textSize="22sp"/>
         </LinearLayout>
 
+        <!-- ================================= -->
         <!-- CONTENT -->
+        <!-- ================================= -->
 
         <LinearLayout
             android:layout_width="0dp"
@@ -102,6 +116,29 @@
             android:layout_marginStart="16dp"
 
             android:orientation="vertical">
+
+            <!-- STATUS -->
+
+            <TextView
+                android:id="@+id/txtStatus"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="ĐANG HỌC"
+
+                android:textColor="#60A5FA"
+
+                android:textStyle="bold"
+
+                android:textSize="11sp"
+
+                android:background="#12203D"
+
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"/>
 
             <!-- TITLE -->
 
@@ -117,27 +154,11 @@
 
                 android:textStyle="bold"
 
-                android:textSize="17sp"
+                android:textSize="18sp"
 
-                android:maxLines="2"/>
+                android:maxLines="2"
 
-            <!-- STATUS -->
-
-            <TextView
-                android:id="@+id/txtStatus"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-
-                android:text="Đang học"
-
-                android:textColor="#3B82F6"
-
-                android:textStyle="bold"
-
-                android:textSize="12sp"
-
-                android:layout_marginTop="6dp"/>
+                android:layout_marginTop="10dp"/>
 
             <!-- SUB -->
 
@@ -147,16 +168,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="6 phút"
+                android:text="6 phút • 4 bước"
 
                 android:textColor="#94A3B8"
 
-                android:textSize="12sp"
+                android:textSize="13sp"
 
-                android:layout_marginTop="2dp"/>
+                android:layout_marginTop="6dp"/>
         </LinearLayout>
 
+        <!-- ================================= -->
         <!-- RIGHT -->
+        <!-- ================================= -->
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -168,33 +191,45 @@
 
             <!-- XP -->
 
-            <TextView
-                android:id="@+id/txtXp"
-
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="+50 XP"
+                android:background="#1E293B"
 
-                android:textColor="#FACC15"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:paddingTop="6dp"
+                android:paddingBottom="6dp">
 
-                android:textStyle="bold"
+                <TextView
+                    android:id="@+id/txtXp"
 
-                android:textSize="12sp"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="⚡ 50 XP"
+
+                    android:textColor="#FACC15"
+
+                    android:textStyle="bold"
+
+                    android:textSize="12sp"/>
+            </LinearLayout>
 
             <!-- BUTTON -->
 
             <TextView
                 android:id="@+id/btnStart"
 
-                android:layout_width="78dp"
-                android:layout_height="34dp"
+                android:layout_width="92dp"
+                android:layout_height="38dp"
 
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="14dp"
 
                 android:gravity="center"
 
-                android:text="Tiếp tục"
+                android:text="TIẾP TỤC"
 
                 android:textColor="@android:color/white"
 

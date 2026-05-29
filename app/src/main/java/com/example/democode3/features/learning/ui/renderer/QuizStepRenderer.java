@@ -1,10 +1,11 @@
 package com.example.democode3.features.learning.ui.renderer;
 
+import android.graphics.Color;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.democode3.R;
 import com.example.democode3.features.learning.model.LessonStep;
 
 public class QuizStepRenderer {
@@ -17,22 +18,45 @@ public class QuizStepRenderer {
 
             TextView txtContent,
 
-            Button btnAnswerA,
+            TextView btnAnswerA,
 
-            Button btnAnswerB
+            TextView btnAnswerB,
+
+            View viewCircleA,
+
+            View viewCircleB,
+
+            LinearLayout layoutAnswerA,
+
+            LinearLayout layoutAnswerB
     ) {
+
+        // =================================================
+        // SHOW QUIZ
+        // =================================================
 
         layoutQuiz.setVisibility(
                 View.VISIBLE
         );
 
+        // =================================================
+        // QUESTION
+        // =================================================
+
         txtContent.setText(
                 step.data.question
         );
 
+        // =================================================
+        // ANSWER
+        // =================================================
+
         if (
+
                 step.data.options != null
+
                         &&
+
                         step.data.options.size() >= 2
         ) {
 
@@ -51,12 +75,32 @@ public class QuizStepRenderer {
             );
         }
 
-        btnAnswerA.setBackgroundColor(
-                0xFF4C4AA1
+        // =================================================
+        // RESET STYLE
+        // =================================================
+
+        layoutAnswerA.setBackgroundResource(
+                R.drawable.bg_quiz_option
         );
 
-        btnAnswerB.setBackgroundColor(
-                0xFF4C4AA1
+        layoutAnswerB.setBackgroundResource(
+                R.drawable.bg_quiz_option
+        );
+
+        viewCircleA.setBackgroundResource(
+                R.drawable.bg_radio_unselected
+        );
+
+        viewCircleB.setBackgroundResource(
+                R.drawable.bg_radio_unselected
+        );
+
+        btnAnswerA.setTextColor(
+                Color.WHITE
+        );
+
+        btnAnswerB.setTextColor(
+                Color.WHITE
         );
     }
 }

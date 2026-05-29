@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,19 +14,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import com.example.democode3.R;
-import com.example.democode3.features.community.api.request.CreateCommentRequest;
-import com.example.democode3.features.community.api.response.CommentResponse;
 import com.example.democode3.features.community.model.Comment;
 import com.example.democode3.features.community.model.Post;
-import com.example.democode3.features.community.repository.CommunityRepository;
 import com.example.democode3.features.community.ui.adapter.CommentAdapter;
+import com.example.democode3.features.fake.session.FakeSessionManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PostDetailActivity
         extends AppCompatActivity {
@@ -82,10 +75,11 @@ public class PostDetailActivity
     private CommentAdapter adapter;
 
     // =====================================
-    // REPOSITORY
+    // SESSION
     // =====================================
 
-    private CommunityRepository repository;
+    private final FakeSessionManager session =
+            FakeSessionManager.getInstance();
 
     // =====================================
     // ON CREATE
@@ -102,9 +96,6 @@ public class PostDetailActivity
                 R.layout.activity_post_detail
         );
 
-        repository =
-                new CommunityRepository(this);
-
         post =
                 (Post) getIntent()
                         .getSerializableExtra(
@@ -113,7 +104,8 @@ public class PostDetailActivity
 
         if (post != null) {
 
-            postId = String.valueOf(post.id);
+            postId =
+                    String.valueOf(post.id);
         }
 
         initView();
@@ -128,7 +120,7 @@ public class PostDetailActivity
     }
 
     // =====================================
-    // INIT VIEW
+    // INIT
     // =====================================
 
     private void initView() {
@@ -209,9 +201,9 @@ public class PostDetailActivity
         if (post == null)
             return;
 
-        // =================================
+        // ================================
         // AVATAR
-        // =================================
+        // ================================
 
         if (
 
@@ -230,57 +222,58 @@ public class PostDetailActivity
             );
         }
 
-        // =================================
+        // ================================
         // USERNAME
-        // =================================
+        // ================================
 
         txtUsername.setText(
                 post.username
         );
 
-        // =================================
+        // ================================
         // CONTENT
-        // =================================
+        // ================================
 
         txtContent.setText(
                 post.content
         );
 
-        // =================================
-        // LIKE
-        // =================================
+        // ================================
+        // TIME
+        // ================================
 
-        btnLike.setText(
-
-                (post.likedByMe ? "❤️ " : "🤍 ")
-
-                        + post.likeCount
+        txtTime.setText(
+                post.createdAt
         );
 
-        // =================================
+        // ================================
+        // LIKE
+        // ================================
+
+        updateLikeUI();
+
+        // ================================
         // COMMENT
-        // =================================
+        // ================================
+
+        post.commentCount =
+                session.getFakeComments(
+                        postId
+                ).size();
 
         btnComment.setText(
                 "💬 " + post.commentCount
         );
 
-        // =================================
+        // ================================
         // SAVE
-        // =================================
+        // ================================
 
-        btnSave.setText(
+        updateSaveUI();
 
-                post.savedByMe
-
-                        ? "🔖"
-
-                        : "📑"
-        );
-
-        // =================================
+        // ================================
         // IMAGE
-        // =================================
+        // ================================
 
         if (
 
@@ -310,9 +303,9 @@ public class PostDetailActivity
             );
         }
 
-        // =================================
+        // ================================
         // CODE
-        // =================================
+        // ================================
 
         if (
 
@@ -347,13 +340,54 @@ public class PostDetailActivity
     private void setupClick() {
 
         btnBack.setOnClickListener(
-
                 v -> finish()
         );
 
-        // =================================
+        // ================================
+        // LIKE
+        // ================================
+
+        btnLike.setOnClickListener(v -> {
+
+            post.likedByMe =
+                    !post.likedByMe;
+
+            if (post.likedByMe) {
+
+                session.likePost(post.id);
+
+            } else {
+
+                session.unlikePost(post.id);
+            }
+
+            updateLikeUI();
+        });
+
+        // ================================
+        // SAVE
+        // ================================
+
+        btnSave.setOnClickListener(v -> {
+
+            post.savedByMe =
+                    !post.savedByMe;
+
+            if (post.savedByMe) {
+
+                session.savePost(post.id);
+
+            } else {
+
+                session.unsavePost(post.id);
+            }
+
+            updateSaveUI();
+        });
+
+        // ================================
         // SEND COMMENT
-        // =================================
+        // ================================
 
         btnSend.setOnClickListener(v -> {
 
@@ -372,133 +406,84 @@ public class PostDetailActivity
                         "Nhập bình luận",
 
                         Toast.LENGTH_SHORT
+
                 ).show();
 
                 return;
             }
 
-            CreateCommentRequest request =
-                    new CreateCommentRequest();
-
-            request.postId =
-                    postId;
-
-            request.content =
-                    content;
-
-            repository.createComment(
-
-                    request,
-
-                    new Callback<Void>() {
-
-                        @Override
-                        public void onResponse(
-
-                                @NonNull Call<Void> call,
-
-                                @NonNull Response<Void> response
-                        ) {
-
-                            edtComment.setText("");
-
-                            loadComments();
-
-                            post.commentCount++;
-
-                            btnComment.setText(
-                                    "💬 " + post.commentCount
-                            );
-                        }
-
-                        @Override
-                        public void onFailure(
-
-                                @NonNull Call<Void> call,
-
-                                @NonNull Throwable t
-                        ) {
-
-                            Toast.makeText(
-
-                                    PostDetailActivity.this,
-
-                                    "Lỗi comment",
-
-                                    Toast.LENGTH_SHORT
-                            ).show();
-                        }
-                    }
+            session.addComment(
+                    postId,
+                    content
             );
+
+            edtComment.setText("");
+
+            loadComments();
+
+            post.commentCount =
+                    session.getFakeComments(
+                            postId
+                    ).size();
+
+            btnComment.setText(
+                    "💬 " + post.commentCount
+            );
+
+            recyclerComment.scrollToPosition(0);
         });
     }
 
     // =====================================
-    // LOAD COMMENT
+    // LOAD COMMENTS
     // =====================================
 
     private void loadComments() {
 
-        repository.getComments(
+        commentList.clear();
 
-                String.valueOf(postId),
+        commentList.addAll(
 
-                new Callback<CommentResponse>() {
+                session.getFakeComments(
+                        postId
+                )
+        );
 
-                    @Override
-                    public void onResponse(
+        adapter.notifyDataSetChanged();
+    }
 
-                            @NonNull
-                            Call<CommentResponse> call,
+    // =====================================
+    // LIKE UI
+    // =====================================
 
-                            @NonNull
-                            Response<CommentResponse> response
-                    ) {
+    private void updateLikeUI() {
 
-                        if (
+        post.likeCount =
+                session.getPostLikeCount(
+                        post.id
+                );
 
-                                response.isSuccessful()
+        btnLike.setText(
 
-                                        &&
+                (post.likedByMe ? "❤️ " : "🤍 ")
 
-                                        response.body() != null
+                        + post.likeCount
+        );
+    }
 
-                                        &&
+    // =====================================
+    // SAVE UI
+    // =====================================
 
-                                        response.body().result != null
-                        ) {
+    private void updateSaveUI() {
 
-                            commentList.clear();
+        btnSave.setText(
 
-                            commentList.addAll(
+                post.savedByMe
 
-                                    response.body().result
-                            );
+                        ? "🔖"
 
-                            adapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            @NonNull
-                            Call<CommentResponse> call,
-
-                            @NonNull
-                            Throwable t
-                    ) {
-
-                        Toast.makeText(
-
-                                PostDetailActivity.this,
-
-                                "Lỗi load comment",
-
-                                Toast.LENGTH_SHORT
-                        ).show();
-                    }
-                }
+                        : "📑"
         );
     }
 }

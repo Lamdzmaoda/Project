@@ -1,115 +1,202 @@
 package com.example.democode3.features.learning.ui.handler;
 
+import android.graphics.Color;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-import androidx.fragment.app.FragmentManager;
-
-import com.example.democode3.features.learning.model.LessonStep;
-import com.example.democode3.features.learning.ui.component.QuizResultSheet;
+import com.example.democode3.R;
 
 public class QuizResultHandler {
+
+    // =================================================
+    // CORRECT
+    // =================================================
 
     public void handleCorrect(
 
             int selectedIndex,
 
-            Button btnAnswerA,
+            LinearLayout layoutAnswerA,
 
-            Button btnAnswerB,
+            LinearLayout layoutAnswerB,
 
-            LessonStep step,
+            LinearLayout layoutResult,
 
-            FragmentManager fragmentManager,
+            LinearLayout layoutAi,
 
-            Runnable onContinue,
+            TextView txtResult,
 
-            Button btnNext
+            Button btnNext,
+
+            Runnable onContinue
     ) {
+
+        // =================================================
+        // SHOW RESULT
+        // =================================================
+
+        layoutResult.setVisibility(
+                View.VISIBLE
+        );
+
+        layoutAi.setVisibility(
+                View.VISIBLE
+        );
+
+        txtResult.setText(
+                "🎉 Chính xác!"
+        );
+
+        layoutResult.setBackgroundResource(
+                R.drawable.bg_result_correct
+        );
+
+        // =================================================
+        // GREEN ANSWER
+        // =================================================
 
         if (selectedIndex == 0) {
 
-            btnAnswerA.setBackgroundColor(
-                    0xFF4ADE80
+            layoutAnswerA.setBackgroundResource(
+                    R.drawable.bg_quiz_correct
             );
 
         } else {
 
-            btnAnswerB.setBackgroundColor(
-                    0xFF4ADE80
+            layoutAnswerB.setBackgroundResource(
+                    R.drawable.bg_quiz_correct
             );
         }
 
-        QuizResultSheet sheet =
-                new QuizResultSheet(
+        // =================================================
+        // BUTTON
+        // =================================================
 
-                        true,
-
-                        step.data.explanation,
-
-                        onContinue
-                );
-
-        sheet.show(
-
-                fragmentManager,
-
-                "QuizResult"
+        btnNext.setVisibility(
+                View.VISIBLE
         );
+
+        btnNext.setEnabled(true);
+
+        btnNext.setClickable(true);
+
+        btnNext.setAlpha(1f);
 
         btnNext.setText(
                 "TIẾP TỤC"
         );
+
+        btnNext.setTextColor(
+                Color.WHITE
+        );
+
+        btnNext.setBackgroundResource(
+                R.drawable.bg_primary_button
+        );
+
+        btnNext.setOnClickListener(v -> {
+
+            if (onContinue != null) {
+
+                onContinue.run();
+            }
+        });
     }
+
+    // =================================================
+    // WRONG
+    // =================================================
 
     public void handleWrong(
 
             int selectedIndex,
 
-            Button btnAnswerA,
+            LinearLayout layoutAnswerA,
 
-            Button btnAnswerB,
+            LinearLayout layoutAnswerB,
 
-            LessonStep step,
+            LinearLayout layoutResult,
 
-            FragmentManager fragmentManager,
+            LinearLayout layoutAi,
 
-            Runnable onRetry,
+            TextView txtResult,
 
-            Button btnNext
+            Button btnNext,
+
+            Runnable onRetry
     ) {
+
+        // =================================================
+        // SHOW RESULT
+        // =================================================
+
+        layoutResult.setVisibility(
+                View.VISIBLE
+        );
+
+        layoutAi.setVisibility(
+                View.VISIBLE
+        );
+
+        txtResult.setText(
+                "😭 Sai rồi!"
+        );
+
+        layoutResult.setBackgroundResource(
+                R.drawable.bg_result_wrong
+        );
+
+        // =================================================
+        // RED ANSWER
+        // =================================================
 
         if (selectedIndex == 0) {
 
-            btnAnswerA.setBackgroundColor(
-                    0xFFFB7185
+            layoutAnswerA.setBackgroundResource(
+                    R.drawable.bg_quiz_wrong
             );
 
         } else {
 
-            btnAnswerB.setBackgroundColor(
-                    0xFFFB7185
+            layoutAnswerB.setBackgroundResource(
+                    R.drawable.bg_quiz_wrong
             );
         }
 
-        QuizResultSheet sheet =
-                new QuizResultSheet(
+        // =================================================
+        // BUTTON
+        // =================================================
 
-                        false,
-
-                        "Sai rồi 😭🔥",
-
-                        onRetry
-                );
-
-        sheet.show(
-
-                fragmentManager,
-
-                "QuizResult"
+        btnNext.setVisibility(
+                View.VISIBLE
         );
+
+        btnNext.setEnabled(true);
+
+        btnNext.setClickable(true);
+
+        btnNext.setAlpha(1f);
 
         btnNext.setText(
                 "THỬ LẠI"
         );
+
+        btnNext.setTextColor(
+                Color.WHITE
+        );
+
+        btnNext.setBackgroundResource(
+                R.drawable.bg_primary_button
+        );
+
+        btnNext.setOnClickListener(v -> {
+
+            if (onRetry != null) {
+
+                onRetry.run();
+            }
+        });
     }
 }

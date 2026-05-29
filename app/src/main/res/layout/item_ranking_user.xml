@@ -2,75 +2,77 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:background="@color/dark_surface"
+    android:layout_height="74dp"
+    android:layout_marginBottom="12dp"
+    android:background="@drawable/bg_card_secondary"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="14dp">
-
-    <!-- RANK -->
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp">
 
     <TextView
         android:id="@+id/txtRank"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="34dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="#1"
-        android:textColor="@color/blue_primary"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:textSize="14sp"
-        android:background="@drawable/bg_avatar"/>
-
-    <!-- AVATAR -->
+        android:textSize="17sp"/>
 
     <TextView
         android:id="@+id/txtAvatar"
-        android:layout_width="46dp"
-        android:layout_height="46dp"
-        android:layout_marginStart="12dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_avatar_blue"
         android:gravity="center"
         android:text="D"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:background="@drawable/bg_avatar"/>
-
-    <!-- USER -->
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <LinearLayout
         android:id="@+id/layoutUser"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginStart="14dp"
+        android:layout_marginStart="12dp"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtUsername"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="16sp"/>
+            android:text="KaiDev"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txtLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_text"
-            android:textSize="13sp"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp"
+            android:background="@drawable/bg_level_badge"
+            android:paddingStart="10dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="3dp"
+            android:text="Lv.12"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            android:textStyle="bold"/>
     </LinearLayout>
-
-    <!-- XP -->
 
     <TextView
         android:id="@+id/txtXp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="14sp"/>
+        android:text="5420 XP"
+        android:textColor="#60A5FA"
+        android:textSize="17sp"
+        android:textStyle="bold"/>
 </LinearLayout>

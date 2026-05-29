@@ -1,204 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:background="#111827"
-    android:padding="12dp"
-    android:layout_marginBottom="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <!-- ================================= -->
-    <!-- HEADER -->
-    <!-- ================================= -->
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="#020817"
+    app:cardCornerRadius="26dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#172036"
+    app:strokeWidth="1dp">
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <!-- AVATAR -->
-
-        <TextView
-            android:id="@+id/txtAvatar"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:gravity="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            android:background="@android:color/holo_blue_dark"/>
-
-        <!-- USER -->
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/txtUsername"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:id="@+id/txtTime"
-                android:textColor="#9CA3AF"
-                android:textSize="12sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <!-- MENU -->
-
-        <TextView
-            android:id="@+id/btnMore"
-            android:text="⋮"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:padding="8dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
-
-    <!-- ================================= -->
-    <!-- CONTENT -->
-    <!-- ================================= -->
-
-    <TextView
-        android:id="@+id/txtContent"
-        android:textColor="#FFFFFF"
-        android:textSize="15sp"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <!-- ================================= -->
-    <!-- IMAGE -->
-    <!-- ================================= -->
-
-    <ImageView
-        android:id="@+id/imgPost"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_marginTop="10dp"
-        android:scaleType="centerCrop"/>
-
-
-    <!-- ================================= -->
-    <!-- CODE SNIPPET -->
-    <!-- ================================= -->
-
-    <HorizontalScrollView
-        android:id="@+id/layoutCode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
-        android:visibility="gone"
-        android:scrollbars="none"
-        android:background="#0B1220"
-        android:padding="0dp">
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- ============================== -->
+        <!-- HEADER -->
+        <!-- ============================== -->
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-            <!-- ================================= -->
-            <!-- CODE HEADER -->
-            <!-- ================================= -->
+            <!-- AVATAR -->
+
+            <TextView
+                android:id="@+id/txtAvatar"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_avatar_blue"
+                android:gravity="center"
+                android:text="K"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <!-- USER -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <!-- NAME -->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txtUsername"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="KaiDev"
+                        android:textColor="#FFFFFF"
+                        android:textSize="16sp"
+                        android:textStyle="bold"/>
+
+
+                    <!-- LEVEL -->
+
+                    <TextView
+                        android:id="@+id/txtLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_level_badge"
+                        android:paddingStart="8dp"
+                        android:paddingTop="3dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="3dp"
+                        android:text="Lv.12"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- TIME -->
+
+                <TextView
+                    android:id="@+id/txtTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="2 giờ trước"
+                    android:textColor="#64748B"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <!-- MORE -->
+
+            <TextView
+                android:id="@+id/btnMore"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:gravity="center"
+                android:text="⋮"
+                android:textColor="#64748B"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <!-- ============================== -->
+        <!-- CONTENT -->
+        <!-- ============================== -->
+
+        <TextView
+            android:id="@+id/txtContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:lineSpacingExtra="3dp"
+            android:text="Finally finished JWT authentication 😭🔥"
+            android:textColor="#F8FAFC"
+            android:textSize="15sp"/>
+
+        <!-- ============================== -->
+        <!-- IMAGE -->
+        <!-- ============================== -->
+
+        <ImageView
+            android:id="@+id/imgPost"
+            android:layout_width="match_parent"
+            android:layout_height="230dp"
+            android:layout_marginTop="14dp"
+            android:background="#111827"
+            android:scaleType="centerCrop"
+            android:visibility="gone"/>
+
+        <!-- ============================== -->
+        <!-- CODE -->
+        <!-- ============================== -->
+
+        <LinearLayout
+            android:id="@+id/layoutCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_code_block"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <!-- TOP -->
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:orientation="horizontal"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="12dp"
-                android:background="#111827">
-
-                <!-- LANGUAGE -->
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/txtCodeLanguage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="CODE"
-                    android:textColor="#94A3B8"
-                    android:textStyle="bold"
-                    android:textSize="11sp"/>
-
-                <!-- SPACE -->
-
-                <View
                     android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
-
-                <!-- COPY -->
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="PYTHON"
+                    android:textColor="#4ADE80"
+                    android:textSize="11sp"
+                    android:textStyle="bold"/>
 
                 <TextView
                     android:id="@+id/btnCopyCode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="📋 Copy"
-                    android:textColor="#E2E8F0"
+                    android:textColor="#FFFFFF"
                     android:textSize="12sp"/>
             </LinearLayout>
 
-            <!-- ================================= -->
-            <!-- CODE -->
-            <!-- ================================= -->
+            <!-- CODE TEXT -->
 
             <TextView
                 android:id="@+id/txtCode"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#E2E8F0"
-                android:textSize="13sp"
+                android:layout_marginTop="12dp"
                 android:fontFamily="monospace"
-                android:lineSpacingExtra="4dp"
-                android:padding="14dp"/>
+                android:lineSpacingExtra="2dp"
+                android:text="print('Hello AI')"
+                android:textColor="#E2E8F0"
+                android:textSize="13sp"/>
         </LinearLayout>
-    </HorizontalScrollView>
 
-    <!-- ================================= -->
-    <!-- ACTION -->
-    <!-- ================================= -->
+        <!-- ============================== -->
+        <!-- TAGS -->
+        <!-- ============================== -->
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginTop="12dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/btnLike"
-            android:textColor="#FFFFFF"
-            android:text="🤍 0"
-            android:layout_marginEnd="20dp"
+        <LinearLayout
+            android:id="@+id/layoutTags"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:orientation="horizontal"/>
 
-        <TextView
-            android:id="@+id/btnComment"
-            android:textColor="#FFFFFF"
-            android:text="💬 0"
-            android:layout_marginEnd="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <!-- ============================== -->
+        <!-- ACTION -->
+        <!-- ============================== -->
 
-        <TextView
-            android:id="@+id/btnSave"
-            android:textColor="#FFFFFF"
-            android:text="🔖"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btnLike"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="❤️ 482"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/btnComment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="💬 92"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/btnShare"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="↗ Share"
+                android:textColor="#CBD5E1"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>

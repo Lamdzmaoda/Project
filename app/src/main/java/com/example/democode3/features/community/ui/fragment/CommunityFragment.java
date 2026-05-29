@@ -115,6 +115,17 @@ public class CommunityFragment extends Fragment {
         );
 
         // =====================================
+        // DEFAULT TAB
+        // =====================================
+
+        tabLayout.selectTab(
+                tabLayout.getTabAt(1)
+        );
+
+        currentFeed =
+                FeedType.FOR_YOU;
+
+        // =====================================
         // RECYCLER
         // =====================================
 
@@ -202,35 +213,7 @@ public class CommunityFragment extends Fragment {
                                             );
                                         }
 
-                                        // =========================
-                                        // POST DETAIL
-                                        // =========================
 
-                                        @Override
-                                        public void onOpenPost(
-                                                Post post
-                                        ) {
-
-                                            Intent intent =
-                                                    new Intent(
-
-                                                            requireContext(),
-
-                                                            PostDetailActivity.class
-                                                    );
-
-                                            intent.putExtra(
-                                                    "post",
-                                                    post
-                                            );
-
-                                            intent.putExtra(
-                                                    "post_id",
-                                                    post.id
-                                            );
-
-                                            startActivity(intent);
-                                        }
                                     }
                             )
                     );

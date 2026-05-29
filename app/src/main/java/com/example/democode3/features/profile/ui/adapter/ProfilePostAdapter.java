@@ -278,14 +278,6 @@ public class ProfilePostAdapter
             listener.onOpenComment(p);
         });
 
-        // =================================
-        // OPEN POST
-        // =================================
-
-        h.itemView.setOnClickListener(v -> {
-
-            listener.onOpenPost(p);
-        });
 
         // =================================
         // OPEN PROFILE

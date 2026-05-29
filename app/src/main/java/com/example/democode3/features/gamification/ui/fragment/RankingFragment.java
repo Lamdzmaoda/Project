@@ -316,21 +316,15 @@ public class RankingFragment
         );
 
         txtAvatarTop1.setText(
-                top1.username
-                        .substring(0, 1)
-                        .toUpperCase()
+                safeAvatarText(top1.username)
         );
 
         txtAvatarTop2.setText(
-                top2.username
-                        .substring(0, 1)
-                        .toUpperCase()
+                safeAvatarText(top2.username)
         );
 
         txtAvatarTop3.setText(
-                top3.username
-                        .substring(0, 1)
-                        .toUpperCase()
+                safeAvatarText(top3.username)
         );
 
         layoutTop1.setOnClickListener(v ->
@@ -358,20 +352,31 @@ public class RankingFragment
 
                         list,
 
-                        this::openProfile
+                        userId -> openProfile(userId)
                 )
         );
 
+        // =================================
         // AUTO SCROLL
+        // =================================
 
-        String currentUserId =
-                String.valueOf(
-                        SessionManager
-                                .getUser(
-                                        requireContext()
-                                )
-                                .id
-                );
+        String currentUserId = "";
+
+        if (
+
+                SessionManager
+                        .getUser(requireContext())
+                        != null
+        ) {
+
+            currentUserId =
+                    String.valueOf(
+
+                            SessionManager
+                                    .getUser(requireContext())
+                                    .id
+                    );
+        }
 
         for (int i = 0; i < list.size(); i++) {
 
@@ -400,17 +405,35 @@ public class RankingFragment
             String userId
     ) {
 
-        String currentUserId =
-                String.valueOf(
-                        SessionManager
-                                .getUser(requireContext())
-                                .id
-                );
+        if (
+                userId == null
+                        ||
+                        userId.isEmpty()
+        ) {
+
+            return;
+        }
+
+        String currentUserId = "";
 
         if (
-                userId != null
-                        &&
-                        userId.equals(currentUserId)
+
+                SessionManager
+                        .getUser(requireContext())
+                        != null
+        ) {
+
+            currentUserId =
+                    String.valueOf(
+
+                            SessionManager
+                                    .getUser(requireContext())
+                                    .id
+                    );
+        }
+
+        if (
+                userId.equals(currentUserId)
         ) {
 
             requireActivity()
@@ -423,9 +446,7 @@ public class RankingFragment
                                             .getParent())
                                     .getId(),
 
-                            new com.example.democode3
-                                    .features.profile
-                                    .ui.fragment.ProfileFragment()
+                            new ProfileFragment()
                     )
                     .addToBackStack(null)
                     .commit();
@@ -449,5 +470,27 @@ public class RankingFragment
                 )
                 .addToBackStack(null)
                 .commit();
+    }
+
+    // =====================================
+    // SAFE AVATAR
+    // =====================================
+
+    private String safeAvatarText(
+            String text
+    ) {
+
+        if (
+                text == null
+                        ||
+                        text.trim().isEmpty()
+        ) {
+
+            return "?";
+        }
+
+        return text
+                .substring(0, 1)
+                .toUpperCase();
     }
 }

@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.democode3.R;
 import com.example.democode3.features.community.model.Post;
 import com.example.democode3.features.community.ui.activity.PostDetailActivity;
-import com.example.democode3.features.profile.ui.fragment.ProfileFragment;
 
 import java.util.List;
 
@@ -35,6 +34,63 @@ public class ProfileGridPostAdapter
     ) {
 
         this.list = list;
+    }
+
+    // =====================================
+    // HOLDER
+    // =====================================
+
+    static class VH
+            extends RecyclerView.ViewHolder {
+
+        TextView txtAvatar;
+
+        TextView txtUsername;
+
+        TextView txtContent;
+
+        TextView txtLike;
+
+        TextView txtComment;
+
+        TextView txtTime;
+
+        public VH(
+                @NonNull View itemView
+        ) {
+
+            super(itemView);
+
+            txtAvatar =
+                    itemView.findViewById(
+                            R.id.txtAvatar
+                    );
+
+            txtUsername =
+                    itemView.findViewById(
+                            R.id.txtUsername
+                    );
+
+            txtContent =
+                    itemView.findViewById(
+                            R.id.txtContent
+                    );
+
+            txtLike =
+                    itemView.findViewById(
+                            R.id.txtLike
+                    );
+
+            txtComment =
+                    itemView.findViewById(
+                            R.id.txtComment
+                    );
+
+            txtTime =
+                    itemView.findViewById(
+                            R.id.txtTime
+                    );
+        }
     }
 
     // =====================================
@@ -81,15 +137,35 @@ public class ProfileGridPostAdapter
                 list.get(position);
 
         // =================================
+        // AVATAR
+        // =================================
+
+        if (
+
+                post.username != null
+
+                        &&
+
+                        !post.username.isEmpty()
+        ) {
+
+            h.txtAvatar.setText(
+
+                    post.username
+                            .substring(0, 1)
+                            .toUpperCase()
+            );
+        }
+
+        // =================================
         // USERNAME
         // =================================
 
-        if (post.username != null) {
+        h.txtUsername.setText(
 
-            h.txtUsername.setText(
-                    "@" + post.username
-            );
-        }
+                "@"
+                        + post.username
+        );
 
         // =================================
         // CONTENT
@@ -104,7 +180,9 @@ public class ProfileGridPostAdapter
         // =================================
 
         h.txtLike.setText(
-                "❤ " + post.likeCount
+
+                "❤ "
+                        + post.likeCount
         );
 
         // =================================
@@ -112,11 +190,24 @@ public class ProfileGridPostAdapter
         // =================================
 
         h.txtComment.setText(
-                "💬 " + post.commentCount
+
+                "💬 "
+                        + post.commentCount
         );
 
         // =================================
-        // OPEN POST
+        // TIME
+        // =================================
+
+        if (post.createdAt != null) {
+
+            h.txtTime.setText(
+                    post.createdAt
+            );
+        }
+
+        // =================================
+        // OPEN DETAIL
         // =================================
 
         h.itemView.setOnClickListener(v -> {
@@ -136,37 +227,6 @@ public class ProfileGridPostAdapter
 
             v.getContext()
                     .startActivity(intent);
-        });
-
-        // =================================
-        // OPEN PROFILE
-        // =================================
-
-        h.txtUsername.setOnClickListener(v -> {
-
-            if (post.userId == null)
-                return;
-
-            androidx.fragment.app.FragmentActivity activity =
-                    (androidx.fragment.app.FragmentActivity)
-                            v.getContext();
-
-            activity.getSupportFragmentManager()
-
-                    .beginTransaction()
-
-                    .replace(
-
-                            R.id.fragmentContainer,
-
-                            ProfileFragment.newInstance(
-                                    post.userId
-                            )
-                    )
-
-                    .addToBackStack(null)
-
-                    .commit();
         });
     }
 
@@ -193,48 +253,5 @@ public class ProfileGridPostAdapter
     public int getItemCount() {
 
         return list.size();
-    }
-
-    // =====================================
-    // HOLDER
-    // =====================================
-
-    static class VH
-            extends RecyclerView.ViewHolder {
-
-        TextView txtUsername;
-
-        TextView txtContent;
-
-        TextView txtLike;
-
-        TextView txtComment;
-
-        public VH(
-                @NonNull View itemView
-        ) {
-
-            super(itemView);
-
-            txtUsername =
-                    itemView.findViewById(
-                            R.id.txtUsername
-                    );
-
-            txtContent =
-                    itemView.findViewById(
-                            R.id.txtContent
-                    );
-
-            txtLike =
-                    itemView.findViewById(
-                            R.id.txtLike
-                    );
-
-            txtComment =
-                    itemView.findViewById(
-                            R.id.txtComment
-                    );
-        }
     }
 }

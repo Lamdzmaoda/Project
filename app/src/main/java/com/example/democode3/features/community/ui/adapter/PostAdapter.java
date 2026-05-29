@@ -1,182 +1,61 @@
 package com.example.democode3.features.community.ui.adapter;
 
+import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-
 import com.example.democode3.R;
-
 import com.example.democode3.features.community.model.Post;
-import com.example.democode3.features.community.repository.CommunityRepository;
-
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class PostAdapter
         extends RecyclerView.Adapter<PostAdapter.VH> {
 
-    // =====================================
-    // LISTENER
-    // =====================================
+    private final Context context;
+
+    private final List<Post> posts;
+
+    private final OnPostActionListener listener;
 
     public interface OnPostActionListener {
 
-        void onOpenProfile(String userId);
+        void onOpenProfile(
+                String userId
+        );
 
-        void onOpenComment(Post post);
-
-        void onOpenPost(Post post);
+        void onOpenComment(
+                Post post
+        );
     }
-
-    // =====================================
-    // CONTEXT
-    // =====================================
-
-    Context context;
-
-    // =====================================
-    // LIST
-    // =====================================
-
-    List<Post> list;
-
-    // =====================================
-    // LISTENER
-    // =====================================
-
-    OnPostActionListener listener;
-
-    // =====================================
-    // REPOSITORY
-    // =====================================
-
-    CommunityRepository repository;
-
-    // =====================================
-    // CONSTRUCTOR
-    // =====================================
 
     public PostAdapter(
 
             Context context,
 
-            List<Post> list,
+            List<Post> posts,
 
             OnPostActionListener listener
     ) {
 
         this.context = context;
 
-        this.list = list;
+        this.posts = posts;
 
         this.listener = listener;
-
-        repository =
-                new CommunityRepository(
-                        context
-                );
     }
-
-    // =====================================
-    // VIEW HOLDER
-    // =====================================
-
-    static class VH
-            extends RecyclerView.ViewHolder {
-
-        TextView txtAvatar;
-
-        TextView txtUsername;
-
-        TextView txtTime;
-
-        TextView txtContent;
-
-        TextView btnLike;
-
-        TextView btnComment;
-
-        TextView btnSave;
-
-        TextView btnMore;
-
-        ImageView imgPost;
-
-        HorizontalScrollView layoutCode;
-
-        TextView txtCode;
-
-        TextView btnCopyCode;
-
-        TextView txtCodeLanguage;
-
-        public VH(View v) {
-
-            super(v);
-
-            txtAvatar =
-                    v.findViewById(R.id.txtAvatar);
-
-            txtUsername =
-                    v.findViewById(R.id.txtUsername);
-
-            txtTime =
-                    v.findViewById(R.id.txtTime);
-
-            txtContent =
-                    v.findViewById(R.id.txtContent);
-
-            btnLike =
-                    v.findViewById(R.id.btnLike);
-
-            btnComment =
-                    v.findViewById(R.id.btnComment);
-
-            btnSave =
-                    v.findViewById(R.id.btnSave);
-
-            btnMore =
-                    v.findViewById(R.id.btnMore);
-
-            imgPost =
-                    v.findViewById(R.id.imgPost);
-
-            layoutCode =
-                    v.findViewById(R.id.layoutCode);
-
-            txtCode =
-                    v.findViewById(R.id.txtCode);
-
-            btnCopyCode =
-                    v.findViewById(R.id.btnCopyCode);
-
-            txtCodeLanguage =
-                    v.findViewById(R.id.txtCodeLanguage);
-        }
-    }
-
-    // =====================================
-    // CREATE VIEW
-    // =====================================
 
     @NonNull
     @Override
@@ -198,746 +77,334 @@ public class PostAdapter
         return new VH(view);
     }
 
-    // =====================================
-    // BIND
-    // =====================================
-
     @Override
     public void onBindViewHolder(
 
-            @NonNull VH h,
+            @NonNull VH holder,
 
             int position
     ) {
 
-        Post p = list.get(position);
-        int adapterPosition =
-                h.getAdapterPosition();
+        Post post =
+                posts.get(position);
 
-        if (adapterPosition == RecyclerView.NO_POSITION)
-            return;
+        // USER
 
-        // =====================================
-        // USERNAME
-        // =====================================
-
-        h.txtUsername.setText(
-                p.username
+        holder.txtUsername.setText(
+                safe(post.username)
         );
 
-        // =====================================
-        // AVATAR
-        // =====================================
-
-        String username = "U";
-
-        if (
-                p.username != null
-                        &&
-                        p.username != null
-                        &&
-                        !p.username.isEmpty()
-        ) {
-
-            username = p.username;
-        }
-
-        h.txtAvatar.setText(
-                username.substring(0, 1).toUpperCase()
+        holder.txtAvatar.setText(
+                avatar(post.username)
         );
 
-        // =====================================
         // CONTENT
-        // =====================================
 
-        h.txtContent.setText(
-                p.content
+        holder.txtContent.setText(
+                safe(post.content)
         );
 
-        // =====================================
         // TIME
-        // =====================================
 
-        h.txtTime.setText("2 giờ");
+        holder.txtTime.setText(
+                "2 giờ trước"
+        );
 
-        // =====================================
-        // IMAGE
-        // =====================================
+        // LEVEL
+
+        holder.txtLevel.setText(
+                "Lv.12"
+        );
+
+        // LIKE
+
+        holder.btnLike.setText(
+                "❤️ " + post.likeCount
+        );
+
+        // COMMENT
+
+        holder.btnComment.setText(
+                "💬 " + post.commentCount
+        );
+
+        // CODE
 
         if (
-                p.imageUrl != null
+                post.codeSnippet != null
                         &&
-                        !p.imageUrl.isEmpty()
+                        !post.codeSnippet.trim().isEmpty()
         ) {
 
-            h.imgPost.setVisibility(
+            holder.layoutCode.setVisibility(
                     View.VISIBLE
             );
 
-            Glide.with(context)
-                    .load(p.imageUrl)
-                    .into(h.imgPost);
+            holder.txtCode.setText(
+                    post.codeSnippet
+            );
 
         } else {
 
-            h.imgPost.setVisibility(
+            holder.layoutCode.setVisibility(
                     View.GONE
             );
         }
 
-        // =====================================
-        // CODE SNIPPET
-        // =====================================
+        // IMAGE
 
         if (
-                p.codeSnippet != null
+                post.imageUrl != null
                         &&
-                        !p.codeSnippet.isEmpty()
+                        !post.imageUrl.trim().isEmpty()
         ) {
 
-            h.layoutCode.setVisibility(
+            holder.imgPost.setVisibility(
                     View.VISIBLE
             );
 
-            h.txtCode.setText(
-                    p.codeSnippet
-            );
+            try {
 
-            // =================================
-            // LANGUAGE
-            // =================================
-
-            if (p.codeSnippet.contains("def ")) {
-
-                h.txtCodeLanguage.setText(
-                        "PYTHON"
+                holder.imgPost.setImageURI(
+                        Uri.parse(post.imageUrl)
                 );
 
-            }
+            } catch (Exception e) {
 
-            else if (
-                    p.codeSnippet.contains("System.out")
-            ) {
-
-                h.txtCodeLanguage.setText(
-                        "JAVA"
-                );
-
-            }
-
-            else {
-
-                h.txtCodeLanguage.setText(
-                        "CODE"
+                holder.imgPost.setVisibility(
+                        View.GONE
                 );
             }
 
-            // =================================
-            // COPY
-            // =================================
+        } else {
 
-            h.btnCopyCode.setOnClickListener(v -> {
-
-                ClipboardManager clipboard =
-
-                        (ClipboardManager)
-
-                                context.getSystemService(
-                                        Context.CLIPBOARD_SERVICE
-                                );
-
-                ClipData clip =
-
-                        ClipData.newPlainText(
-                                "code",
-                                p.codeSnippet
-                        );
-
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(
-
-                        context,
-
-                        "Đã sao chép code",
-
-                        Toast.LENGTH_SHORT
-
-                ).show();
-            });
-
-        }
-
-        else {
-
-            h.layoutCode.setVisibility(
+            holder.imgPost.setVisibility(
                     View.GONE
             );
         }
 
-        // =====================================
-        // LIKE
-        // =====================================
+        // COPY
 
-        h.btnLike.setText(
-                (p.likedByMe ? "❤️ " : "🤍 ")
-                        + p.likeCount
-        );
+        holder.btnCopyCode.setOnClickListener(v -> {
 
-        h.btnLike.setOnClickListener(v -> {
+            ClipboardManager clipboard =
+                    (ClipboardManager)
 
-            if (!p.likedByMe) {
-
-                repository.likePost(
-
-                        String.valueOf(p.id),
-
-                        new Callback<Void>() {
-
-                            @Override
-                            public void onResponse(
-
-                                    Call<Void> call,
-
-                                    Response<Void> response
-                            ) {
-
-                                p.likedByMe = true;
-
-                                p.likeCount++;
-
-                                notifyItemChanged(adapterPosition);
-                            }
-
-                            @Override
-                            public void onFailure(
-
-                                    Call<Void> call,
-
-                                    Throwable t
-                            ) {
-
-                                Toast.makeText(
-
-                                        context,
-
-                                        t.getMessage(),
-
-                                        Toast.LENGTH_SHORT
-
-                                ).show();
-                            }
-                        }
-                );
-
-            } else {
-
-                repository.unlikePost(
-
-                        String.valueOf(p.id),
-
-                        new Callback<Void>() {
-
-                            @Override
-                            public void onResponse(
-
-                                    Call<Void> call,
-
-                                    Response<Void> response
-                            ) {
-
-                                p.likedByMe = false;
-
-                                p.likeCount--;
-
-                                notifyItemChanged(adapterPosition);
-                            }
-
-                            @Override
-                            public void onFailure(
-
-                                    Call<Void> call,
-
-                                    Throwable t
-                            ) {
-
-                                Toast.makeText(
-
-                                        context,
-
-                                        t.getMessage(),
-
-                                        Toast.LENGTH_SHORT
-
-                                ).show();
-                            }
-                        }
-                );
-            }
-        });
-
-        // =====================================
-        // COMMENT
-        // =====================================
-
-        h.btnComment.setText(
-                "💬 " + p.commentCount
-        );
-
-        h.btnComment.setOnClickListener(v -> {
-
-            listener.onOpenComment(p);
-        });
-
-        // =====================================
-        // SAVE
-        // =====================================
-
-        h.btnSave.setText(
-                p.savedByMe ? "🔖" : "📑"
-        );
-
-        h.btnSave.setOnClickListener(v -> {
-
-            if (!p.savedByMe) {
-
-                repository.savePost(
-
-                        String.valueOf(p.id),
-
-                        new Callback<Void>() {
-
-                            @Override
-                            public void onResponse(
-
-                                    Call<Void> call,
-
-                                    Response<Void> response
-                            ) {
-
-                                p.savedByMe = true;
-
-                                notifyItemChanged(adapterPosition);
-                            }
-
-                            @Override
-                            public void onFailure(
-
-                                    Call<Void> call,
-
-                                    Throwable t
-                            ) {
-
-                                Toast.makeText(
-
-                                        context,
-
-                                        t.getMessage(),
-
-                                        Toast.LENGTH_SHORT
-
-                                ).show();
-                            }
-                        }
-                );
-
-            } else {
-
-                repository.unsavePost(
-
-                        String.valueOf(p.id),
-
-                        new Callback<Void>() {
-
-                            @Override
-                            public void onResponse(
-
-                                    Call<Void> call,
-
-                                    Response<Void> response
-                            ) {
-
-                                p.savedByMe = false;
-
-                                notifyItemChanged(adapterPosition);
-                            }
-
-                            @Override
-                            public void onFailure(
-
-                                    Call<Void> call,
-
-                                    Throwable t
-                            ) {
-
-                                Toast.makeText(
-
-                                        context,
-
-                                        t.getMessage(),
-
-                                        Toast.LENGTH_SHORT
-
-                                ).show();
-                            }
-                        }
-                );
-            }
-        });
-
-        // =====================================
-        // OPEN PROFILE
-        // =====================================
-
-        View.OnClickListener openProfileListener =
-
-                v -> listener.onOpenProfile(
-                        p.userId
-                );
-
-        h.txtAvatar.setOnClickListener(
-                openProfileListener
-        );
-
-        h.txtUsername.setOnClickListener(
-                openProfileListener
-        );
-
-        // =====================================
-        // OPEN POST
-        // =====================================
-
-        h.imgPost.setOnClickListener(v -> {
-
-            listener.onOpenPost(p);
-        });
-
-        // =====================================
-// MENU
-// =====================================
-
-        h.btnMore.setOnClickListener(v -> {
-
-            BottomSheetDialog dialog =
-                    new BottomSheetDialog(context);
-
-            View sheet =
-
-                    LayoutInflater
-                            .from(context)
-                            .inflate(
-                                    R.layout.dialog_post_menu,
-                                    null
+                            context.getSystemService(
+                                    Context.CLIPBOARD_SERVICE
                             );
 
-            dialog.setContentView(sheet);
-
-            TextView btnReport =
-                    sheet.findViewById(
-                            R.id.btnReport
+            ClipData clip =
+                    ClipData.newPlainText(
+                            "code",
+                            holder.txtCode.getText()
                     );
 
-            TextView btnNotInterested =
-                    sheet.findViewById(
-                            R.id.btnNotInterested
+            clipboard.setPrimaryClip(clip);
+
+            Toast.makeText(
+                    context,
+                    "Đã copy code",
+                    Toast.LENGTH_SHORT
+            ).show();
+        });
+
+        // MENU
+
+        holder.btnMore.setOnClickListener(v -> {
+
+            Dialog dialog =
+                    new Dialog(
+                            context,
+                            android.R.style.Theme_Black_NoTitleBar_Fullscreen
                     );
 
-            TextView btnGoToPost =
-                    sheet.findViewById(
-                            R.id.btnGoToPost
-                    );
+            dialog.setContentView(
+                    R.layout.dialog_post_menu
+            );
 
-            TextView btnShare =
-                    sheet.findViewById(
-                            R.id.btnShare
-                    );
+            if (dialog.getWindow() != null) {
 
-            TextView btnCopyLink =
-                    sheet.findViewById(
-                            R.id.btnCopyLink
-                    );
+                dialog.getWindow().setBackgroundDrawableResource(
+                        android.R.color.transparent
+                );
+            }
 
-            TextView btnEmbed =
-                    sheet.findViewById(
-                            R.id.btnEmbed
-                    );
-
-            TextView btnAboutAccount =
-                    sheet.findViewById(
-                            R.id.btnAboutAccount
-                    );
+            dialog.setCancelable(true);
 
             TextView btnCancel =
-                    sheet.findViewById(
+                    dialog.findViewById(
                             R.id.btnCancel
                     );
 
-            // =====================================
-            // OWNER MENU
-            // =====================================
+            if (btnCancel != null) {
 
-            boolean isOwner =
-                    p.username != null
-                            &&
-                            p.username.equalsIgnoreCase(
-                                    "dantew"
-                            );
+                btnCancel.setOnClickListener(v2 -> {
 
-            if (isOwner) {
-
-                btnReport.setText(
-                        "Xóa bài viết"
-                );
-
-                btnReport.setTextColor(
-                        0xFFF43F5E
-                );
-
-            } else {
-
-                btnReport.setText(
-                        "Báo cáo"
-                );
+                    dialog.dismiss();
+                });
             }
-
-            // =====================================
-            // REPORT / DELETE
-            // =====================================
-
-            btnReport.setOnClickListener(v1 -> {
-
-                if (isOwner) {
-
-                    repository.deletePost(
-
-                            String.valueOf(p.id),
-
-                            new Callback<Void>() {
-
-                                @Override
-                                public void onResponse(
-
-                                        Call<Void> call,
-
-                                        Response<Void> response
-                                ) {
-
-                                    int pos =
-                                            h.getAdapterPosition();
-
-                                    if (
-                                            pos != RecyclerView.NO_POSITION
-                                    ) {
-
-                                        list.remove(pos);
-
-                                        notifyItemRemoved(pos);
-
-                                        notifyItemRangeChanged(
-                                                pos,
-                                                list.size()
-                                        );
-                                    }
-
-                                    Toast.makeText(
-
-                                            context,
-
-                                            "Đã xóa bài viết",
-
-                                            Toast.LENGTH_SHORT
-
-                                    ).show();
-                                }
-
-                                @Override
-                                public void onFailure(
-
-                                        Call<Void> call,
-
-                                        Throwable t
-                                ) {
-
-                                    Toast.makeText(
-
-                                            context,
-
-                                            t.getMessage(),
-
-                                            Toast.LENGTH_SHORT
-
-                                    ).show();
-                                }
-                            }
-                    );
-
-                } else {
-
-                    Toast.makeText(
-
-                            context,
-
-                            "Đã báo cáo",
-
-                            Toast.LENGTH_SHORT
-
-                    ).show();
-                }
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // NOT INTERESTED
-            // =====================================
-
-            btnNotInterested.setOnClickListener(v1 -> {
-
-                int pos =
-                        h.getAdapterPosition();
-
-                if (
-                        pos != RecyclerView.NO_POSITION
-                ) {
-
-                    list.remove(pos);
-
-                    notifyItemRemoved(pos);
-                }
-
-                Toast.makeText(
-
-                        context,
-
-                        "Ẩn bài viết",
-
-                        Toast.LENGTH_SHORT
-
-                ).show();
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // GO TO POST
-            // =====================================
-
-            btnGoToPost.setOnClickListener(v1 -> {
-
-                listener.onOpenPost(p);
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // SHARE
-            // =====================================
-
-            btnShare.setOnClickListener(v1 -> {
-
-                Toast.makeText(
-
-                        context,
-
-                        "Chia sẻ bài viết",
-
-                        Toast.LENGTH_SHORT
-
-                ).show();
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // COPY LINK
-            // =====================================
-
-            btnCopyLink.setOnClickListener(v1 -> {
-
-                ClipboardManager clipboard =
-
-                        (ClipboardManager)
-
-                                context.getSystemService(
-                                        Context.CLIPBOARD_SERVICE
-                                );
-
-                ClipData clip =
-
-                        ClipData.newPlainText(
-
-                                "link",
-
-                                "https://myapp/post/" + p.id
-                        );
-
-                clipboard.setPrimaryClip(clip);
-
-                Toast.makeText(
-
-                        context,
-
-                        "Đã sao chép link",
-
-                        Toast.LENGTH_SHORT
-
-                ).show();
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // EMBED
-            // =====================================
-
-            btnEmbed.setOnClickListener(v1 -> {
-
-                Toast.makeText(
-
-                        context,
-
-                        "Nhúng bài viết",
-
-                        Toast.LENGTH_SHORT
-
-                ).show();
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // ABOUT ACCOUNT
-            // =====================================
-
-            btnAboutAccount.setOnClickListener(v1 -> {
-
-                listener.onOpenProfile(
-                        p.userId
-                );
-
-                dialog.dismiss();
-            });
-
-            // =====================================
-            // CANCEL
-            // =====================================
-
-            btnCancel.setOnClickListener(v1 -> {
-
-                dialog.dismiss();
-            });
 
             dialog.show();
         });
-    }
 
-    // =====================================
-    // COUNT
-    // =====================================
+        // PROFILE
+
+        holder.txtAvatar.setOnClickListener(v -> {
+
+            if (listener != null) {
+
+                listener.onOpenProfile(
+                        post.userId
+                );
+            }
+        });
+
+        holder.txtUsername.setOnClickListener(v -> {
+
+            if (listener != null) {
+
+                listener.onOpenProfile(
+                        post.userId
+                );
+            }
+        });
+
+        // COMMENT
+
+        holder.btnComment.setOnClickListener(v -> {
+
+            if (listener != null) {
+
+                listener.onOpenComment(
+                        post
+                );
+            }
+        });
+    }
 
     @Override
     public int getItemCount() {
 
-        return list.size();
+        return posts == null
+                ? 0
+                : posts.size();
+    }
+
+    private String safe(
+            String text
+    ) {
+
+        if (
+                text == null
+                        ||
+                        text.trim().isEmpty()
+        ) {
+
+            return "";
+        }
+
+        return text;
+    }
+
+    private String avatar(
+            String text
+    ) {
+
+        if (
+                text == null
+                        ||
+                        text.trim().isEmpty()
+        ) {
+
+            return "?";
+        }
+
+        return text
+                .substring(0, 1)
+                .toUpperCase();
+    }
+
+    class VH extends RecyclerView.ViewHolder {
+
+        TextView txtAvatar;
+
+        TextView txtUsername;
+
+        TextView txtLevel;
+
+        TextView txtTime;
+
+        TextView txtContent;
+
+        TextView txtCode;
+
+        TextView txtCodeLanguage;
+
+        TextView btnCopyCode;
+
+        TextView btnLike;
+
+        TextView btnComment;
+
+        TextView btnShare;
+
+        TextView btnMore;
+
+        ImageView imgPost;
+
+        LinearLayout layoutTags;
+
+        LinearLayout layoutCode;
+
+        VH(View v) {
+
+            super(v);
+
+            txtAvatar =
+                    v.findViewById(R.id.txtAvatar);
+
+            txtUsername =
+                    v.findViewById(R.id.txtUsername);
+
+            txtLevel =
+                    v.findViewById(R.id.txtLevel);
+
+            txtTime =
+                    v.findViewById(R.id.txtTime);
+
+            txtContent =
+                    v.findViewById(R.id.txtContent);
+
+            txtCode =
+                    v.findViewById(R.id.txtCode);
+
+            txtCodeLanguage =
+                    v.findViewById(R.id.txtCodeLanguage);
+
+            btnCopyCode =
+                    v.findViewById(R.id.btnCopyCode);
+
+            btnLike =
+                    v.findViewById(R.id.btnLike);
+
+            btnComment =
+                    v.findViewById(R.id.btnComment);
+
+            btnShare =
+                    v.findViewById(R.id.btnShare);
+
+            btnMore =
+                    v.findViewById(R.id.btnMore);
+
+            imgPost =
+                    v.findViewById(R.id.imgPost);
+
+            layoutTags =
+                    v.findViewById(R.id.layoutTags);
+
+            layoutCode =
+                    v.findViewById(R.id.layoutCode);
+        }
     }
 }

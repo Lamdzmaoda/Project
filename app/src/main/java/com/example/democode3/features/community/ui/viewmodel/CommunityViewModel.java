@@ -1,21 +1,19 @@
 package com.example.democode3.features.community.ui.viewmodel;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.democode3.core.enums.FeedType;
-import com.example.democode3.features.community.api.response.PostResponse;
 import com.example.democode3.features.community.model.Post;
-import com.example.democode3.features.community.repository.CommunityRepository;
+import com.example.democode3.features.fake.session.FakeSessionManager;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class CommunityViewModel
         extends ViewModel {
@@ -29,10 +27,12 @@ public class CommunityViewModel
             new MutableLiveData<>();
 
     // =====================================
-    // REPOSITORY
+    // LOADING
     // =====================================
 
-    private CommunityRepository repository;
+    private final MutableLiveData<Boolean>
+            loading =
+            new MutableLiveData<>(false);
 
     // =====================================
     // CURRENT FEED
@@ -42,6 +42,13 @@ public class CommunityViewModel
             FeedType.ALL;
 
     // =====================================
+    // SESSION
+    // =====================================
+
+    private final FakeSessionManager session =
+            FakeSessionManager.getInstance();
+
+    // =====================================
     // INIT
     // =====================================
 
@@ -49,22 +56,26 @@ public class CommunityViewModel
             Context context
     ) {
 
-        if (repository == null) {
-
-            repository =
-                    new CommunityRepository(
-                            context
-                    );
-        }
     }
 
     // =====================================
-    // OBSERVE
+    // POSTS
     // =====================================
 
-    public LiveData<List<Post>> getPosts() {
+    public LiveData<List<Post>>
+    getPosts() {
 
         return posts;
+    }
+
+    // =====================================
+    // LOADING
+    // =====================================
+
+    public LiveData<Boolean>
+    isLoading() {
+
+        return loading;
     }
 
     // =====================================
@@ -77,50 +88,54 @@ public class CommunityViewModel
 
         currentFeed = type;
 
-        if (repository == null)
-            return;
+        loading.setValue(true);
 
-        repository.getPosts(
+        new Handler(
 
-                new Callback<PostResponse>() {
+                Looper.getMainLooper()
 
-                    @Override
-                    public void onResponse(
+        ).postDelayed(() -> {
 
-                            Call<PostResponse> call,
+            List<Post> fakePosts =
+                    session.getCommunityPosts();
 
-                            Response<PostResponse> response
+            // =============================
+            // FOLLOWING FEED
+            // =============================
+
+            if (type == FeedType.FOLLOWING) {
+
+                List<Post> followingPosts =
+                        new ArrayList<>();
+
+                for (Post post : fakePosts) {
+
+                    if (
+
+                            session.isFollowing(
+                                    post.userId
+                            )
                     ) {
 
-                        if (
-                                response.isSuccessful()
-                                        &&
-                                        response.body() != null
-                                        &&
-                                        response.body().result != null
-                        ) {
-
-                            if (response.body().result != null) {
-
-                                posts.setValue(
-                                        response.body().result.content
-                                );
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<PostResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
+                        followingPosts.add(post);
                     }
                 }
-        );
+
+                posts.setValue(
+                        followingPosts
+                );
+            }
+
+            else {
+
+                posts.setValue(
+                        fakePosts
+                );
+            }
+
+            loading.setValue(false);
+
+        }, 1200);
     }
 
     // =====================================
@@ -131,89 +146,35 @@ public class CommunityViewModel
             Post post
     ) {
 
-        if (repository == null)
+        if (post == null)
             return;
 
         if (post.likedByMe) {
 
-            repository.unlikePost(
+            post.likedByMe = false;
 
-                    String.valueOf(post.id),
+            if (post.likeCount > 0) {
 
-                    new Callback<Void>() {
+                post.likeCount--;
+            }
 
-                        @Override
-                        public void onResponse(
-
-                                Call<Void> call,
-
-                                Response<Void> response
-                        ) {
-
-                            post.likedByMe = false;
-
-                            if (post.likeCount > 0) {
-
-                                post.likeCount--;
-                            }
-
-                            posts.setValue(
-                                    posts.getValue()
-                            );
-                        }
-
-                        @Override
-                        public void onFailure(
-
-                                Call<Void> call,
-
-                                Throwable t
-                        ) {
-
-                            t.printStackTrace();
-                        }
-                    }
+            session.unlikePost(
+                    post.id
             );
         }
 
         else {
 
-            repository.likePost(
+            post.likedByMe = true;
 
-                    String.valueOf(post.id),
+            post.likeCount++;
 
-                    new Callback<Void>() {
-
-                        @Override
-                        public void onResponse(
-
-                                Call<Void> call,
-
-                                Response<Void> response
-                        ) {
-
-                            post.likedByMe = true;
-
-                            post.likeCount++;
-
-                            posts.setValue(
-                                    posts.getValue()
-                            );
-                        }
-
-                        @Override
-                        public void onFailure(
-
-                                Call<Void> call,
-
-                                Throwable t
-                        ) {
-
-                            t.printStackTrace();
-                        }
-                    }
+            session.likePost(
+                    post.id
             );
         }
+
+        refreshPosts();
     }
 
     // =====================================
@@ -224,128 +185,64 @@ public class CommunityViewModel
             Post post
     ) {
 
-        if (repository == null)
+        if (post == null)
             return;
 
         if (post.savedByMe) {
 
-            repository.unsavePost(
+            post.savedByMe = false;
 
-                    String.valueOf(post.id),
-
-                    new Callback<Void>() {
-
-                        @Override
-                        public void onResponse(
-
-                                Call<Void> call,
-
-                                Response<Void> response
-                        ) {
-
-                            post.savedByMe = false;
-
-                            posts.setValue(
-                                    posts.getValue()
-                            );
-                        }
-
-                        @Override
-                        public void onFailure(
-
-                                Call<Void> call,
-
-                                Throwable t
-                        ) {
-
-                            t.printStackTrace();
-                        }
-                    }
+            session.unsavePost(
+                    post.id
             );
         }
 
         else {
 
-            repository.savePost(
+            post.savedByMe = true;
 
-                    String.valueOf(post.id),
-
-                    new Callback<Void>() {
-
-                        @Override
-                        public void onResponse(
-
-                                Call<Void> call,
-
-                                Response<Void> response
-                        ) {
-
-                            post.savedByMe = true;
-
-                            posts.setValue(
-                                    posts.getValue()
-                            );
-                        }
-
-                        @Override
-                        public void onFailure(
-
-                                Call<Void> call,
-
-                                Throwable t
-                        ) {
-
-                            t.printStackTrace();
-                        }
-                    }
+            session.savePost(
+                    post.id
             );
         }
+
+        refreshPosts();
     }
 
     // =====================================
-    // DELETE POST
+    // DELETE
     // =====================================
 
     public void deletePost(
             long postId
     ) {
 
-        if (repository == null)
+        List<Post> current =
+                posts.getValue();
+
+        if (current == null)
             return;
 
-        repository.deletePost(
+        List<Post> updated =
+                new ArrayList<>();
 
-                String.valueOf(postId),
+        for (Post post : current) {
 
-                new Callback<Void>() {
+            if (
 
-                    @Override
-                    public void onResponse(
+                    !String.valueOf(postId)
+                            .equals(post.id)
+            ) {
 
-                            Call<Void> call,
+                updated.add(post);
+            }
+        }
 
-                            Response<Void> response
-                    ) {
-
-                        loadFeed(currentFeed);
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<Void> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
-        );
+        posts.setValue(updated);
     }
 
     // =====================================
-    // CREATE POST
+    // CREATE
     // =====================================
 
     public void createPost(
@@ -353,6 +250,37 @@ public class CommunityViewModel
             Post post
     ) {
 
-        loadFeed(type);
+        if (post == null)
+            return;
+
+        List<Post> current =
+                posts.getValue();
+
+        if (current == null) {
+
+            current =
+                    new ArrayList<>();
+        }
+
+        current.add(0, post);
+
+        posts.setValue(current);
+    }
+
+    // =====================================
+    // REFRESH
+    // =====================================
+
+    private void refreshPosts() {
+
+        List<Post> current =
+                posts.getValue();
+
+        if (current == null)
+            return;
+
+        posts.setValue(
+                new ArrayList<>(current)
+        );
     }
 }

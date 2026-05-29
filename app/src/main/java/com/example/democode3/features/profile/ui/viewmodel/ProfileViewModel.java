@@ -1,31 +1,20 @@
 package com.example.democode3.features.profile.ui.viewmodel;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.democode3.core.model.ApiResponse;
-
-import com.example.democode3.features.community.api.response.PostResponse;
 import com.example.democode3.features.community.model.Post;
-
-import com.example.democode3.features.profile.model.BooleanResponse;
-import com.example.democode3.features.profile.model.CountResponse;
-import com.example.democode3.features.profile.model.FollowResponse;
-import com.example.democode3.features.profile.model.ProfileResult;
-import com.example.democode3.features.profile.model.ProfileResponse;
+import com.example.democode3.features.fake.model.FakeUser;
+import com.example.democode3.features.fake.session.FakeSessionManager;
 import com.example.democode3.features.profile.model.UserProfileResponse;
 
-import com.example.democode3.features.profile.repository.ProfileRepository;
-
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ProfileViewModel
         extends AndroidViewModel {
@@ -71,10 +60,19 @@ public class ProfileViewModel
             new MutableLiveData<>(0);
 
     // =====================================
-    // REPOSITORY
+    // LOADING
     // =====================================
 
-    private final ProfileRepository repository;
+    private final MutableLiveData<Boolean>
+            loading =
+            new MutableLiveData<>(false);
+
+    // =====================================
+    // SESSION
+    // =====================================
+
+    private final FakeSessionManager session =
+            FakeSessionManager.getInstance();
 
     // =====================================
     // CONSTRUCTOR
@@ -85,11 +83,6 @@ public class ProfileViewModel
     ) {
 
         super(application);
-
-        repository =
-                new ProfileRepository(
-                        application
-                );
     }
 
     // =====================================
@@ -143,54 +136,55 @@ public class ProfileViewModel
     }
 
     // =====================================
+    // LOADING
+    // =====================================
+
+    public LiveData<Boolean>
+    isLoading() {
+
+        return loading;
+    }
+
+    // =====================================
     // LOAD MY PROFILE
     // =====================================
 
     public void loadMyProfile() {
 
-        repository.getMyInfo(
+        loading.setValue(true);
 
-                new Callback<ApiResponse<UserProfileResponse>>() {
+        new Handler(
 
-                    @Override
-                    public void onResponse(
+                Looper.getMainLooper()
 
-                            Call<ApiResponse<UserProfileResponse>> call,
+        ).postDelayed(() -> {
 
-                            Response<ApiResponse<UserProfileResponse>> response
-                    ) {
+            FakeUser fakeUser =
+                    session.getCurrentUser();
 
-                        if (
+            UserProfileResponse user =
+                    mapFakeUser(fakeUser);
 
-                                response.isSuccessful()
+            profile.setValue(user);
 
-                                        &&
+            followersCount.setValue(
+                    fakeUser.followers
+            );
 
-                                        response.body() != null
+            followingCount.setValue(
+                    fakeUser.following
+            );
 
-                                        &&
+            posts.setValue(
 
-                                        response.body().result != null
-                        ) {
+                    session.getPostsByUser(
+                            fakeUser.id
+                    )
+            );
 
-                            profile.setValue(
-                                    response.body().result
-                            );
-                        }
-                    }
+            loading.setValue(false);
 
-                    @Override
-                    public void onFailure(
-
-                            Call<ApiResponse<UserProfileResponse>> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
-        );
+        }, 1000);
     }
 
     // =====================================
@@ -201,150 +195,71 @@ public class ProfileViewModel
             String userId
     ) {
 
-        repository.getUserProfile(
+        loading.setValue(true);
 
-                userId,
+        new Handler(
 
-                new Callback<ApiResponse<ProfileResult>>() {
+                Looper.getMainLooper()
 
-                    @Override
-                    public void onResponse(
+        ).postDelayed(() -> {
 
-                            Call<ApiResponse<ProfileResult>> call,
+            FakeUser targetUser = null;
 
-                            Response<ApiResponse<ProfileResult>> response
-                    ) {
+            for (
 
-                        if (
+                    FakeUser user
+                    : session.getAllUsers()
+            ) {
 
-                                response.isSuccessful()
+                if (
 
-                                        &&
+                        user.id.equals(
+                                userId
+                        )
+                ) {
 
-                                        response.body() != null
+                    targetUser = user;
 
-                                        &&
-
-                                        response.body().result != null
-                        ) {
-
-                            ProfileResult result =
-                                    response.body().result;
-
-                            UserProfileResponse user =
-                                    new UserProfileResponse();
-
-                            user.id =
-                                    result.id;
-
-                            user.username =
-                                    result.username;
-
-                            user.displayName =
-                                    result.displayName;
-
-                            user.email =
-                                    result.email;
-
-                            user.avatarUrl =
-                                    result.avatarUrl;
-
-                            user.bio =
-                                    result.bio;
-
-                            user.level =
-                                    result.level;
-
-                            user.xp =
-                                    result.xp;
-
-                            user.coin =
-                                    result.coin;
-
-                            user.streak =
-                                    result.streak;
-
-                            user.verified =
-                                    result.verified;
-
-                            user.roles =
-                                    result.roles;
-
-                            profile.setValue(user);
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<ApiResponse<ProfileResult>> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
+                    break;
                 }
-        );
+            }
 
-        loadFollowStatus(userId);
+            if (targetUser == null) {
 
-        loadFollowersCount(userId);
+                loading.setValue(false);
 
-        loadFollowingCount(userId);
+                return;
+            }
 
-        loadPosts(userId);
-    }
+            profile.setValue(
+                    mapFakeUser(targetUser)
+            );
 
-    // =====================================
-    // FOLLOW STATUS
-    // =====================================
+            followed.setValue(
 
-    public void loadFollowStatus(
-            String userId
-    ) {
+                    session.isFollowing(
+                            userId
+                    )
+            );
 
-        repository.checkFollow(
+            followersCount.setValue(
+                    targetUser.followers
+            );
 
-                userId,
+            followingCount.setValue(
+                    targetUser.following
+            );
 
-                new Callback<BooleanResponse>() {
+            posts.setValue(
 
-                    @Override
-                    public void onResponse(
+                    session.getPostsByUser(
+                            userId
+                    )
+            );
 
-                            Call<BooleanResponse> call,
+            loading.setValue(false);
 
-                            Response<BooleanResponse> response
-                    ) {
-
-                        if (
-
-                                response.isSuccessful()
-
-                                        &&
-
-                                        response.body() != null
-                        ) {
-
-                            followed.setValue(
-                                    response.body().result
-                            );
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<BooleanResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
-        );
+        }, 1000);
     }
 
     // =====================================
@@ -355,36 +270,18 @@ public class ProfileViewModel
             String userId
     ) {
 
-        repository.followUser(
+        session.followUser(userId);
 
-                userId,
+        followed.setValue(true);
 
-                new Callback<FollowResponse>() {
+        Integer current =
+                followersCount.getValue();
 
-                    @Override
-                    public void onResponse(
+        if (current == null)
+            current = 0;
 
-                            Call<FollowResponse> call,
-
-                            Response<FollowResponse> response
-                    ) {
-
-                        followed.setValue(true);
-
-                        loadFollowersCount(userId);
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<FollowResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
+        followersCount.setValue(
+                current + 1
         );
     }
 
@@ -396,193 +293,64 @@ public class ProfileViewModel
             String userId
     ) {
 
-        repository.unfollowUser(
+        session.unfollowUser(userId);
 
-                userId,
+        followed.setValue(false);
 
-                new Callback<FollowResponse>() {
+        Integer current =
+                followersCount.getValue();
 
-                    @Override
-                    public void onResponse(
+        if (current == null)
+            current = 0;
 
-                            Call<FollowResponse> call,
+        if (current > 0) {
 
-                            Response<FollowResponse> response
-                    ) {
+            current--;
+        }
 
-                        followed.setValue(false);
-
-                        loadFollowersCount(userId);
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<FollowResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
+        followersCount.setValue(
+                current
         );
     }
 
     // =====================================
-    // FOLLOWERS COUNT
+    // MAP USER
     // =====================================
 
-    public void loadFollowersCount(
-            String userId
+    private UserProfileResponse mapFakeUser(
+            FakeUser fake
     ) {
 
-        repository.getFollowersCount(
+        UserProfileResponse user =
+                new UserProfileResponse();
 
-                userId,
+        user.id =
+                fake.id;
 
-                new Callback<CountResponse>() {
+        user.username =
+                fake.username;
 
-                    @Override
-                    public void onResponse(
+        user.displayName =
+                fake.fullName;
 
-                            Call<CountResponse> call,
+        user.avatarUrl =
+                fake.avatar;
 
-                            Response<CountResponse> response
-                    ) {
+        user.bio =
+                fake.bio;
 
-                        if (
+        user.level =
+                fake.level;
 
-                                response.isSuccessful()
+        user.xp =
+                fake.xp;
 
-                                        &&
+        user.streak =
+                fake.streak;
 
-                                        response.body() != null
-                        ) {
+        user.verified =
+                fake.verified;
 
-                            followersCount.setValue(
-                                    response.body().result
-                            );
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<CountResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
-        );
-    }
-
-    // =====================================
-    // FOLLOWING COUNT
-    // =====================================
-
-    public void loadFollowingCount(
-            String userId
-    ) {
-
-        repository.getFollowingCount(
-
-                userId,
-
-                new Callback<CountResponse>() {
-
-                    @Override
-                    public void onResponse(
-
-                            Call<CountResponse> call,
-
-                            Response<CountResponse> response
-                    ) {
-
-                        if (
-
-                                response.isSuccessful()
-
-                                        &&
-
-                                        response.body() != null
-                        ) {
-
-                            followingCount.setValue(
-                                    response.body().result
-                            );
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<CountResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
-        );
-    }
-
-    // =====================================
-    // POSTS
-    // =====================================
-
-    public void loadPosts(
-            String userId
-    ) {
-
-        repository.getUserPosts(
-
-                userId,
-
-                new Callback<PostResponse>() {
-
-                    @Override
-                    public void onResponse(
-
-                            Call<PostResponse> call,
-
-                            Response<PostResponse> response
-                    ) {
-
-                        if (
-
-                                response.isSuccessful()
-
-                                        &&
-
-                                        response.body() != null
-
-                                        &&
-
-                                        response.body().result != null
-                        ) {
-
-                            posts.setValue(
-                                    response.body().result.content
-                            );
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<PostResponse> call,
-
-                            Throwable t
-                    ) {
-
-                        t.printStackTrace();
-                    }
-                }
-        );
+        return user;
     }
 }

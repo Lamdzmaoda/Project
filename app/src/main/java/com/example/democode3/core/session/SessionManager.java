@@ -74,7 +74,7 @@ public class SessionManager {
 
                 .putString(
                         KEY_ID,
-                        user.id
+                        String.valueOf(user.id)
                 )
 
                 .putString(
@@ -94,7 +94,16 @@ public class SessionManager {
 
                 .putString(
                         KEY_ROLE,
-                        user.role.name()
+
+                        user.role != null
+
+                                ?
+
+                                user.role.name()
+
+                                :
+
+                                "USER"
                 )
 
                 .putInt(
@@ -139,11 +148,27 @@ public class SessionManager {
         User user =
                 new User();
 
-        user.id =
-                prefs.getString(
-                        KEY_ID,
-                        ""
-                );
+        // =================================
+        // SAFE ID
+        // =================================
+
+        Object rawId =
+                prefs.getAll().get(KEY_ID);
+
+        if (rawId == null) {
+
+            user.id = "";
+        }
+
+        else {
+
+            user.id =
+                    String.valueOf(rawId);
+        }
+
+        // =================================
+        // STRING
+        // =================================
 
         user.email =
                 prefs.getString(
@@ -163,14 +188,30 @@ public class SessionManager {
                         ""
                 );
 
+        // =================================
+        // ROLE
+        // =================================
+
         String role =
                 prefs.getString(
                         KEY_ROLE,
                         "USER"
                 );
 
-        user.role =
-                RoleType.valueOf(role);
+        try {
+
+            user.role =
+                    RoleType.valueOf(role);
+
+        } catch (Exception e) {
+
+            user.role =
+                    RoleType.USER;
+        }
+
+        // =================================
+        // LEVEL
+        // =================================
 
         user.level =
                 prefs.getInt(

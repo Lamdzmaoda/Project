@@ -1,20 +1,22 @@
 package com.example.democode3.features.gamification.ui.viewmodel;
 
 import android.app.Application;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.democode3.features.fake.model.FakeUser;
+import com.example.democode3.features.fake.session.FakeSessionManager;
 import com.example.democode3.features.gamification.model.RankingUser;
-import com.example.democode3.features.gamification.repository.RankingRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class RankingViewModel
         extends AndroidViewModel {
@@ -28,10 +30,19 @@ public class RankingViewModel
             new MutableLiveData<>();
 
     // =====================================
-    // REPOSITORY
+    // LOADING
     // =====================================
 
-    private final RankingRepository repository;
+    private final MutableLiveData<Boolean>
+            loading =
+            new MutableLiveData<>(false);
+
+    // =====================================
+    // SESSION
+    // =====================================
+
+    private final FakeSessionManager session =
+            FakeSessionManager.getInstance();
 
     // =====================================
     // CONSTRUCTOR
@@ -42,15 +53,10 @@ public class RankingViewModel
     ) {
 
         super(application);
-
-        repository =
-                new RankingRepository(
-                        application
-                );
     }
 
     // =====================================
-    // GET
+    // GET RANKING
     // =====================================
 
     public LiveData<List<RankingUser>>
@@ -60,39 +66,22 @@ public class RankingViewModel
     }
 
     // =====================================
+    // LOADING
+    // =====================================
+
+    public LiveData<Boolean>
+    isLoading() {
+
+        return loading;
+    }
+
+    // =====================================
     // WEEK
     // =====================================
 
     public void loadWeeklyRanking() {
 
-        repository.getWeeklyRanking(
-
-                new Callback<List<RankingUser>>() {
-
-                    @Override
-                    public void onResponse(
-
-                            Call<List<RankingUser>> call,
-
-                            Response<List<RankingUser>> response
-                    ) {
-
-                        ranking.setValue(
-                                response.body()
-                        );
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<List<RankingUser>> call,
-
-                            Throwable t
-                    ) {
-
-                    }
-                }
-        );
+        loadFakeRanking();
     }
 
     // =====================================
@@ -101,34 +90,7 @@ public class RankingViewModel
 
     public void loadMonthlyRanking() {
 
-        repository.getMonthlyRanking(
-
-                new Callback<List<RankingUser>>() {
-
-                    @Override
-                    public void onResponse(
-
-                            Call<List<RankingUser>> call,
-
-                            Response<List<RankingUser>> response
-                    ) {
-
-                        ranking.setValue(
-                                response.body()
-                        );
-                    }
-
-                    @Override
-                    public void onFailure(
-
-                            Call<List<RankingUser>> call,
-
-                            Throwable t
-                    ) {
-
-                    }
-                }
-        );
+        loadFakeRanking();
     }
 
     // =====================================
@@ -137,33 +99,91 @@ public class RankingViewModel
 
     public void loadLegendRanking() {
 
-        repository.getLegendRanking(
+        loadFakeRanking();
+    }
 
-                new Callback<List<RankingUser>>() {
+    // =====================================
+    // LOAD
+    // =====================================
 
-                    @Override
-                    public void onResponse(
+    private void loadFakeRanking() {
 
-                            Call<List<RankingUser>> call,
+        loading.setValue(true);
 
-                            Response<List<RankingUser>> response
-                    ) {
+        new Handler(
 
-                        ranking.setValue(
-                                response.body()
-                        );
-                    }
+                Looper.getMainLooper()
 
-                    @Override
-                    public void onFailure(
+        ).postDelayed(() -> {
 
-                            Call<List<RankingUser>> call,
+            List<FakeUser> users =
+                    session.getAllUsers();
 
-                            Throwable t
-                    ) {
+            List<RankingUser> result =
+                    new ArrayList<>();
 
-                    }
-                }
-        );
+            // =============================
+            // MAP
+            // =============================
+
+            for (FakeUser fake : users) {
+
+                RankingUser user =
+                        new RankingUser();
+
+                user.id =
+                        fake.id;
+
+                user.username =
+                        fake.username;
+
+                user.avatarUrl =
+                        fake.avatar;
+
+                user.level =
+                        fake.level;
+
+                user.xp =
+                        fake.xp;
+
+                result.add(user);
+            }
+
+            // =============================
+            // SORT
+            // =============================
+
+            Collections.sort(
+
+                    result,
+
+                    (a, b) -> Integer.compare(
+                            b.xp,
+                            a.xp
+                    )
+            );
+
+            // =============================
+            // RANK
+            // =============================
+
+            for (
+
+                    int i = 0;
+
+                    i < result.size();
+
+                    i++
+            ) {
+
+                result.get(i).rank =
+                        i + 1;
+            }
+
+            ranking.setValue(result);
+
+            loading.setValue(false);
+
+        }, 1200);
     }
 }

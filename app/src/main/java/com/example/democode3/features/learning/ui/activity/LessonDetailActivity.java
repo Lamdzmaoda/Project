@@ -5,30 +5,36 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.example.democode3.R;
+import com.example.democode3.core.network.RetrofitClient;
+import com.example.democode3.features.ai.api.ChatApiService;
+import com.example.democode3.features.ai.model.ChatRequest;
+import com.example.democode3.features.ai.model.ChatResponse;
+import com.example.democode3.features.learning.fake.FakeLessonDetailRepository;
 import com.example.democode3.features.learning.model.LessonStep;
 import com.example.democode3.features.learning.model.LessonUiState;
-import com.example.democode3.features.learning.ui.controller.QuizController;
+import com.example.democode3.features.learning.ui.component.LearningRewardDialog;
 import com.example.democode3.features.learning.ui.handler.QuizResultHandler;
-import com.example.democode3.features.learning.ui.navigation.LessonNavigator;
-import com.example.democode3.features.learning.ui.registry.StepRegistry;
-import com.example.democode3.features.learning.ui.renderer.AiHintRendererAdapter;
 import com.example.democode3.features.learning.ui.renderer.CodeRendererAdapter;
 import com.example.democode3.features.learning.ui.renderer.ProgressRenderer;
-import com.example.democode3.features.learning.ui.renderer.QuizRendererAdapter;
-import com.example.democode3.features.learning.ui.renderer.TextRendererAdapter;
-import com.example.democode3.features.learning.ui.viewmodel.LessonViewModel;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LessonDetailActivity
         extends AppCompatActivity {
 
-    // =====================================================
+    // =================================================
     // VIEW
-    // =====================================================
+    // =================================================
 
     private TextView txtContent;
 
@@ -38,80 +44,75 @@ public class LessonDetailActivity
 
     private Button btnNext;
 
-    // =====================================================
-    // FOOTER
-    // =====================================================
-
-    private LinearLayout layoutNormalFooter;
-
-    private LinearLayout layoutCodeFooter;
-
-    // =====================================================
+    // =================================================
     // QUIZ
-    // =====================================================
+    // =================================================
 
     private LinearLayout layoutQuiz;
 
-    private Button btnAnswerA;
+    private LinearLayout layoutAnswerA;
 
-    private Button btnAnswerB;
+    private LinearLayout layoutAnswerB;
 
-    // =====================================================
+    private TextView btnAnswerA;
+
+    private TextView btnAnswerB;
+
+    private View viewCircleA;
+
+    private View viewCircleB;
+
+    // =================================================
     // CODE
-    // =====================================================
+    // =================================================
 
     private LinearLayout layoutCode;
-
-    private TextView txtCodeQuestion;
 
     private LinearLayout layoutCodeSlots;
 
     private LinearLayout layoutCodeWords;
 
-    private Button btnCheckCode;
+    // =================================================
+    // RESULT
+    // =================================================
 
-    private Button btnResetCode;
+    private LinearLayout layoutResult;
 
-    private Button btnClearCode;
+    private LinearLayout layoutAi;
 
-    // =====================================================
-    // DATA
-    // =====================================================
+    private TextView txtResult;
 
-    private long lessonId;
+    private TextView txtAiDescription;
 
-    // =====================================================
-    // VIEWMODEL
-    // =====================================================
+    private TextView btnAskAi;
 
-    private LessonViewModel viewModel;
-
-    private StepRegistry stepRegistry;
-
-    private ProgressRenderer progressRenderer;
-
-    private QuizResultHandler quizResultHandler;
-
-    private QuizController quizController;
-
-    private LessonNavigator lessonNavigator;
-
-    // =====================================================
-    // UI STATE
-    // =====================================================
+    // =================================================
+    // STATE
+    // =================================================
 
     private final LessonUiState uiState =
             new LessonUiState();
 
-    // =====================================================
-    // RENDER STATE
-    // =====================================================
+    // =================================================
+    // DATA
+    // =================================================
 
-    private int currentRenderedStepIndex = -1;
+    private List<LessonStep> lessonSteps;
+
+    // =================================================
+    // HANDLER
+    // =================================================
+
+    private final QuizResultHandler quizResultHandler =
+            new QuizResultHandler();
+
+    // =================================================
+    // ON CREATE
+    // =================================================
 
     @Override
     protected void onCreate(
-            Bundle savedInstanceState
+            @Nullable Bundle savedInstanceState
     ) {
 
         super.onCreate(savedInstanceState);
@@ -120,317 +121,658 @@ public class LessonDetailActivity
                 R.layout.activity_lesson_detail
         );
 
-        viewModel =
-                new ViewModelProvider(this)
-                        .get(LessonViewModel.class);
+        initView();
 
-        initViews();
+        loadFakeData();
 
-        stepRegistry =
-                new StepRegistry();
+        renderStep();
+    }
 
-        progressRenderer =
+    // =================================================
+    // INIT
+    // =================================================
+
+    private void initView() {
+
+        txtContent =
+                findViewById(R.id.txtContent);
+
+        txtStepProgress =
+                findViewById(R.id.txtStepProgress);
+
+        progressView =
+                findViewById(R.id.progressView);
+
+        btnNext =
+                findViewById(R.id.btnNext);
+
+        // QUIZ
+
+        layoutQuiz =
+                findViewById(R.id.layoutQuiz);
+
+        layoutAnswerA =
+                findViewById(R.id.layoutAnswerA);
+
+        layoutAnswerB =
+                findViewById(R.id.layoutAnswerB);
+
+        btnAnswerA =
+                findViewById(R.id.btnAnswerA);
+
+        btnAnswerB =
+                findViewById(R.id.btnAnswerB);
+
+        viewCircleA =
+                findViewById(R.id.viewCircleA);
+
+        viewCircleB =
+                findViewById(R.id.viewCircleB);
+
+        // CODE
+
+        layoutCode =
+                findViewById(R.id.layoutCode);
+
+        layoutCodeSlots =
+                findViewById(R.id.layoutCodeSlots);
+
+        layoutCodeWords =
+                findViewById(R.id.layoutCodeWords);
+
+        // RESULT
+
+        layoutResult =
+                findViewById(R.id.layoutResult);
+
+        layoutAi =
+                findViewById(R.id.layoutAi);
+
+        txtResult =
+                findViewById(R.id.txtResult);
+
+        txtAiDescription =
+                findViewById(R.id.txtAiDescription);
+
+        btnAskAi =
+                findViewById(R.id.btnAskAi);
+    }
+
+    // =================================================
+    // LOAD DATA
+    // =================================================
+
+    private void loadFakeData() {
+
+        // =====================================
+        // GET LESSON ID
+        // =====================================
+
+        long lessonId =
+                getIntent().getLongExtra(
+                        "lessonId",
+                        1
+                );
+
+        // =====================================
+        // REPOSITORY
+        // =====================================
+
+        FakeLessonDetailRepository repository =
+                new FakeLessonDetailRepository();
+
+        // =====================================
+        // LOAD STEPS
+        // =====================================
+
+        lessonSteps =
+                repository.getLessonSteps(
+                        lessonId
+                );
+
+        // =====================================
+        // UI STATE
+        // =====================================
+
+        uiState.lessonSteps =
+                lessonSteps;
+
+        uiState.totalSteps =
+                lessonSteps.size();
+    }
+
+    // =================================================
+    // RENDER STEP
+    // =================================================
+
+    private void renderStep() {
+
+        resetUi();
+
+        LessonStep step =
+                lessonSteps.get(
+                        uiState.currentStepIndex
+                );
+
+        ProgressRenderer progressRenderer =
                 new ProgressRenderer(
-
                         txtStepProgress,
-
                         progressView
                 );
 
-        quizResultHandler =
-                new QuizResultHandler();
+        progressRenderer.render(
 
-        quizController =
-                new QuizController(
+                uiState.currentStepIndex + 1,
 
-                        viewModel,
-
-                        uiState,
-
-                        btnAnswerA,
-
-                        btnAnswerB,
-
-                        btnNext
-                );
-
-        getIntentData();
-
-        lessonNavigator =
-                new LessonNavigator(
-
-                        viewModel,
-
-                        lessonId,
-
-                        getSupportFragmentManager()
-                );
-
-        // =============================================
-        // TEXT RENDERER
-        // =============================================
-
-        stepRegistry.register(
-                "TEXT",
-
-                new TextRendererAdapter(
-
-                        txtContent,
-
-                        btnNext
-                )
+                uiState.totalSteps
         );
 
-        // =============================================
-        // QUIZ RENDERER
-        // =============================================
+        switch (step.type) {
 
-        stepRegistry.register(
+            case "TEXT":
 
-                "QUIZ",
+                renderText(step);
 
-                new QuizRendererAdapter(
+                break;
 
-                        layoutQuiz,
+            case "QUIZ":
 
-                        txtContent,
+                renderQuiz(step);
 
-                        btnAnswerA,
+                break;
 
-                        btnAnswerB
-                )
+            case "CODE":
+
+                renderCode(step);
+
+                break;
+
+            case "AI_HINT":
+
+                renderAi(step);
+
+                break;
+        }
+    }
+
+    // =================================================
+    // TEXT
+    // =================================================
+
+    private void renderText(
+            LessonStep step
+    ) {
+
+        txtContent.setText(
+                step.data.content
         );
 
-        // =============================================
-        // CODE RENDERER
-        // =============================================
+        btnNext.setVisibility(
+                View.VISIBLE
+        );
 
-        stepRegistry.register(
+        btnNext.setText(
+                "TIẾP TỤC"
+        );
 
-                "CODE",
+        btnNext.setEnabled(true);
 
+        btnNext.setAlpha(1f);
+
+        btnNext.setBackgroundResource(
+                R.drawable.bg_primary_button
+        );
+
+        btnNext.setOnClickListener(v -> {
+
+            nextStep();
+        });
+    }
+
+    // =================================================
+    // QUIZ
+    // =================================================
+
+    private void renderQuiz(
+            LessonStep step
+    ) {
+
+        layoutQuiz.setVisibility(
+                View.VISIBLE
+        );
+
+        txtContent.setText(
+                step.data.question
+        );
+
+        // ANSWERS
+
+        btnAnswerA.setText(
+
+                step.data.options
+                        .get(0)
+                        .text
+        );
+
+        btnAnswerB.setText(
+
+                step.data.options
+                        .get(1)
+                        .text
+        );
+
+        // RESET
+
+        uiState.selectedIndex = -1;
+
+        layoutAnswerA.setBackgroundResource(
+                R.drawable.bg_quiz_option
+        );
+
+        layoutAnswerB.setBackgroundResource(
+                R.drawable.bg_quiz_option
+        );
+
+        viewCircleA.setBackgroundResource(
+                R.drawable.bg_radio_unselected
+        );
+
+        viewCircleB.setBackgroundResource(
+                R.drawable.bg_radio_unselected
+        );
+
+        layoutResult.setVisibility(
+                View.GONE
+        );
+
+        layoutAi.setVisibility(
+                View.GONE
+        );
+
+        // BUTTON
+
+        btnNext.setVisibility(
+                View.VISIBLE
+        );
+
+        btnNext.setText(
+                "KIỂM TRA"
+        );
+
+        btnNext.setEnabled(true);
+
+        btnNext.setAlpha(1f);
+
+        btnNext.setBackgroundResource(
+                R.drawable.bg_primary_button
+        );
+
+        // SELECT A
+
+        layoutAnswerA.setOnClickListener(v -> {
+
+            uiState.selectedIndex = 0;
+
+            layoutAnswerA.setBackgroundResource(
+                    R.drawable.bg_quiz_option_selected
+            );
+
+            layoutAnswerB.setBackgroundResource(
+                    R.drawable.bg_quiz_option
+            );
+
+            viewCircleA.setBackgroundResource(
+                    R.drawable.bg_radio_selected
+            );
+
+            viewCircleB.setBackgroundResource(
+                    R.drawable.bg_radio_unselected
+            );
+        });
+
+        // SELECT B
+
+        layoutAnswerB.setOnClickListener(v -> {
+
+            uiState.selectedIndex = 1;
+
+            layoutAnswerB.setBackgroundResource(
+                    R.drawable.bg_quiz_option_selected
+            );
+
+            layoutAnswerA.setBackgroundResource(
+                    R.drawable.bg_quiz_option
+            );
+
+            viewCircleB.setBackgroundResource(
+                    R.drawable.bg_radio_selected
+            );
+
+            viewCircleA.setBackgroundResource(
+                    R.drawable.bg_radio_unselected
+            );
+        });
+
+        // CHECK
+
+        btnNext.setOnClickListener(v -> {
+
+            checkAnswer(step);
+        });
+
+        // =================================================
+        // AI
+        // =================================================
+
+        btnAskAi.setOnClickListener(v -> {
+
+            txtAiDescription.setText(
+                    "Đang hỏi AI..."
+            );
+
+            ChatApiService apiService =
+
+                    RetrofitClient
+                            .getInstance(
+                                    LessonDetailActivity.this
+                            )
+                            .create(
+                                    ChatApiService.class
+                            );
+
+            ChatRequest request =
+                    new ChatRequest(
+
+                            "Giải thích bài học này",
+
+                            step.id,
+
+                            null
+                    );
+
+            apiService.askAi(request)
+
+                    .enqueue(
+
+                            new Callback<ChatResponse>() {
+
+                                @Override
+                                public void onResponse(
+
+                                        Call<ChatResponse> call,
+
+                                        Response<ChatResponse> response
+                                ) {
+
+                                    if (
+
+                                            response.body() != null
+                                                    &&
+                                                    response.body().result != null
+                                    ) {
+
+                                        txtAiDescription.setText(
+
+                                                response.body()
+                                                        .result
+                                                        .aiExplanation
+                                        );
+
+                                    } else {
+
+                                        txtAiDescription.setText(
+                                                "AI chưa phản hồi 😭"
+                                        );
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(
+
+                                        Call<ChatResponse> call,
+
+                                        Throwable t
+                                ) {
+
+                                    txtAiDescription.setText(
+
+                                            "Lỗi AI: "
+                                                    + t.getMessage()
+                                    );
+
+                                    Toast.makeText(
+
+                                            LessonDetailActivity.this,
+
+                                            t.getMessage(),
+
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                }
+                            }
+                    );
+        });
+    }
+
+    // =================================================
+    // CHECK ANSWER
+    // =================================================
+
+    private void checkAnswer(
+            LessonStep step
+    ) {
+
+        if (uiState.selectedIndex == -1) {
+
+            return;
+        }
+
+        boolean correct =
+                String.valueOf(
+                        uiState.selectedIndex
+                ).equals(
+                        step.data.correctValue
+                );
+
+        if (correct) {
+
+            quizResultHandler.handleCorrect(
+
+                    uiState.selectedIndex,
+
+                    layoutAnswerA,
+
+                    layoutAnswerB,
+
+                    layoutResult,
+
+                    layoutAi,
+
+                    txtResult,
+
+                    btnNext,
+
+                    this::nextStep
+            );
+
+        } else {
+
+            quizResultHandler.handleWrong(
+
+                    uiState.selectedIndex,
+
+                    layoutAnswerA,
+
+                    layoutAnswerB,
+
+                    layoutResult,
+
+                    layoutAi,
+
+                    txtResult,
+
+                    btnNext,
+
+                    () -> {
+
+                        renderQuiz(step);
+                    }
+            );
+        }
+    }
+
+    // =================================================
+    // CODE
+    // =================================================
+
+    private void renderCode(
+            LessonStep step
+    ) {
+
+        layoutCode.setVisibility(
+                View.VISIBLE
+        );
+
+        btnNext.setVisibility(
+                View.VISIBLE
+        );
+
+        btnNext.setEnabled(true);
+
+        btnNext.setAlpha(1f);
+
+        btnNext.setText(
+                "KIỂM TRA"
+        );
+
+        btnNext.setBackgroundResource(
+                R.drawable.bg_primary_button
+        );
+
+        CodeRendererAdapter adapter =
                 new CodeRendererAdapter(
 
                         this,
 
-                        uiState,
-
                         layoutCode,
-
-                        txtContent,
-
-                        txtCodeQuestion,
 
                         layoutCodeSlots,
 
                         layoutCodeWords,
 
-                        btnCheckCode,
-
-                        btnResetCode,
-
-                        this::goToNextStep
-                )
-        );
-
-        // =============================================
-        // AI HINT RENDERER
-        // =============================================
-
-        stepRegistry.register(
-
-                "AI_HINT",
-
-                new AiHintRendererAdapter(
-
-                        txtContent,
-
-                        btnNext
-                )
-        );
-
-        observeState();
-
-        loadLessonSteps();
-
-        setupClick();
-    }
-
-    // =====================================================
-    // INIT VIEW
-    // =====================================================
-
-    private void initViews() {
-
-        txtContent =
-                findViewById(
-                        R.id.txtContent
+                        txtContent
                 );
 
-        txtStepProgress =
-                findViewById(
-                        R.id.txtStepProgress
-                );
+        adapter.render(step);
 
-        progressView =
-                findViewById(
-                        R.id.progressView
-                );
+        btnNext.setOnClickListener(v -> {
 
-        btnNext =
-                findViewById(
-                        R.id.btnNext
-                );
+            layoutResult.setVisibility(
+                    View.VISIBLE
+            );
 
-        // =============================================
-        // FOOTER
-        // =============================================
+            layoutAi.setVisibility(
+                    View.VISIBLE
+            );
 
-        layoutNormalFooter =
-                findViewById(
-                        R.id.layoutNormalFooter
-                );
+            txtResult.setText(
+                    "🎉 Chính xác!"
+            );
 
-        layoutCodeFooter =
-                findViewById(
-                        R.id.layoutCodeFooter
-                );
+            layoutResult.setBackgroundResource(
+                    R.drawable.bg_result_correct
+            );
 
-        // =============================================
-        // QUIZ
-        // =============================================
+            btnNext.setText(
+                    "TIẾP TỤC"
+            );
 
-        layoutQuiz =
-                findViewById(
-                        R.id.layoutQuiz
-                );
+            btnNext.setOnClickListener(v2 -> {
 
-        btnAnswerA =
-                findViewById(
-                        R.id.btnAnswerA
-                );
-
-        btnAnswerB =
-                findViewById(
-                        R.id.btnAnswerB
-                );
-
-        // =============================================
-        // CODE
-        // =============================================
-
-        layoutCode =
-                findViewById(
-                        R.id.layoutCode
-                );
-
-        txtCodeQuestion =
-                findViewById(
-                        R.id.txtCodeQuestion
-                );
-
-        layoutCodeSlots =
-                findViewById(
-                        R.id.layoutCodeSlots
-                );
-
-        layoutCodeWords =
-                findViewById(
-                        R.id.layoutCodeWords
-                );
-
-        btnCheckCode =
-                findViewById(
-                        R.id.btnCheckCode
-                );
-
-        btnResetCode =
-                findViewById(
-                        R.id.btnResetCode
-                );
-
-        btnResetCode.setOnClickListener(v -> {
-
-            renderCurrentStep();
+                nextStep();
+            });
         });
-
-        btnClearCode =
-                findViewById(
-                        R.id.btnClearCode
-                );
     }
 
-    // =====================================================
-    // INTENT
-    // =====================================================
+    // =================================================
+    // AI
+    // =================================================
 
-    private void getIntentData() {
+    private void renderAi(
+            LessonStep step
+    ) {
 
-        lessonId =
-                getIntent().getLongExtra(
-                        "lessonId",
-                        1
-                );
-    }
-
-    // =====================================================
-    // LOAD STEP
-    // =====================================================
-
-    private void loadLessonSteps() {
-
-        viewModel.loadLesson(
-                lessonId
+        txtContent.setText(
+                step.data.content
         );
-    }
 
-    // =====================================================
-    // OBSERVE STATE
-    // =====================================================
-
-    private void observeState() {
-
-        viewModel.getUiState().observe(
-
-                this,
-
-                state -> {
-
-                    if (state.currentStepIndex
-                            != currentRenderedStepIndex) {
-
-                        currentRenderedStepIndex =
-                                state.currentStepIndex;
-
-                        renderCurrentStep();
-                    }
-                }
+        btnNext.setVisibility(
+                View.VISIBLE
         );
+
+        btnNext.setEnabled(true);
+
+        btnNext.setAlpha(1f);
+
+        btnNext.setText(
+                "TIẾP TỤC"
+        );
+
+        btnNext.setBackgroundResource(
+                R.drawable.bg_primary_button
+        );
+
+        btnNext.setOnClickListener(v -> {
+
+            nextStep();
+        });
     }
 
-    // =====================================================
-    // RENDER
-    // =====================================================
+    // =================================================
+    // NEXT
+    // =================================================
 
-    private void renderCurrentStep() {
+    private void nextStep() {
 
-        LessonStep step =
-                viewModel.getCurrentStep();
+        uiState.currentStepIndex++;
 
-        if (step == null) {
+        if (
+
+                uiState.currentStepIndex
+                        >= lessonSteps.size()
+        ) {
+
+            showRewardDialog();
 
             return;
         }
 
-        // =============================================
-        // RESET
-        // =============================================
+        renderStep();
+    }
 
-        uiState.selectedIndex = -1;
+    // =================================================
+    // REWARD
+    // =================================================
 
-        uiState.answered = false;
+    private void showRewardDialog() {
 
-        uiState.isCorrect = false;
+        LearningRewardDialog dialog =
+                new LearningRewardDialog(
+                        50,
+                        5
+                );
+
+        dialog.show(
+                getSupportFragmentManager(),
+                "reward_dialog"
+        );
+    }
+
+    // =================================================
+    // RESET UI
+    // =================================================
+
+    private void resetUi() {
 
         layoutQuiz.setVisibility(
                 View.GONE
@@ -440,277 +782,12 @@ public class LessonDetailActivity
                 View.GONE
         );
 
-        txtContent.setVisibility(
-                View.VISIBLE
+        layoutResult.setVisibility(
+                View.GONE
         );
 
-        // =============================================
-        // FOOTER MODE
-        // =============================================
-
-        if (step.type.equals("CODE")) {
-
-            layoutNormalFooter.setVisibility(
-                    View.GONE
-            );
-
-            layoutCodeFooter.setVisibility(
-                    View.VISIBLE
-            );
-
-        } else {
-
-            layoutNormalFooter.setVisibility(
-                    View.VISIBLE
-            );
-
-            layoutCodeFooter.setVisibility(
-                    View.GONE
-            );
-        }
-
-        // =============================================
-        // RESET NORMAL BUTTON
-        // =============================================
-
-        btnNext.setEnabled(false);
-
-        btnNext.setAlpha(0.4f);
-
-        btnNext.setText("KIỂM TRA");
-
-        // =============================================
-        // RENDER BY REGISTRY
-        // =============================================
-
-        stepRegistry.render(step);
-
-        // =============================================
-        // PROGRESS
-        // =============================================
-
-        LessonUiState state =
-                viewModel.getUiState().getValue();
-
-        if (state != null) {
-
-            progressRenderer.render(
-
-                    state.currentStepIndex + 1,
-
-                    state.lessonSteps.size()
-            );
-        }
-    }
-
-    // =====================================================
-    // CLICK
-    // =====================================================
-
-    private void setupClick() {
-
-        btnNext.setOnClickListener(v -> {
-
-            LessonStep step =
-                    viewModel.getCurrentStep();
-
-            if (step == null) {
-
-                return;
-            }
-
-            // =========================================
-            // QUIZ FLOW
-            // =========================================
-
-            if (step.type.equals("QUIZ")) {
-
-                if (!uiState.answered) {
-
-                    checkQuizAnswer();
-
-                    return;
-                }
-
-                if (uiState.isCorrect) {
-
-                    goToNextStep();
-
-                    return;
-                }
-
-                resetQuizState();
-
-                return;
-            }
-
-            // =========================================
-            // NORMAL FLOW
-            // =========================================
-
-            goToNextStep();
-        });
-
-        // =============================================
-        // ANSWER A
-        // =============================================
-
-        btnAnswerA.setOnClickListener(v -> {
-
-            quizController.selectAnswer(0);
-        });
-
-        // =============================================
-        // ANSWER B
-        // =============================================
-
-        btnAnswerB.setOnClickListener(v -> {
-
-            quizController.selectAnswer(1);
-        });
-
-        // =============================================
-        // CLEAR CODE
-        // =============================================
-
-        btnClearCode.setOnClickListener(v -> {
-
-            if (uiState.selectedCodeWords.isEmpty()) {
-
-                return;
-            }
-
-            // =========================================
-            // REMOVE LAST
-            // =========================================
-
-            uiState.selectedCodeWords.remove(
-
-                    uiState.selectedCodeWords.size() - 1
-            );
-
-            // =========================================
-            // RERENDER CURRENT STEP
-            // =========================================
-
-            LessonStep step =
-                    viewModel.getCurrentStep();
-
-            if (step != null) {
-
-                stepRegistry.render(step);
-            }
-        });
-    }
-
-    // =====================================================
-    // NEXT STEP
-    // =====================================================
-
-    private void goToNextStep() {
-
-        boolean hasNext =
-                lessonNavigator.goToNextStep();
-
-        // =========================================
-        // COMPLETE LESSON
-        // =========================================
-
-        if (!hasNext) {
-
-            return;
-        }
-
-        // =========================================
-        // NEXT STEP
-        // =========================================
-
-        renderCurrentStep();
-    }
-
-    // =====================================================
-    // CHECK QUIZ
-    // =====================================================
-
-    private void checkQuizAnswer() {
-
-        int selectedIndex =
-                uiState.selectedIndex;
-
-        boolean correct =
-                viewModel.checkQuizAnswer();
-
-        LessonStep step =
-                viewModel.getCurrentStep();
-
-        if (step == null) {
-
-            return;
-        }
-
-        // =============================================
-        // CORRECT
-        // =============================================
-
-        if (correct) {
-
-            quizResultHandler.handleCorrect(
-
-                    selectedIndex,
-
-                    btnAnswerA,
-
-                    btnAnswerB,
-
-                    step,
-
-                    getSupportFragmentManager(),
-
-                    this::goToNextStep,
-
-                    btnNext
-            );
-        }
-
-        // =============================================
-        // WRONG
-        // =============================================
-
-        else {
-
-            quizResultHandler.handleWrong(
-
-                    selectedIndex,
-
-                    btnAnswerA,
-
-                    btnAnswerB,
-
-                    step,
-
-                    getSupportFragmentManager(),
-
-                    this::resetQuizState,
-
-                    btnNext
-            );
-        }
-    }
-
-    // =====================================================
-    // RESET QUIZ
-    // =====================================================
-
-    private void resetQuizState() {
-
-        viewModel.resetQuizState();
-
-        btnAnswerA.setBackgroundColor(
-                0xFF4C4AA1
-        );
-
-        btnAnswerB.setBackgroundColor(
-                0xFF4C4AA1
+        layoutAi.setVisibility(
+                View.GONE
         );
     }
 }

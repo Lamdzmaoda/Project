@@ -1,279 +1,451 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    android:orientation="vertical"
+    android:background="#020817">
 
-    android:background="@color/dark_bg">
-
-    <!-- ====================================== -->
-    <!-- TOP BAR -->
-    <!-- ====================================== -->
+    <!-- ================================================= -->
+    <!-- MAIN -->
+    <!-- ================================================= -->
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="match_parent"
 
-        android:orientation="horizontal"
+        android:orientation="vertical">
 
-        android:gravity="center_vertical"
-
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp">
-
-        <TextView
-            android:id="@+id/btnClose"
-
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-
-            android:text="✕"
-
-            android:textColor="@android:color/white"
-
-            android:textSize="22sp"
-
-            android:gravity="center"/>
-
-        <!-- PROGRESS -->
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="8dp"
-
-            android:layout_weight="1"
-
-            android:layout_marginHorizontal="18dp"
-
-            android:background="#1E293B">
-
-            <View
-                android:id="@+id/progressView"
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                android:background="#2563EB"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/txtStepProgress"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text="1 / 5"
-
-            android:textColor="#3B82F6"
-
-            android:textStyle="bold"
-
-            android:textSize="16sp"/>
-    </LinearLayout>
-
-    <!-- ====================================== -->
-    <!-- CONTENT -->
-    <!-- ====================================== -->
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-
-        android:layout_weight="1">
+        <!-- ================================================= -->
+        <!-- TOP -->
+        <!-- ================================================= -->
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="72dp"
 
-            android:orientation="vertical"
+            android:gravity="center_vertical"
 
-            android:padding="24dp">
+            android:orientation="horizontal"
 
-            <!-- CONTENT -->
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp">
+
+            <!-- CLOSE -->
 
             <TextView
-                android:id="@+id/txtContent"
+                android:id="@+id/btnClose"
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
 
-                android:textColor="@android:color/white"
+                android:gravity="center"
 
-                android:textSize="24sp"
+                android:text="✕"
 
-                android:lineSpacingExtra="8dp"/>
+                android:textColor="#FFFFFF"
 
-            <!-- QUIZ -->
+                android:textSize="22sp"/>
+
+            <!-- PROGRESS -->
 
             <LinearLayout
-                android:id="@+id/layoutQuiz"
+                android:layout_width="0dp"
+                android:layout_height="10dp"
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_weight="1"
 
-                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
 
-                android:visibility="gone"
+                android:background="#172033">
 
-                android:layout_marginTop="28dp">
+                <View
+                    android:id="@+id/progressView"
 
-                <Button
-                    android:id="@+id/btnAnswerA"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
 
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-
-                    android:textColor="@android:color/white"
-
-                    android:textSize="18sp"
-
-                    android:textAllCaps="false"
-
-                    android:backgroundTint="#182447"
-
-                    android:layout_marginBottom="16dp"/>
-
-                <Button
-                    android:id="@+id/btnAnswerB"
-
-                    android:layout_width="match_parent"
-                    android:layout_height="72dp"
-
-                    android:textColor="@android:color/white"
-
-                    android:textSize="18sp"
-
-                    android:textAllCaps="false"
-
-                    android:backgroundTint="#182447"/>
+                    android:background="#2563EB"/>
             </LinearLayout>
 
-            <!-- CODE -->
+            <!-- STEP -->
+
+            <TextView
+                android:id="@+id/txtStepProgress"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="1 / 4"
+
+                android:textColor="#3B82F6"
+
+                android:textSize="18sp"
+
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- ================================================= -->
+        <!-- BODY -->
+        <!-- ================================================= -->
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:layout_weight="1"
+
+            android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/layoutCode"
-
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
                 android:orientation="vertical"
 
-                android:visibility="gone"
+                android:paddingStart="22dp"
+                android:paddingEnd="22dp"
+                android:paddingTop="14dp"
+                android:paddingBottom="220dp">
 
-                android:layout_marginTop="28dp">
+                <!-- ================================================= -->
+                <!-- TITLE -->
+                <!-- ================================================= -->
 
                 <TextView
-                    android:id="@+id/txtCodeQuestion"
+                    android:id="@+id/txtContent"
 
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
-                    android:textColor="@android:color/white"
+                    android:textColor="#FFFFFF"
 
-                    android:textSize="22sp"
+                    android:textSize="30sp"
 
-                    android:layout_marginBottom="20dp"/>
+                    android:textStyle="bold"
 
-                <!-- EDITOR -->
+                    android:lineSpacingExtra="8dp"/>
+
+                <!-- ================================================= -->
+                <!-- QUIZ -->
+                <!-- ================================================= -->
 
                 <LinearLayout
+                    android:id="@+id/layoutQuiz"
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="34dp"
+
+                    android:orientation="vertical"
+
+                    android:visibility="gone">
+
+                    <!-- A -->
+
+                    <LinearLayout
+                        android:id="@+id/layoutAnswerA"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="92dp"
+
+                        android:layout_marginBottom="18dp"
+
+                        android:background="@drawable/bg_quiz_option"
+
+                        android:gravity="center_vertical"
+
+                        android:orientation="horizontal"
+
+                        android:paddingHorizontal="20dp"
+
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View
+                            android:id="@+id/viewCircleA"
+
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+
+                            android:background="@drawable/bg_radio_unselected"/>
+
+                        <TextView
+                            android:id="@+id/btnAnswerA"
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_weight="1"
+
+                            android:layout_marginStart="18dp"
+
+                            android:textColor="#FFFFFF"
+
+                            android:textSize="22sp"
+
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                    <!-- B -->
+
+                    <LinearLayout
+                        android:id="@+id/layoutAnswerB"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="92dp"
+
+                        android:background="@drawable/bg_quiz_option"
+
+                        android:gravity="center_vertical"
+
+                        android:orientation="horizontal"
+
+                        android:paddingHorizontal="20dp"
+
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <View
+                            android:id="@+id/viewCircleB"
+
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+
+                            android:background="@drawable/bg_radio_unselected"/>
+
+                        <TextView
+                            android:id="@+id/btnAnswerB"
+
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_weight="1"
+
+                            android:layout_marginStart="18dp"
+
+                            android:textColor="#FFFFFF"
+
+                            android:textSize="22sp"
+
+                            android:textStyle="bold"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- ================================================= -->
+                <!-- CODE -->
+                <!-- ================================================= -->
+
+                <LinearLayout
+                    android:id="@+id/layoutCode"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     android:orientation="vertical"
 
-                    android:background="@drawable/bg_card_primary">
+                    android:visibility="gone"
 
-                    <!-- FILE -->
+                    android:layout_marginTop="30dp">
+
+                    <TextView
+                        android:id="@+id/txtCodeQuestion"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:textColor="#FFFFFF"
+
+                        android:textSize="20sp"
+
+                        android:textStyle="bold"/>
+
+                    <!-- CODE BOX -->
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="52dp"
+                        android:layout_height="220dp"
 
-                        android:background="#1E293B"
+                        android:layout_marginTop="18dp"
 
-                        android:gravity="center_vertical"
-
-                        android:paddingHorizontal="18dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="🐍"
-
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:text="main.py"
-
-                            android:textColor="@android:color/white"
-
-                            android:textStyle="bold"
-
-                            android:textSize="16sp"
-
-                            android:layout_marginStart="10dp"/>
-                    </LinearLayout>
-
-                    <!-- CODE -->
-
-                    <LinearLayout
-                        android:id="@+id/layoutCodeSlots"
-
-                        android:layout_width="match_parent"
-                        android:layout_height="180dp"
+                        android:background="#081120"
 
                         android:orientation="vertical"
 
-                        android:padding="20dp"
+                        android:padding="18dp">
 
-                        android:background="#0F172A"/>
-                </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/layoutCodeSlots"
 
-                <!-- WORDS -->
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                            android:orientation="horizontal"/>
+                    </LinearLayout>
 
-                    android:scrollbars="none"
-
-                    android:layout_marginTop="18dp">
+                    <!-- WORD BANK -->
 
                     <LinearLayout
                         android:id="@+id/layoutCodeWords"
 
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
+                        android:layout_marginTop="18dp"
+
                         android:orientation="horizontal"/>
-                </HorizontalScrollView>
+                </LinearLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- ================================================= -->
+    <!-- FOOTER -->
+    <!-- ================================================= -->
+
+    <LinearLayout
+        android:id="@+id/layoutBottom"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_gravity="bottom"
+
+        android:background="#081120"
+
+        android:orientation="vertical"
+
+        android:padding="22dp">
+
+        <!-- AI -->
+
+        <LinearLayout
+            android:id="@+id/layoutAi"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="18dp"
+
+            android:orientation="vertical"
+
+            android:padding="16dp"
+
+            android:background="@drawable/bg_ai_hint"
+
+            android:visibility="gone">
+
+            <!-- TITLE -->
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="🤖 AI hỗ trợ"
+
+                android:textColor="#FFFFFF"
+
+                android:textStyle="bold"
+
+                android:textSize="15sp"/>
+
+            <!-- ROW -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="10dp"
+
+                android:orientation="horizontal"
+
+                android:gravity="center_vertical">
+
+                <!-- DESC -->
+
+                <TextView
+                    android:id="@+id/txtAiDescription"
+
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_weight="1"
+
+                    android:text="AI sẽ giải thích bài học và đưa gợi ý cho bạn."
+
+                    android:textColor="#CBD5E1"
+
+                    android:textSize="14sp"
+
+                    android:lineSpacingExtra="2dp"/>
+
+                <!-- LINK -->
+
+                <TextView
+                    android:id="@+id/btnAskAi"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:text="Hỏi AI"
+
+                    android:textColor="#60A5FA"
+
+                    android:textStyle="bold"
+
+                    android:textSize="14sp"
+
+                    android:layout_marginStart="12dp"
+
+                    android:clickable="true"
+
+                    android:focusable="true"/>
             </LinearLayout>
 
         </LinearLayout>
-    </ScrollView>
 
-    <!-- ====================================== -->
-    <!-- NORMAL FOOTER -->
-    <!-- ====================================== -->
+        <!-- RESULT -->
 
-    <LinearLayout
-        android:id="@+id/layoutNormalFooter"
+        <LinearLayout
+            android:id="@+id/layoutResult"
 
-        android:layout_width="match_parent"
-        android:layout_height="92dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-        android:gravity="center"
+            android:layout_marginBottom="18dp"
 
-        android:paddingHorizontal="24dp">
+            android:background="@drawable/bg_result_correct"
+
+            android:gravity="center_vertical"
+
+            android:orientation="horizontal"
+
+            android:padding="18dp"
+
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/txtResult"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="🎉 Chính xác!"
+
+                android:textColor="#FFFFFF"
+
+                android:textSize="18sp"
+
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- BUTTON -->
 
         <Button
             android:id="@+id/btnNext"
@@ -281,86 +453,27 @@
             android:layout_width="match_parent"
             android:layout_height="58dp"
 
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="18dp"
+
             android:text="TIẾP TỤC"
 
-            android:textColor="@android:color/white"
+            android:textAllCaps="false"
+
+            android:textColor="#FFFFFF"
 
             android:textStyle="bold"
-
-            android:textSize="17sp"
-
-            android:backgroundTint="#2563EB"/>
-    </LinearLayout>
-
-    <!-- ====================================== -->
-    <!-- CODE FOOTER -->
-    <!-- ====================================== -->
-
-    <LinearLayout
-        android:id="@+id/layoutCodeFooter"
-
-        android:layout_width="match_parent"
-        android:layout_height="92dp"
-
-        android:orientation="horizontal"
-
-        android:gravity="center_vertical"
-
-        android:paddingHorizontal="18dp"
-
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/btnResetCode"
-
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-
-            android:text="↻"
-
-            android:textColor="@android:color/white"
-
-            android:textSize="20sp"
-
-            android:backgroundTint="#1E293B"/>
-
-        <Button
-            android:id="@+id/btnClearCode"
-
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-
-            android:layout_marginStart="12dp"
-
-            android:text="⌫"
-
-            android:textColor="@android:color/white"
 
             android:textSize="18sp"
 
-            android:backgroundTint="#1E293B"/>
+            android:background="@drawable/bg_primary_button"
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
+            android:backgroundTint="@null"
 
-            android:layout_weight="1"/>
+            android:elevation="0dp"
 
-        <Button
-            android:id="@+id/btnCheckCode"
-
-            android:layout_width="170dp"
-            android:layout_height="56dp"
-
-            android:text="KIỂM TRA"
-
-            android:textColor="@android:color/white"
-
-            android:textStyle="bold"
-
-            android:textSize="16sp"
-
-            android:backgroundTint="#2563EB"/>
+            android:stateListAnimator="@null"
+            />
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>

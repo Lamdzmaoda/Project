@@ -52,7 +52,7 @@
                 android:id="@+id/textHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Home"
+                android:text="Trang chủ"
                 android:textColor="#94A3B8"
                 android:textSize="11sp"
                 android:layout_marginTop="2dp"/>
@@ -80,7 +80,7 @@
                 android:id="@+id/textPractice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Practice"
+                android:text="Luyện tập"
                 android:textColor="#94A3B8"
                 android:textSize="11sp"
                 android:layout_marginTop="2dp"/>
@@ -108,7 +108,7 @@
                 android:id="@+id/textCommunity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Community"
+                android:text="Cộng đồng"
                 android:textColor="#2563EB"
                 android:textStyle="bold"
                 android:textSize="11sp"
@@ -137,7 +137,7 @@
                 android:id="@+id/textProgress"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Progress"
+                android:text="Giải đấu"
                 android:textColor="#94A3B8"
                 android:textSize="11sp"
                 android:layout_marginTop="2dp"/>
@@ -165,7 +165,7 @@
                 android:id="@+id/textProfile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Profile"
+                android:text="Hồ sơ"
                 android:textColor="#94A3B8"
                 android:textSize="11sp"
                 android:layout_marginTop="2dp"/>

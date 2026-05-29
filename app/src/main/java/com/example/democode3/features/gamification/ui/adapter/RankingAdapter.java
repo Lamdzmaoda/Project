@@ -1,5 +1,6 @@
 package com.example.democode3.features.gamification.ui.adapter;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.democode3.R;
-import com.example.democode3.core.session.SessionManager;
+import com.example.democode3.features.fake.model.FakeUser;
+import com.example.democode3.features.fake.session.FakeSessionManager;
 import com.example.democode3.features.gamification.model.RankingUser;
 
 import java.util.List;
@@ -64,11 +66,15 @@ public class RankingAdapter
     static class VH
             extends RecyclerView.ViewHolder {
 
+        LinearLayout rootLayout;
+
         TextView txtRank;
 
         TextView txtAvatar;
 
         TextView txtUsername;
+
+        TextView txtLevel;
 
         TextView txtXp;
 
@@ -78,20 +84,40 @@ public class RankingAdapter
 
             super(v);
 
+            rootLayout =
+                    v.findViewById(
+                            R.id.rootLayout
+                    );
+
             txtRank =
-                    v.findViewById(R.id.txtRank);
+                    v.findViewById(
+                            R.id.txtRank
+                    );
 
             txtAvatar =
-                    v.findViewById(R.id.txtAvatar);
+                    v.findViewById(
+                            R.id.txtAvatar
+                    );
 
             txtUsername =
-                    v.findViewById(R.id.txtUsername);
+                    v.findViewById(
+                            R.id.txtUsername
+                    );
+
+            txtLevel =
+                    v.findViewById(
+                            R.id.txtLevel
+                    );
 
             txtXp =
-                    v.findViewById(R.id.txtXp);
+                    v.findViewById(
+                            R.id.txtXp
+                    );
 
             layoutUser =
-                    v.findViewById(R.id.layoutUser);
+                    v.findViewById(
+                            R.id.layoutUser
+                    );
         }
     }
 
@@ -151,8 +177,11 @@ public class RankingAdapter
         // =================================
 
         if (
+
                 user.username != null
+
                         &&
+
                         !user.username.isEmpty()
         ) {
 
@@ -165,7 +194,7 @@ public class RankingAdapter
         }
 
         // =================================
-        // NAME
+        // USERNAME
         // =================================
 
         h.txtUsername.setText(
@@ -173,10 +202,19 @@ public class RankingAdapter
         );
 
         // =================================
+        // LEVEL
+        // =================================
+
+        h.txtLevel.setText(
+                "Lv." + user.level
+        );
+
+        // =================================
         // XP
         // =================================
 
         h.txtXp.setText(
+
                 user.xp + " XP"
         );
 
@@ -184,31 +222,69 @@ public class RankingAdapter
         // CURRENT USER
         // =================================
 
-        String currentUserId =
-                String.valueOf(
+        FakeUser currentUser =
 
-                        SessionManager
-                                .getUser(
-                                        h.itemView.getContext()
-                                )
-                                .id
-                );
+                FakeSessionManager
+                        .getInstance()
+                        .getCurrentUser();
 
         boolean isCurrentUser =
-                user.id != null
+
+                currentUser != null
+
                         &&
-                        user.id.equals(currentUserId);
+
+                        currentUser.id.equals(
+                                user.id
+                        );
+
+        // =================================
+        // BACKGROUND
+        // =================================
 
         if (isCurrentUser) {
 
-            h.itemView.setBackgroundColor(
-                    0xFF1E3A8A
+            h.itemView.setBackgroundResource(
+                    R.drawable.bg_current_user_rank
             );
 
         } else {
 
-            h.itemView.setBackgroundColor(
-                    0xFF111827
+            h.itemView.setBackgroundResource(
+                    R.drawable.bg_card_secondary
+            );
+        }
+
+        // =================================
+        // TOP 3 COLOR
+        // =================================
+
+        if (user.rank == 1) {
+
+            h.txtRank.setTextColor(
+                    Color.parseColor("#FFD700")
+            );
+
+        }
+
+        else if (user.rank == 2) {
+
+            h.txtRank.setTextColor(
+                    Color.parseColor("#C0C0C0")
+            );
+        }
+
+        else if (user.rank == 3) {
+
+            h.txtRank.setTextColor(
+                    Color.parseColor("#CD7F32")
+            );
+        }
+
+        else {
+
+            h.txtRank.setTextColor(
+                    Color.WHITE
             );
         }
 
@@ -220,8 +296,11 @@ public class RankingAdapter
                 v -> {
 
                     if (
+
                             listener != null
+
                                     &&
+
                                     user.id != null
                     ) {
 
@@ -231,11 +310,7 @@ public class RankingAdapter
                     }
                 };
 
-        h.txtAvatar.setOnClickListener(
-                click
-        );
-
-        h.layoutUser.setOnClickListener(
+        h.itemView.setOnClickListener(
                 click
         );
     }

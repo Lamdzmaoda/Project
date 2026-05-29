@@ -2,35 +2,28 @@ package com.example.democode3.features.profile.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import androidx.lifecycle.ViewModelProvider;
-
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.democode3.R;
-
 import com.example.democode3.core.session.TokenManager;
-
 import com.example.democode3.features.auth.ui.activity.LoginActivity;
-
+import com.example.democode3.features.profile.model.UserProfileResponse;
+import com.example.democode3.features.profile.ui.adapter.ProfileGridPostAdapter;
 import com.example.democode3.features.profile.ui.viewmodel.ProfileViewModel;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
-import android.widget.ProgressBar;
-import androidx.recyclerview.widget.GridLayoutManager;
-import com.example.democode3.features.profile.model.UserProfileResponse;
-
-import com.example.democode3.features.profile.ui.adapter.ProfileGridPostAdapter;
 
 import java.util.ArrayList;
 
@@ -66,15 +59,13 @@ public class ProfileFragment
 
     private TextView txtFullName;
 
+    private TextView txtBio;
+
     private TextView txtFollowers;
 
     private TextView txtFollowing;
 
     private TextView txtPosts;
-
-    private TextView txtBio;
-
-    private TextView txtXp;
 
     private TextView txtStreak;
 
@@ -132,14 +123,15 @@ public class ProfileFragment
     // CREATE
     // =====================================
 
+    @Nullable
     @Override
     public View onCreateView(
 
-            LayoutInflater inflater,
+            @NonNull LayoutInflater inflater,
 
-            ViewGroup container,
+            @Nullable ViewGroup container,
 
-            Bundle savedInstanceState
+            @Nullable Bundle savedInstanceState
     ) {
 
         View view =
@@ -158,23 +150,23 @@ public class ProfileFragment
 
         setupRecycler();
 
+        setupTabs();
+
+        setupButtons();
+
         viewModel =
                 new ViewModelProvider(this)
                         .get(ProfileViewModel.class);
 
         observeProfile();
 
+        observePosts();
+
         observeFollow();
 
         observeCounts();
 
-        observePosts();
-
         loadProfile();
-
-        setupTabs();
-
-        setupButtons();
 
         return view;
     }
@@ -202,6 +194,11 @@ public class ProfileFragment
                         R.id.txtFullName
                 );
 
+        txtBio =
+                view.findViewById(
+                        R.id.txtBio
+                );
+
         txtFollowers =
                 view.findViewById(
                         R.id.txtFollowers
@@ -217,12 +214,6 @@ public class ProfileFragment
                         R.id.txtPosts
                 );
 
-
-        txtXp =
-                view.findViewById(
-                        R.id.txtXp
-                );
-
         txtStreak =
                 view.findViewById(
                         R.id.txtStreak
@@ -231,6 +222,26 @@ public class ProfileFragment
         txtVerified =
                 view.findViewById(
                         R.id.txtVerified
+                );
+
+        txtLevel =
+                view.findViewById(
+                        R.id.txtLevel
+                );
+
+        txtRankTitle =
+                view.findViewById(
+                        R.id.txtRankTitle
+                );
+
+        txtXpProgress =
+                view.findViewById(
+                        R.id.txtXpProgress
+                );
+
+        progressXp =
+                view.findViewById(
+                        R.id.progressXp
                 );
 
         btnEdit =
@@ -257,25 +268,6 @@ public class ProfileFragment
                 view.findViewById(
                         R.id.recyclerPost
                 );
-        txtLevel =
-                view.findViewById(
-                        R.id.txtLevel
-                );
-
-        txtRankTitle =
-                view.findViewById(
-                        R.id.txtRankTitle
-                );
-
-        txtXpProgress =
-                view.findViewById(
-                        R.id.txtXpProgress
-                );
-
-        progressXp =
-                view.findViewById(
-                        R.id.progressXp
-                );
     }
 
     // =====================================
@@ -283,8 +275,6 @@ public class ProfileFragment
     // =====================================
 
     private void getArgumentsData() {
-
-        userId = null;
 
         if (getArguments() == null)
             return;
@@ -313,7 +303,7 @@ public class ProfileFragment
 
                         requireContext(),
 
-                        3
+                        2
                 )
         );
 
@@ -351,12 +341,36 @@ public class ProfileFragment
 
                 this::renderProfile
         );
-
     }
 
+    // =====================================
+    // POSTS
+    // =====================================
+
+    private void observePosts() {
+
+        viewModel.getPosts().observe(
+
+                getViewLifecycleOwner(),
+
+                posts -> {
+
+                    if (posts == null)
+                        return;
+
+                    txtPosts.setText(
+                            String.valueOf(
+                                    posts.size()
+                            )
+                    );
+
+                    adapter.updateData(posts);
+                }
+        );
+    }
 
     // =====================================
-    // OBSERVE FOLLOW
+    // FOLLOW
     // =====================================
 
     private void observeFollow() {
@@ -387,7 +401,7 @@ public class ProfileFragment
     }
 
     // =====================================
-    // OBSERVE COUNTS
+    // COUNTS
     // =====================================
 
     private void observeCounts() {
@@ -399,7 +413,7 @@ public class ProfileFragment
                 count -> {
 
                     txtFollowers.setText(
-                            count + "\nNgười theo dõi"
+                            String.valueOf(count)
                     );
                 }
         );
@@ -411,39 +425,15 @@ public class ProfileFragment
                 count -> {
 
                     txtFollowing.setText(
-                            count + "\nĐang theo dõi"
+                            String.valueOf(count)
                     );
                 }
         );
     }
 
     // =====================================
-    // OBSERVE POSTS
+    // PROFILE
     // =====================================
-
-    private void observePosts() {
-
-        viewModel.getPosts().observe(
-
-                getViewLifecycleOwner(),
-
-                posts -> {
-
-                    if (posts == null)
-                        return;
-
-                    txtPosts.setText(
-                            posts.size() + "\nBài viết"
-                    );
-
-                    adapter.updateData(posts);
-                }
-        );
-    }
-
-    /// =====================================
-// RENDER
-// =====================================
 
     private void renderProfile(
             UserProfileResponse user
@@ -467,11 +457,8 @@ public class ProfileFragment
                 user.displayName
         );
 
-        txtXp.setText(
-
-                "⚡ "
-                        + user.xp
-                        + " XP"
+        txtBio.setText(
+                user.bio
         );
 
         txtStreak.setText(
@@ -480,8 +467,6 @@ public class ProfileFragment
                         + user.streak
                         + " ngày"
         );
-
-        txtBio.setVisibility(View.GONE);
 
         txtVerified.setVisibility(
 
@@ -495,6 +480,10 @@ public class ProfileFragment
 
                         View.GONE
         );
+
+        // =================================
+        // MY PROFILE
+        // =================================
 
         boolean isMyProfile =
                 userId == null;
@@ -539,14 +528,16 @@ public class ProfileFragment
         );
 
         // =================================
-        // LEVEL SYSTEM
+        // LEVEL
         // =================================
 
         txtLevel.setText(
                 "LV " + user.level
         );
 
+        // =================================
         // TITLE
+        // =================================
 
         String title;
 
@@ -575,7 +566,13 @@ public class ProfileFragment
             title = "Người mới";
         }
 
+        txtRankTitle.setText(
+                "• " + title
+        );
+
+        // =================================
         // XP
+        // =================================
 
         int nextXp =
                 user.level * 100;
@@ -629,10 +626,57 @@ public class ProfileFragment
                 tabLayout.newTab()
                         .setText("Thành tựu")
         );
+
+        tabLayout.addOnTabSelectedListener(
+
+                new TabLayout.OnTabSelectedListener() {
+
+                    @Override
+                    public void onTabSelected(
+                            TabLayout.Tab tab
+                    ) {
+
+                        if (tab == null)
+                            return;
+
+                        if (tab.getPosition() == 0) {
+
+                            observePosts();
+                        }
+
+                        else {
+
+                            Toast.makeText(
+
+                                    requireContext(),
+
+                                    "Thành tựu sẽ thêm sau 😭🔥",
+
+                                    Toast.LENGTH_SHORT
+
+                            ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onTabUnselected(
+                            TabLayout.Tab tab
+                    ) {
+
+                    }
+
+                    @Override
+                    public void onTabReselected(
+                            TabLayout.Tab tab
+                    ) {
+
+                    }
+                }
+        );
     }
 
     // =====================================
-    // BUTTON
+    // BUTTONS
     // =====================================
 
     private void setupButtons() {
@@ -643,7 +687,7 @@ public class ProfileFragment
 
                     requireContext(),
 
-                    "Edit Profile",
+                    "Tính năng đang phát triển 😭🔥",
 
                     Toast.LENGTH_SHORT
 
@@ -694,6 +738,5 @@ public class ProfileFragment
                 );
             }
         });
-
     }
 }

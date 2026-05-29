@@ -1,161 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#0F172A"
-    android:paddingTop="10dp"
-    android:paddingBottom="20dp">
+    android:layout_height="match_parent"
+    android:background="#66000000">
 
-    <!-- ================================= -->
-    <!-- REPORT -->
-    <!-- ================================= -->
-
-    <TextView
-        android:id="@+id/btnReport"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:text="Báo cáo"
-        android:textColor="#EF4444"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
+        android:layout_gravity="center"
+        android:background="#081128"
+        android:orientation="vertical"
+        android:paddingTop="14dp"
+        android:paddingBottom="28dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Báo cáo"
+            android:textColor="#FF4D4F"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
 
-    <!-- ================================= -->
-    <!-- NOT INTERESTED -->
-    <!-- ================================= -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1E293B"/>
 
-    <TextView
-        android:id="@+id/btnNotInterested"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Không quan tâm"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Không quan tâm"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Đi đến bài viết"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
-    <!-- ================================= -->
-    <!-- GO TO POST -->
-    <!-- ================================= -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Chia sẻ"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/btnGoToPost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Đi đến bài viết"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1E293B"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Sao chép liên kết"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
-    <!-- ================================= -->
-    <!-- SHARE -->
-    <!-- ================================= -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Nhúng"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
-    <TextView
-        android:id="@+id/btnShare"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Chia sẻ"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Giới thiệu về tài khoản này"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#1E293B"/>
 
-    <!-- ================================= -->
-    <!-- COPY LINK -->
-    <!-- ================================= -->
+        <TextView
+            android:id="@+id/btnCancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="20dp"
+            android:text="Hủy"
+            android:textColor="#3B82F6"
+            android:textSize="17sp"
+            android:textStyle="bold"/>
 
-    <TextView
-        android:id="@+id/btnCopyLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sao chép liên kết"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
+    </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
-
-    <!-- ================================= -->
-    <!-- EMBED -->
-    <!-- ================================= -->
-
-    <TextView
-        android:id="@+id/btnEmbed"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Nhúng"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
-
-    <!-- ================================= -->
-    <!-- ABOUT ACCOUNT -->
-    <!-- ================================= -->
-
-    <TextView
-        android:id="@+id/btnAboutAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Giới thiệu về tài khoản này"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#334155"/>
-
-    <!-- ================================= -->
-    <!-- CANCEL -->
-    <!-- ================================= -->
-
-    <TextView
-        android:id="@+id/btnCancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hủy"
-        android:textColor="#3B82F6"
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:padding="18dp"/>
-
-</LinearLayout>
+</FrameLayout>

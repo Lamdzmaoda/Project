@@ -8,19 +8,16 @@
     android:orientation="vertical"
     android:background="@color/dark_bg">
 
-    <!-- ================================= -->
-    <!-- LEAGUE CARD -->
-    <!-- ================================= -->
+    <!-- HEADER -->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="14dp"
         android:orientation="vertical"
-        android:padding="14dp"
-        android:background="@color/dark_surface">
-
-        <!-- TITLE -->
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="12dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,33 +25,38 @@
             android:text="Giải đấu"
             android:textColor="@android:color/white"
             android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="10dp"/>
+            android:textSize="26sp"/>
 
-        <!-- LEAGUE TAB -->
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLeague"
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:background="#111827"
-
-            app:tabTextColor="#9CA3AF"
-            app:tabSelectedTextColor="#FFFFFF"
-            app:tabIndicatorColor="@color/blue_primary"
-            app:tabIndicatorHeight="3dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bảng xếp hạng coder"
+            android:textColor="@color/gray_text"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
 
-    <!-- ================================= -->
+    <!-- TAB -->
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLeague"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/dark_surface"
+
+        app:tabTextColor="#94A3B8"
+        app:tabSelectedTextColor="#FFFFFF"
+        app:tabIndicatorColor="@color/blue_primary"
+        app:tabIndicatorHeight="3dp"/>
+
     <!-- TOP 3 -->
-    <!-- ================================= -->
 
     <include
         layout="@layout/layout_gamification_top3"/>
 
-    <!-- ================================= -->
     <!-- LIST -->
-    <!-- ================================= -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerRanking"
@@ -63,6 +65,6 @@
         android:layout_weight="1"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
-        android:clipToPadding="false"
-        android:paddingBottom="18dp"/>
+        android:paddingBottom="20dp"
+        android:clipToPadding="false"/>
 </LinearLayout>

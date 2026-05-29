@@ -4,7 +4,7 @@ import java.util.List;
 
 public class UserProfileResponse {
 
-    public long id;
+    public String id;
 
     public String username;
 

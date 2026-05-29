@@ -1,6 +1,6 @@
 package com.example.democode3.features.learning.ui.renderer;
 
-import android.widget.Button;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,9 +13,17 @@ public class QuizRendererAdapter
 
     private final TextView txtContent;
 
-    private final Button btnAnswerA;
+    private final TextView btnAnswerA;
 
-    private final Button btnAnswerB;
+    private final TextView btnAnswerB;
+
+    private final View viewCircleA;
+
+    private final View viewCircleB;
+
+    private final LinearLayout layoutAnswerA;
+
+    private final LinearLayout layoutAnswerB;
 
     public QuizRendererAdapter(
 
@@ -23,9 +31,17 @@ public class QuizRendererAdapter
 
             TextView txtContent,
 
-            Button btnAnswerA,
+            TextView btnAnswerA,
 
-            Button btnAnswerB
+            TextView btnAnswerB,
+
+            View viewCircleA,
+
+            View viewCircleB,
+
+            LinearLayout layoutAnswerA,
+
+            LinearLayout layoutAnswerB
     ) {
 
         this.layoutQuiz = layoutQuiz;
@@ -35,6 +51,14 @@ public class QuizRendererAdapter
         this.btnAnswerA = btnAnswerA;
 
         this.btnAnswerB = btnAnswerB;
+
+        this.viewCircleA = viewCircleA;
+
+        this.viewCircleB = viewCircleB;
+
+        this.layoutAnswerA = layoutAnswerA;
+
+        this.layoutAnswerB = layoutAnswerB;
     }
 
     @Override
@@ -52,7 +76,15 @@ public class QuizRendererAdapter
 
                 btnAnswerA,
 
-                btnAnswerB
+                btnAnswerB,
+
+                viewCircleA,
+
+                viewCircleB,
+
+                layoutAnswerA,
+
+                layoutAnswerB
         );
     }
 }
